@@ -13,7 +13,7 @@ import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
 import {
   User, Building2, Clock, Globe, Mail, Calendar, Phone, Headphones,
-  Plus, Trash2, RotateCcw, Save, ChevronDown, ChevronUp
+  Plus, Trash2, RotateCcw, Save, ChevronDown, ChevronUp, Brain
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { useState } from "react";
@@ -384,10 +384,51 @@ export default function Config() {
           </div>
         </Section>
 
+        {/* === NOUVELLE SECTION : Configuration IA conversationnelle === */}
+        <Section title="Instructions IA avancées (Vraie IA)" icon={Brain} defaultOpen={true}>
+          <div className="space-y-6">
+            <div className="p-4 bg-primary/10 border-2 border-primary">
+              <p className="text-sm text-primary-foreground/90">
+                Ces instructions sont envoyées directement à l'IA (Groq). Laisse vide pour utiliser le comportement par défaut intelligent.
+              </p>
+            </div>
+
+            <div className="space-y-2">
+              <Label className="font-heading font-semibold">Prompt système personnalisé (optionnel)</Label>
+              <Textarea
+                value={config.customSystemPrompt}
+                onChange={(e) => updateConfig({ customSystemPrompt: e.target.value })}
+                placeholder="Ex: Tu es une assistante très empathique et experte en support technique. Toujours proposer des solutions concrètes avant de transférer. Ne jamais dire 'je ne sais pas' sans proposer une alternative."
+                rows={6}
+                className="border-2 border-foreground shadow-[2px_2px_0px] shadow-foreground resize-y font-mono text-sm"
+              />
+              <p className="text-xs text-muted-foreground">
+                Si rempli, ce prompt remplace / complète le prompt par défaut. Sois précis sur le style, les règles et les priorités.
+              </p>
+            </div>
+
+            <div className="space-y-2">
+              <Label className="font-heading font-semibold">Connaissances spécifiques de l'entreprise</Label>
+              <Textarea
+                value={config.companyKnowledge}
+                onChange={(e) => updateConfig({ companyKnowledge: e.target.value })}
+                placeholder="Ex: Nous vendons des logiciels SaaS B2B. Notre produit phare est 'FlowCRM'. Délai moyen de réponse support = 4h. Politique de remboursement : 30 jours."
+                rows={5}
+                className="border-2 border-foreground shadow-[2px_2px_0px] shadow-foreground resize-y"
+              />
+              <p className="text-xs text-muted-foreground">
+                L'IA utilisera ces informations pour répondre de façon précise et contextuelle.
+              </p>
+            </div>
+          </div>
+        </Section>
+
         {/* Prompt Preview */}
-        <Section title="Aperçu du prompt système" icon={Phone} defaultOpen={false}>
+        <Section title="Aperçu du prompt système envoyé à l'IA" icon={Phone} defaultOpen={false}>
           <div className="p-4 bg-foreground text-background font-mono text-sm leading-relaxed border-2 border-foreground overflow-x-auto whitespace-pre-wrap max-h-96 overflow-y-auto">
-{`Tu es ${config.assistantName || "[ASSISTANT_NAME]"}, l'assistant(e) d'accueil téléphonique de ${config.companyName || "[COMPANY_NAME]"}.
+{config.customSystemPrompt 
+  ? config.customSystemPrompt 
+  : `Tu es ${config.assistantName || "[ASSISTANT_NAME]"}, l'assistant(e) d'accueil téléphonique de ${config.companyName || "[COMPANY_NAME]"}.
 Tu réponds comme une vraie secrétaire : naturel, rapide, professionnel, empathique.
 Ton : ${config.tone}
 Langue : ${config.language}${config.otherLanguages ? ` + ${config.otherLanguages}` : ""}
@@ -401,8 +442,14 @@ Email standard : ${config.emailMain || "[EMAIL_MAIN]"}
 Calendrier : ${config.calendarProvider} (${config.calendarId || "[CALENDAR_ID]"})
 ${config.crmTool ? `CRM : ${config.crmTool}` : ""}
 Téléphonie : ${config.telephonyProvider}
-${config.recordingNotice ? "Annonce d'enregistrement : activée" : ""}`}
+${config.recordingNotice ? "Annonce d'enregistrement : activée" : ""}
+
+${config.companyKnowledge ? `Connaissances spécifiques :
+${config.companyKnowledge}` : ""}`}
           </div>
+          <p className="text-xs text-muted-foreground mt-2">
+            C'est ce que l'IA reçoit comme instructions principales.
+          </p>
         </Section>
       </div>
     </div>
