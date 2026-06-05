@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
-// Simple proxy to Groq API for real AI responses
-// User must set GROQ_API_KEY in Vercel Environment Variables
+// Proxy to Groq for real conversational AI
+// Fully respects customSystemPrompt and companyKnowledge from user config
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {
@@ -12,36 +12,36 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   if (!process.env.GROQ_API_KEY) {
     return res.status(500).json({ 
-      error: 'GROQ_API_KEY not configured. Add it in Vercel Project Settings > Environment Variables.' 
+      error: 'GROQ_API_KEY not configured in Vercel Environment Variables.' 
     });
   }
 
   try {
-    const systemPrompt = `Tu es ${config.assistantName || 'un assistant d\'accueil'} chez ${config.companyName || 'l\'entreprise'}.
-Ton ton : ${config.tone || 'professionnel et chaleureux'}.
+    // Priority to user's custom prompt if provided
+    let systemPrompt = (config.customSystemPrompt && config.customSystemPrompt.trim().length > 15)
+      ? config.customSystemPrompt
+      : `Tu es ${config.assistantName || 'un assistant d\'accueil'} chez ${config.companyName || 'l\'entreprise'}.
+Ton : ${config.tone || 'professionnel et chaleureux'}.
 
-Services disponibles : ${config.services?.map((s: any) => s.name).join(', ') || 'Standard, Commercial, Support, Comptabilité, RH'}.
-
+Services : ${config.services?.map((s: any) => s.name).join(', ') || 'Commercial, Support, Comptabilité, RH, Standard'}.
 Horaires : ${config.openingHours || 'Lun-Ven 9h-18h'}.
 
-Règles :
-- Sois naturel, poli et efficace comme une vraie secrétaire au téléphone.
-- Détecte l'intention : transfert vers un service, prise de rendez-vous, message/rappel, urgence, ou info générale.
-- Collecte les infos nécessaires étape par étape (nom, téléphone, email, motif).
-- Pour les transferts : dis que tu transfères et simule le résultat.
-- Pour les rendez-vous : propose des créneaux et confirme.
-- Réponds en français.
-- Garde les réponses courtes et adaptées au téléphone (pas de longs paragraphes).
-- Si c'est fermé, propose de prendre un message.
+Comportement :
+- Naturel, poli, efficace et empathique comme une vraie secrétaire au téléphone.
+- Détecte l'intention rapidement.
+- Collecte les infos de façon progressive.
+- Propose des solutions avant de transférer quand possible.
+- Réponses courtes et adaptées au téléphone.
 
-Réponds UNIQUEMENT au format JSON suivant :
+${config.companyKnowledge ? `Connaissances spécifiques :
+${config.companyKnowledge}
+
+` : ''}Réponds UNIQUEMENT en JSON :
 {
-  "response": "ta réponse naturelle ici",
-  "action": "optionnel: transfer_call(\"Service\") | calendar_create_event(...) | send_email(...) | FIN D'APPEL | ALERTE URGENCE",
-  "nextPhase": "greeting | intent | collecting_info | confirming | closing"
-}
-
-Ne mets aucun texte en dehors du JSON.`;
+  "response": "réponse naturelle ici",
+  "action": "optionnel : transfer_call(...) | calendar_create_event(...) | send_email(...) | FIN D'APPEL",
+  "nextPhase": "intent | collecting_info | confirming | closing"
+}`;
 
     const groqMessages = [
       { role: 'system', content: systemPrompt },
@@ -58,40 +58,30 @@ Ne mets aucun texte en dehors du JSON.`;
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'llama-3.3-70b-versatile', // Fast and excellent French
+        model: 'llama-3.3-70b-versatile',
         messages: groqMessages,
-        temperature: 0.7,
-        max_tokens: 400,
+        temperature: 0.75,
+        max_tokens: 450,
         response_format: { type: 'json_object' }
       }),
     });
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`Groq API error: ${response.status} ${errorText}`);
-    }
+    if (!response.ok) throw new Error(`Groq ${response.status}`);
 
     const data = await response.json();
     const content = data.choices?.[0]?.message?.content;
 
-    if (!content) {
-      throw new Error('No response from AI');
-    }
-
-    // Parse the JSON response from the model
     let parsed;
-    try {
-      parsed = JSON.parse(content);
-    } catch {
-      parsed = { response: content, action: undefined, nextPhase: 'intent' };
-    }
+    try { parsed = JSON.parse(content); } 
+    catch { parsed = { response: content || "Pouvez-vous reformuler ?", action: undefined }; }
 
     return res.status(200).json(parsed);
-  } catch (error: any) {
-    console.error('AI Proxy Error:', error);
+
+  } catch (error) {
+    console.error(error);
     return res.status(500).json({ 
-      error: 'AI service temporarily unavailable',
-      fallbackResponse: 'Désolé, je rencontre un petit problème technique. Pouvez-vous répéter ?' 
+      error: 'IA temporairement indisponible',
+      fallbackResponse: 'Désolé, petit problème technique. Que puis-je faire pour vous ?' 
     });
   }
 }
