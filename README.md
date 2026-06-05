@@ -2,11 +2,18 @@
 
 Application web moderne pour configurer et simuler un assistant IA d'accueil téléphonique professionnel.
 
-## ✨ Améliorations récentes (Juin 2026)
-- Configuration Vercel optimisée (SPA rewrites pour routing client-side)
-- Nettoyage de `vite.config.ts` : suppression plugins Manus/dev-only, compatibilité Vercel
-- Nettoyage `package.json` : suppression dépendances inutiles, build simplifié
-- Prêt pour déploiement production
+## ✨ Nouveauté : Vraie IA intégrée !
+- L'assistant utilise maintenant **Groq (Llama 3.3)** via une fonction serverless Vercel pour des réponses naturelles et intelligentes.
+- Fallback automatique vers la logique locale si l'IA est indisponible.
+- Comportement fidèle à ta configuration (nom, ton, services, horaires...).
+
+## Configuration de l'IA (obligatoire pour la vraie IA)
+1. Va dans les **Settings** de ton projet Vercel
+2. **Environment Variables** → Ajoute :
+   - `GROQ_API_KEY` = ta clé API Groq (gratuite sur https://console.groq.com)
+3. Redeploie le projet
+
+Sans la clé, l'application utilise le mode simulation locale (toujours fonctionnel).
 
 ## Développement
 ```bash
@@ -14,31 +21,19 @@ pnpm install
 pnpm dev
 ```
 
-## Build
+## Build & Déploiement Vercel
 ```bash
 pnpm build
 ```
 
-## Déploiement sur Vercel (recommandé)
-1. Va sur [vercel.com](https://vercel.com) et importe le repo GitHub `Nico33999/njp-call`
-2. Vercel détecte automatiquement Vite
-3. Build : `pnpm build` | Output : `dist/public`
-4. Déploie !
-
-Le site est live-ready avec routing SPA.
+Le site est prêt pour la production avec vraie IA conversationnelle.
 
 ## Structure
-- `client/` : Frontend React + Vite (design Néo-Brutaliste Télécom)
-- `server/` : Serveur statique minimal (non utilisé sur Vercel)
-- `shared/` : Types partagés
+- `client/` : Frontend React + Vite
+- `api/chat.ts` : Proxy IA (Groq)
+- `server/` : Ancien serveur statique (non utilisé sur Vercel)
 
 ## Design
-Inspiré de "Signal — Néo-Brutaliste Télécom" (idées dans ideas.md) : couleurs franches, bordures épaisses, ombres décalées, responsive.
+Style Néo-Brutaliste Télécom (Signal) — fluide et professionnel.
 
-## Prochaines étapes suggérées
-- Intégration IA réelle (OpenAI / Grok API pour simulation)
-- Ajout d'assets locaux pour images
-- Tests avec Vitest
-- Domain custom + analytics
-
-Conforme RGPD par design.
+Prochaines améliorations possibles : vraie intégration téléphonie (Twilio, etc.), historique persistant, analytics.
