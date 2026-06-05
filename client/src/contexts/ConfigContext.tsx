@@ -24,6 +24,9 @@ export interface AssistantConfig {
   recordingNotice: boolean;
   customGreeting: string;
   customClosedGreeting: string;
+  // === NOUVEAU : Configuration IA conversationnelle réelle ===
+  customSystemPrompt: string;      // Instructions personnalisées complètes pour l'IA
+  companyKnowledge: string;        // Connaissances spécifiques sur l'entreprise / produits / process
 }
 
 const defaultServices: ServiceConfig[] = [
@@ -51,6 +54,9 @@ const defaultConfig: AssistantConfig = {
   recordingNotice: true,
   customGreeting: "",
   customClosedGreeting: "",
+  // IA conversationnelle
+  customSystemPrompt: "",
+  companyKnowledge: "",
 };
 
 interface ConfigContextType {
