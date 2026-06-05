@@ -2,7 +2,6 @@ import { useCallback } from "react";
 import { useConfig } from "@/contexts/ConfigContext";
 import { useSimulation } from "@/contexts/SimulationContext";
 
-// Fallback local intent detection (used if AI proxy fails)
 function detectIntentFallback(message: string, serviceNames: string[]) {
   const lower = message.toLowerCase();
   if (/urgence|danger|secours|ambulance|pompier|police|samu|15|18|17/i.test(lower)) return { type: "emergency" };
@@ -20,100 +19,92 @@ export function useAssistantAI() {
   const { config } = useConfig();
   const { addMessage, setIsTyping } = useSimulation();
 
+  const executeAction = useCallback(async (action: string, details?: any) => {
+    try {
+      const res = await fetch("/api/execute-action", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action, config, details }),
+      });
+      const result = await res.json();
+      if (result.success) {
+        addMessage("system", result.message || "Action exécutée", action);
+      } else {
+        addMessage("system", result.message || "Échec de l'action", action);
+      }
+    } catch {
+      addMessage("system", "Action simulée (connecteur non configuré)", action);
+    }
+  }, [config, addMessage]);
+
   const processMessage = useCallback(
     async (userMessage: string) => {
       setIsTyping(true);
 
       try {
-        // Call our real AI proxy (Groq via Vercel Function)
         const response = await fetch("/api/chat", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             messages: [{ role: "caller", content: userMessage }],
-            config: {
-              assistantName: config.assistantName,
-              companyName: config.companyName,
-              tone: config.tone,
-              services: config.services,
-              openingHours: config.openingHours,
-            },
+            config,
           }),
         });
 
-        if (!response.ok) throw new Error("AI proxy failed");
-
+        if (!response.ok) throw new Error("AI failed");
         const aiResult = await response.json();
 
-        if (aiResult.error) {
-          throw new Error(aiResult.error);
-        }
+        if (aiResult.error) throw new Error(aiResult.error);
 
-        const { response: aiResponse, action, nextPhase } = aiResult;
-
+        const { response: aiResponse, action } = aiResult;
         setIsTyping(false);
 
         if (aiResponse) {
           addMessage("assistant", aiResponse, action);
         }
 
-        // Handle specific actions locally for nice UI feedback
-        if (action?.includes("transfer_call")) {
-          setTimeout(() => {
-            addMessage("system", `Transfert simulé vers le service.`, "TRANSFERT OK");
-          }, 1200);
+        if (action) {
+          await executeAction(action);
         }
-        if (action?.includes("calendar_create_event")) {
-          addMessage("system", "Rendez-vous enregistré dans le calendrier (simulation).", "RDV CONFIRMÉ");
-        }
-        if (action?.includes("send_email")) {
-          addMessage("system", "Message transmis par email (simulation).", "EMAIL ENVOYÉ");
-        }
-
       } catch (error) {
-        console.warn("Real AI failed, using fallback local logic:", error);
-
-        // === FALLBACK: Original rule-based logic (kept as safety net) ===
-        await new Promise((r) => setTimeout(r, 600));
+        // Fallback local
+        await new Promise(r => setTimeout(r, 600));
         const serviceNames = config.services?.map((s: any) => s.name) || [];
         const intent = detectIntentFallback(userMessage, serviceNames);
 
         let fallbackResponse = "";
-        let fallbackAction: string | undefined;
+        let fallbackAction = "";
 
         if (intent.type === "emergency") {
-          fallbackResponse = "Je comprends que c'est urgent. Pour une urgence médicale, appelez le 15 (SAMU). Pour les pompiers, le 18. Pour la police, le 17.";
+          fallbackResponse = "Je comprends que c'est urgent. Appelez le 15 (SAMU), 18 (pompiers) ou 17 (police).";
           fallbackAction = "ALERTE URGENCE";
         } else if (intent.type === "transfer" && intent.service) {
           fallbackResponse = `Très bien, je vous transfère au service ${intent.service}.`;
           fallbackAction = `transfer_call("${intent.service}")`;
         } else if (intent.type === "appointment") {
-          fallbackResponse = "D'accord, je m'en occupe. Pour planifier un rendez-vous, quel est votre nom ?";
+          fallbackResponse = "D'accord, je m'en occupe. Quel est votre nom ?";
         } else if (intent.type === "message") {
           fallbackResponse = "Très bien, je prends votre message. Quel est votre nom ?";
         } else {
-          fallbackResponse = `Je peux vous aider pour : commercial, support, rendez-vous, ou laisser un message. Que souhaitez-vous ?`;
+          fallbackResponse = "Je peux vous aider pour commercial, support, rendez-vous ou message. Que souhaitez-vous ?";
         }
 
         setIsTyping(false);
         addMessage("assistant", fallbackResponse, fallbackAction);
+        if (fallbackAction) await executeAction(fallbackAction);
       }
     },
-    [config, addMessage, setIsTyping]
+    [config, addMessage, setIsTyping, executeAction]
   );
 
   const initCall = useCallback(() => {
-    const greeting =
-      config.customGreeting ||
-      `Bonjour, vous êtes bien chez ${config.companyName || "notre entreprise"}, ici ${config.assistantName || "l'assistant"}. Je vous écoute — comment puis-je vous aider ?`;
+    const greeting = config.customGreeting || 
+      `Bonjour, vous êtes bien chez ${config.companyName || "notre entreprise"}, ici ${config.assistantName || "l'assistant"}. Je vous écoute.`;
 
     if (config.recordingNotice) {
-      addMessage("system", "Cet appel peut être enregistré à des fins de qualité.", "NOTICE");
+      addMessage("system", "Cet appel peut être enregistré.", "NOTICE");
     }
-
-    setTimeout(() => {
-      addMessage("assistant", greeting);
-    }, 400);
+    setTimeout(() => addMessage("assistant", greeting), 400);
   }, [config, addMessage]);
 
   return { processMessage, initCall };
