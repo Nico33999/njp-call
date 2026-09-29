@@ -3,6 +3,8 @@ import {
   InMemoryReminderStore,
   nextAllowed,
   ReminderEngine,
+  ReminderNotSent,
+  ReminderOutcomeUnknown,
   reminderText,
   type AppointmentFact,
   type Reminder,
@@ -18,13 +20,20 @@ const appt = (over: Partial<AppointmentFact> = {}): AppointmentFact => ({
   ...over,
 });
 
-const setup = (facts: Map<string, AppointmentFact>, failing = 0) => {
+const setup = (
+  facts: Map<string, AppointmentFact>,
+  failing = 0,
+  lost = false
+) => {
   const store = new InMemoryReminderStore();
   const sent: { id: string; text: string }[] = [];
   let fails = failing;
   const sms: ReminderChannel = {
     async send(r: Reminder, text: string) {
-      if (fails-- > 0) throw new Error("provider down");
+      if (fails-- > 0)
+        throw lost
+          ? new ReminderOutcomeUnknown("timeout after send")
+          : new ReminderNotSent("provider down");
       sent.push({ id: r.id, text });
       return { providerRef: `sim_${sent.length}` };
     },
@@ -139,6 +148,23 @@ describe("rappels automatiques", () => {
     const r = store.items.get("appt_0001:v1:sms")!;
     expect(r.attempts).toBe(3);
     expect(r.status).toBe("failed");
+  });
+
+  it("issue inconnue (délai dépassé après envoi) : jamais de second envoi automatique", async () => {
+    const facts = new Map([["appt_0001", appt()]]);
+    const { engine, store, sent } = setup(facts, 1, true);
+    await engine.onAppointmentConfirmed(appt(), NOW);
+    for (const t of [
+      "2026-10-07T08:00:00Z",
+      "2026-10-07T09:00:00Z",
+      "2026-10-07T10:00:00Z",
+    ])
+      await engine.runDue(t, "w1", true);
+    const r = store.items.get("appt_0001:v1:sms")!;
+    expect(r.attempts).toBe(1);
+    expect(r.status).toBe("sent");
+    expect(r.history.at(-1)?.event).toBe("sent_outcome_unknown");
+    expect(sent).toHaveLength(0);
   });
 
   it("un répondeur ne vaut pas confirmation du patient", async () => {

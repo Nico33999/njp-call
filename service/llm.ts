@@ -16,6 +16,7 @@
  * Ce qu'il rend est validé par `validateUnderstanding` : aucune clé ne peut
  * ajouter une action.
  */
+import { createHash } from "node:crypto";
 import type { CabinetConfig } from "../core/config";
 import {
   validateUnderstanding,
@@ -105,14 +106,44 @@ export class LlmUnderstander implements Understander {
   }
 }
 
-export const llmFromEnv = (env: NodeJS.ProcessEnv): LlmSettings | null => {
+/**
+ * Empreinte d'une configuration d'IA : ce qu'une validation (contrat de
+ * sous-traitance, localisation, rétention, non-réutilisation des données)
+ * approuve. La clé d'API n'y entre pas : elle peut tourner sans nouvelle
+ * validation ; l'hôte, le modèle ou la liste blanche, non.
+ */
+export const llmApprovalFingerprint = (
+  s: Pick<LlmSettings, "endpoint" | "model" | "allowHosts">
+) =>
+  createHash("sha256")
+    .update(
+      JSON.stringify({
+        endpoint: s.endpoint,
+        model: s.model,
+        allowHosts: [...s.allowHosts].sort(),
+      })
+    )
+    .digest("hex");
+
+export type LlmGate =
+  | { state: "absent" }
+  | { state: "not_approved"; fingerprint: string }
+  | { state: "approved"; settings: LlmSettings };
+
+/**
+ * L'IA reste DÉSACTIVÉE tant que sa configuration n'a pas été approuvée :
+ * `NJP_CALL_LLM_APPROVED_FINGERPRINT` doit valoir l'empreinte exacte de
+ * (point d'accès, modèle, hôtes autorisés). Sans cela : repli déterministe,
+ * et le démarrage le dit (`llm: "not_approved"`), empreinte à faire valider.
+ */
+export const llmGateFromEnv = (env: NodeJS.ProcessEnv): LlmGate => {
   if (
     !env.NJP_CALL_LLM_ENDPOINT ||
     !env.NJP_CALL_LLM_API_KEY ||
     !env.NJP_CALL_LLM_MODEL
   )
-    return null;
-  return {
+    return { state: "absent" };
+  const settings: LlmSettings = {
     endpoint: env.NJP_CALL_LLM_ENDPOINT,
     apiKey: env.NJP_CALL_LLM_API_KEY,
     model: env.NJP_CALL_LLM_MODEL,
@@ -122,4 +153,13 @@ export const llmFromEnv = (env: NodeJS.ProcessEnv): LlmSettings | null => {
       .filter(Boolean),
     timeoutMs: Number(env.NJP_CALL_LLM_TIMEOUT_MS ?? 6000),
   };
+  const fingerprint = llmApprovalFingerprint(settings);
+  return env.NJP_CALL_LLM_APPROVED_FINGERPRINT === fingerprint
+    ? { state: "approved", settings }
+    : { state: "not_approved", fingerprint };
+};
+
+export const llmFromEnv = (env: NodeJS.ProcessEnv): LlmSettings | null => {
+  const g = llmGateFromEnv(env);
+  return g.state === "approved" ? g.settings : null;
 };

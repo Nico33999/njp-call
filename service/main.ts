@@ -15,6 +15,7 @@
  * | `NJP_CALL_NUMBER_ROUTES` | `+33XXXXXXXXX=cabinetId;…` |
  * | `NJP_CALL_CONFIG_DIR` | dossier de configurations PUBLIQUES `<cabinetId>.json` |
  * | `NJP_CALL_LLM_*` | fournisseur d'IA, désactivé si absent (voir llm.ts) |
+ * | `NJP_CALL_LLM_APPROVED_FINGERPRINT` | empreinte de la configuration d'IA APPROUVÉE ; sans elle, l'IA reste désactivée |
  * | `NJP_CALL_TLS_CERT` / `NJP_CALL_TLS_KEY` | recette : TLS terminé par le service (PEM) ; en exploitation, un frontal TLS |
  * | `NJP_CALL_TEST_FAULT` | bancs de panne : `point` ou `point@n` — honoré en `recette` SEULEMENT |
  * | `PORT` | port d'écoute |
@@ -25,7 +26,7 @@ import path from "node:path";
 import { sanitizeConfig, type CabinetConfig } from "../core/config";
 import { FallbackUnderstander } from "../core/session";
 import { SimulatorInbound } from "./inbound";
-import { LlmUnderstander, llmFromEnv } from "./llm";
+import { LlmUnderstander, llmGateFromEnv } from "./llm";
 import { parseDeviceTokens } from "./security";
 import { createService, type FaultPoint } from "./server";
 import { ServiceStore, storageKeyFromEnv } from "./store";
@@ -146,7 +147,16 @@ if (env.NJP_CALL_TEST_FAULT) {
   };
 }
 
-const llm = llmFromEnv(env);
+const llmGate = llmGateFromEnv(env);
+const llm = llmGate.state === "approved" ? llmGate.settings : null;
+if (llmGate.state === "not_approved")
+  console.warn(
+    JSON.stringify({
+      event: "llm_not_approved",
+      fingerprint: llmGate.fingerprint,
+      note: "IA désactivée : configuration non approuvée (NJP_CALL_LLM_APPROVED_FINGERPRINT)",
+    })
+  );
 const service = createService({
   store,
   inbound: new SimulatorInbound(secret),
@@ -192,7 +202,11 @@ service.server.listen(Number(env.PORT ?? 8787), env.HOST ?? "127.0.0.1", () => {
       storage: dbPath ? "durable" : "volatile",
       tls: env.NJP_CALL_TLS_CERT ? "service" : "frontal",
       cabinets: configs.size,
-      llm: llm ? "configured" : "fallback",
+      llm: llm
+        ? "approved"
+        : llmGate.state === "not_approved"
+          ? "not_approved"
+          : "fallback",
     })
   );
 });

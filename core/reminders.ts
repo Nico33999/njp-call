@@ -78,9 +78,25 @@ export const DEFAULT_REMINDER_POLICY: ReminderPolicy = {
 };
 
 export interface ReminderChannel {
-  /** Rend l'identifiant du prestataire, ou lève. N'envoie rien en test. */
-  send(reminder: Reminder, text: string): Promise<{ providerRef: string }>;
+  /**
+   * Rend l'identifiant du prestataire (message ACCEPTÉ, pas encore remis),
+   * ou lève. `idempotencyKey` (rappel + tentative) est transmis au
+   * prestataire quand il sait dédoublonner.
+   *
+   * - `ReminderNotSent` : on SAIT que rien n'est parti ⇒ nouvel essai permis ;
+   * - `ReminderOutcomeUnknown` (délai dépassé après envoi…) : peut-être
+   *   parti ⇒ JAMAIS de nouvel essai automatique (pas de double SMS) ;
+   * - toute autre erreur est traitée comme `ReminderOutcomeUnknown`.
+   */
+  send(
+    reminder: Reminder,
+    text: string,
+    idempotencyKey: string
+  ): Promise<{ providerRef: string }>;
 }
+
+export class ReminderNotSent extends Error {}
+export class ReminderOutcomeUnknown extends Error {}
 
 /** Ce que NJP CARE dit d'un rendez-vous, au moment de l'envoi. */
 export interface AppointmentLookup {
@@ -348,11 +364,19 @@ export class ReminderEngine {
         });
       } else {
         try {
-          const { providerRef } = await channel.send(r, reminderText(r));
+          const { providerRef } = await channel.send(
+            r,
+            reminderText(r),
+            `${r.id}#${r.attempts}`
+          );
           r.status = "sent";
           r.history.push({ at: nowIso, event: "sent", detail: providerRef });
-        } catch {
-          if (r.attempts >= this.policy.maxAttempts) {
+        } catch (e) {
+          if (!(e instanceof ReminderNotSent)) {
+            // Peut-être parti : un second envoi risquerait un double rappel.
+            r.status = "sent";
+            r.history.push({ at: nowIso, event: "sent_outcome_unknown" });
+          } else if (r.attempts >= this.policy.maxAttempts) {
             r.status = "failed";
             r.history.push({
               at: nowIso,
