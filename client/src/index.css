@@ -155,6 +155,9 @@
 
   /* Neo-brutalist button */
   .brutal-btn {
+    padding: 0.5rem 0.9rem;
+    font-size: 0.875rem;
+    background: var(--card);
     border: 2px solid var(--border);
     box-shadow: 3px 3px 0px var(--border);
     font-family: var(--font-heading);
@@ -164,6 +167,10 @@
   .brutal-btn:hover {
     transform: translate(-1px, -1px);
     box-shadow: 4px 4px 0px var(--border);
+  }
+  .brutal-btn:disabled {
+    opacity: 0.5;
+    transform: none;
   }
   .brutal-btn:active {
     transform: translate(2px, 2px);

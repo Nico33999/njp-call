@@ -1,456 +1,251 @@
 /*
- * Design: Signal — Néo-Brutaliste Télécom
- * Page de configuration avec formulaire structuré en sections
- * Bordures épaisses, ombres décalées, inputs avec style brutal
+ * NJP CALL — configuration publique du cabinet.
+ *
+ * Tout ce qui est ici peut être exporté sans risque : aucun secret, aucun
+ * numéro de transfert (une destination est un libellé et une référence ; le
+ * numéro vit côté service).
  */
-import { useConfig } from "@/contexts/ConfigContext";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Switch } from "@/components/ui/switch";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Separator } from "@/components/ui/separator";
+import { useRef, useState } from "react";
 import { toast } from "sonner";
-import {
-  User, Building2, Clock, Globe, Mail, Calendar, Phone, Headphones,
-  Plus, Trash2, RotateCcw, Save, ChevronDown, ChevronUp, Brain
-} from "lucide-react";
-import { motion } from "framer-motion";
-import { useState } from "react";
+import { useConfig } from "@/contexts/ConfigContext";
+import { activationBlockers, exportConfig, importConfig, type CabinetConfig } from "../../../core/config";
+import { DEFAULT_URGENCY_NOTICE } from "../../../core/emergency";
 
-interface SectionProps {
-  title: string;
-  icon: React.ElementType;
-  children: React.ReactNode;
-  defaultOpen?: boolean;
-}
+const DAYS = ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"];
+const BLOCKERS: Record<string, string> = {
+  cabinet_name: "Nom du cabinet manquant",
+  opening_hours: "Horaires d'ouverture manquants",
+  urgency_notice_not_validated: "Consigne d'urgence non validée par le cabinet",
+  simulation_enabled: "Mode simulation encore actif",
+};
 
-function Section({ title, icon: Icon, children, defaultOpen = true }: SectionProps) {
-  const [open, setOpen] = useState(defaultOpen);
-  return (
-    <div className="brutal-card overflow-hidden">
-      <button
-        onClick={() => setOpen(!open)}
-        className="w-full flex items-center justify-between p-5 bg-secondary/50 border-b-2 border-foreground hover:bg-secondary transition-colors"
-      >
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 bg-primary flex items-center justify-center border-2 border-foreground shadow-[2px_2px_0px] shadow-foreground">
-            <Icon className="w-5 h-5 text-primary-foreground" />
-          </div>
-          <h2 className="font-heading text-lg font-bold">{title}</h2>
-        </div>
-        {open ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
-      </button>
-      {open && (
-        <motion.div
-          initial={{ height: 0, opacity: 0 }}
-          animate={{ height: "auto", opacity: 1 }}
-          transition={{ duration: 0.2 }}
-          className="p-5 space-y-5"
-        >
-          {children}
-        </motion.div>
-      )}
-    </div>
-  );
-}
+const field = "w-full border-2 border-foreground bg-background px-3 py-2 text-sm";
+const label = "block text-sm font-heading font-semibold mb-1";
+const card = "border-[3px] border-foreground bg-card p-5 space-y-4";
 
-function FieldRow({ children, cols = 2 }: { children: React.ReactNode; cols?: number }) {
-  return (
-    <div className={`grid gap-5 ${cols === 3 ? "sm:grid-cols-3" : cols === 1 ? "grid-cols-1" : "sm:grid-cols-2"}`}>
-      {children}
-    </div>
-  );
-}
+const slug = (s: string) => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, "_").replace(/^_|_$/g, "").slice(0, 40) || "ref";
 
 export default function Config() {
-  const { config, updateConfig, updateService, addService, removeService, resetConfig } = useConfig();
+  const { config, update, replace, reset, dropped } = useConfig();
+  const [draft, setDraft] = useState({ practitioner: "", type: "", typeDuration: 30, destination: "" });
+  const fileRef = useRef<HTMLInputElement>(null);
+  const blockers = activationBlockers(config);
 
-  const handleExport = () => {
-    const json = JSON.stringify(config, null, 2);
-    const blob = new Blob([json], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `${config.companyName || "assistant"}-config.json`;
-    a.click();
-    URL.revokeObjectURL(url);
-    toast.success("Configuration exportée !");
+  const setHours = (weekday: number, from: string, to: string, on: boolean) => {
+    const rest = config.openingHours.filter((p) => p.weekday !== weekday);
+    update({ openingHours: on ? [...rest, { weekday, from, to }].sort((a, b) => a.weekday - b.weekday) : rest });
   };
 
-  const handleImport = () => {
-    const input = document.createElement("input");
-    input.type = "file";
-    input.accept = ".json";
-    input.onchange = (e) => {
-      const file = (e.target as HTMLInputElement).files?.[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = (ev) => {
-        try {
-          const data = JSON.parse(ev.target?.result as string);
-          updateConfig(data);
-          toast.success("Configuration importée !");
-        } catch {
-          toast.error("Fichier invalide.");
-        }
-      };
-      reader.readAsText(file);
-    };
-    input.click();
+  const download = () => {
+    const blob = new Blob([exportConfig(config)], { type: "application/json" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "njp-call-configuration.json";
+    a.click();
+    URL.revokeObjectURL(a.href);
+  };
+
+  const upload = async (f: File) => {
+    try {
+      const { config: next, dropped: d } = importConfig(await f.text());
+      replace(next);
+      toast.success(d.length ? `Configuration importée. Données sensibles ignorées : ${d.join(", ")}.` : "Configuration importée.");
+    } catch {
+      toast.error("Fichier illisible.");
+    }
   };
 
   return (
-    <div className="min-h-screen">
-      {/* Header */}
-      <div className="border-b-[3px] border-foreground bg-secondary/30">
-        <div className="container py-8">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <div>
-              <h1 className="text-3xl lg:text-4xl font-bold mb-2">Configuration</h1>
-              <p className="text-muted-foreground">
-                Personnalisez votre assistant d'accueil téléphonique.
-              </p>
-            </div>
-            <div className="flex gap-3">
-              <button onClick={handleImport} className="brutal-btn bg-card text-foreground px-4 py-2 text-sm flex items-center gap-2">
-                <Save className="w-4 h-4" />
-                Importer
-              </button>
-              <button onClick={handleExport} className="brutal-btn bg-primary text-primary-foreground px-4 py-2 text-sm flex items-center gap-2">
-                <Save className="w-4 h-4" />
-                Exporter
-              </button>
-              <button
-                onClick={() => { resetConfig(); toast.info("Configuration réinitialisée."); }}
-                className="brutal-btn bg-accent text-accent-foreground px-4 py-2 text-sm flex items-center gap-2"
-              >
-                <RotateCcw className="w-4 h-4" />
-              </button>
-            </div>
+    <div className="container py-8 max-w-4xl space-y-6">
+      <header>
+        <h1 className="text-3xl font-bold mb-2">Configuration</h1>
+        <p className="text-muted-foreground text-sm">Réglages publics de l'assistante. Les accès téléphoniques et les secrets sont gérés côté service, jamais dans ce navigateur.</p>
+      </header>
+
+      {dropped.length > 0 && (
+        <div role="status" className="border-[3px] border-foreground bg-secondary/40 p-4 text-sm">
+          L'ancienne configuration contenait des données de connexion (<code>{dropped.join(", ")}</code>). Elles ont été supprimées de ce navigateur ; elles se configurent désormais côté service.
+        </div>
+      )}
+
+      <section className={card}>
+        <h2 className="text-xl font-bold">Assistante</h2>
+        <div className="grid gap-4 md:grid-cols-2">
+          <div>
+            <label className={label} htmlFor="assistantName">Nom de l'assistante</label>
+            <input id="assistantName" className={field} value={config.assistantName} onChange={(e) => update({ assistantName: e.target.value })} />
+          </div>
+          <div>
+            <label className={label} htmlFor="cabinetName">Nom du cabinet</label>
+            <input id="cabinetName" className={field} value={config.cabinetName} onChange={(e) => update({ cabinetName: e.target.value })} />
           </div>
         </div>
-      </div>
+        <p className="text-xs text-muted-foreground">L'assistante s'annonce toujours comme automatisée ; ce message ne peut pas être retiré.</p>
+        <div>
+          <label className={label} htmlFor="greeting">Complément d'accueil (heures d'ouverture)</label>
+          <textarea id="greeting" className={field} rows={2} value={config.greeting} onChange={(e) => update({ greeting: e.target.value })} />
+        </div>
+        <div>
+          <label className={label} htmlFor="closedGreeting">Complément d'accueil (cabinet fermé)</label>
+          <textarea id="closedGreeting" className={field} rows={2} value={config.closedGreeting} onChange={(e) => update({ closedGreeting: e.target.value })} />
+        </div>
+        <div>
+          <label className={label} htmlFor="afterHours">Hors horaires</label>
+          <select id="afterHours" className={field} value={config.afterHours} onChange={(e) => update({ afterHours: e.target.value as CabinetConfig["afterHours"] })}>
+            <option value="message">Prendre un message</option>
+            <option value="callback">Enregistrer une demande de rappel</option>
+            <option value="notice_only">Informer seulement</option>
+          </select>
+        </div>
+      </section>
 
-      {/* Form */}
-      <div className="container py-8 space-y-6">
-        {/* Identity */}
-        <Section title="Identité de l'assistant" icon={User}>
-          <FieldRow>
-            <div className="space-y-2">
-              <Label htmlFor="assistantName" className="font-heading font-semibold">Nom de l'assistant(e)</Label>
-              <Input
-                id="assistantName"
-                value={config.assistantName}
-                onChange={(e) => updateConfig({ assistantName: e.target.value })}
-                placeholder="Ex: Clara"
-                className="border-2 border-foreground shadow-[2px_2px_0px] shadow-foreground focus:shadow-[3px_3px_0px]"
-              />
+      <section className={card}>
+        <h2 className="text-xl font-bold">Horaires</h2>
+        {[1, 2, 3, 4, 5, 6, 0].map((d) => {
+          const p = config.openingHours.find((x) => x.weekday === d);
+          return (
+            <div key={d} className="flex items-center gap-3 text-sm">
+              <label className="w-28 flex items-center gap-2">
+                <input type="checkbox" checked={!!p} onChange={(e) => setHours(d, p?.from ?? "09:00", p?.to ?? "18:00", e.target.checked)} /> {DAYS[d]}
+              </label>
+              {p && (
+                <>
+                  <input type="time" aria-label={`Ouverture ${DAYS[d]}`} className="border-2 border-foreground px-2 py-1" value={p.from} onChange={(e) => setHours(d, e.target.value, p.to, true)} />
+                  <span>–</span>
+                  <input type="time" aria-label={`Fermeture ${DAYS[d]}`} className="border-2 border-foreground px-2 py-1" value={p.to} onChange={(e) => setHours(d, p.from, e.target.value, true)} />
+                </>
+              )}
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="companyName" className="font-heading font-semibold">Nom de l'entreprise</Label>
-              <Input
-                id="companyName"
-                value={config.companyName}
-                onChange={(e) => updateConfig({ companyName: e.target.value })}
-                placeholder="Ex: TechCorp"
-                className="border-2 border-foreground shadow-[2px_2px_0px] shadow-foreground focus:shadow-[3px_3px_0px]"
-              />
-            </div>
-          </FieldRow>
-          <FieldRow>
-            <div className="space-y-2">
-              <Label className="font-heading font-semibold">Ton de l'assistant</Label>
-              <Select value={config.tone} onValueChange={(v) => updateConfig({ tone: v })}>
-                <SelectTrigger className="border-2 border-foreground shadow-[2px_2px_0px] shadow-foreground">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="chaleureux">Chaleureux</SelectItem>
-                  <SelectItem value="professionnel">Très professionnel</SelectItem>
-                  <SelectItem value="premium">Premium / Luxe</SelectItem>
-                  <SelectItem value="decontracte">Décontracté</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <Label className="font-heading font-semibold">Téléphonie</Label>
-              <Select value={config.telephonyProvider} onValueChange={(v) => updateConfig({ telephonyProvider: v })}>
-                <SelectTrigger className="border-2 border-foreground shadow-[2px_2px_0px] shadow-foreground">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="OnOff Business">OnOff Business</SelectItem>
-                  <SelectItem value="Webex">Webex</SelectItem>
-                  <SelectItem value="SIP/Trunk">SIP / Trunk</SelectItem>
-                  <SelectItem value="Autre">Autre</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </FieldRow>
-        </Section>
+          );
+        })}
+      </section>
 
-        {/* Schedule */}
-        <Section title="Horaires et langue" icon={Clock}>
-          <FieldRow>
-            <div className="space-y-2">
-              <Label className="font-heading font-semibold">Horaires d'ouverture</Label>
-              <Input
-                value={config.openingHours}
-                onChange={(e) => updateConfig({ openingHours: e.target.value })}
-                placeholder="Ex: Lun-Ven 9h-18h"
-                className="border-2 border-foreground shadow-[2px_2px_0px] shadow-foreground"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label className="font-heading font-semibold">Fuseau horaire</Label>
-              <Select value={config.timezone} onValueChange={(v) => updateConfig({ timezone: v })}>
-                <SelectTrigger className="border-2 border-foreground shadow-[2px_2px_0px] shadow-foreground">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Europe/Paris">Europe/Paris</SelectItem>
-                  <SelectItem value="Europe/London">Europe/London</SelectItem>
-                  <SelectItem value="America/New_York">America/New_York</SelectItem>
-                  <SelectItem value="Asia/Tokyo">Asia/Tokyo</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </FieldRow>
-          <FieldRow>
-            <div className="space-y-2">
-              <Label className="font-heading font-semibold">Langue principale</Label>
-              <Input
-                value={config.language}
-                onChange={(e) => updateConfig({ language: e.target.value })}
-                placeholder="Français"
-                className="border-2 border-foreground shadow-[2px_2px_0px] shadow-foreground"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label className="font-heading font-semibold">Autres langues</Label>
-              <Input
-                value={config.otherLanguages}
-                onChange={(e) => updateConfig({ otherLanguages: e.target.value })}
-                placeholder="Ex: Anglais, Espagnol"
-                className="border-2 border-foreground shadow-[2px_2px_0px] shadow-foreground"
-              />
-            </div>
-          </FieldRow>
-          <div className="flex items-center gap-3 p-4 bg-secondary/50 border-2 border-foreground">
-            <Switch
-              checked={config.recordingNotice}
-              onCheckedChange={(v) => updateConfig({ recordingNotice: v })}
-            />
-            <Label className="font-heading font-semibold">
-              Annoncer l'enregistrement de l'appel
-            </Label>
+      <section className={card}>
+        <h2 className="text-xl font-bold">Praticiens, rendez-vous, transferts</h2>
+        <p className="text-xs text-muted-foreground">Dans NJP CARE, ces références sont reprises du logiciel. Ici, elles servent à la recette.</p>
+        <ListEditor
+          title="Praticiens"
+          items={config.practitioners.map((p) => ({ ref: p.ref, label: p.displayName }))}
+          value={draft.practitioner}
+          onChange={(v) => setDraft({ ...draft, practitioner: v })}
+          onAdd={() => {
+            update({ practitioners: [...config.practitioners, { ref: `prac_${slug(draft.practitioner)}`, displayName: draft.practitioner, aliases: [] }] });
+            setDraft({ ...draft, practitioner: "" });
+          }}
+          onRemove={(ref) => update({ practitioners: config.practitioners.filter((p) => p.ref !== ref) })}
+        />
+        <ListEditor
+          title="Types de rendez-vous"
+          items={config.appointmentTypes.map((t) => ({ ref: t.ref, label: `${t.label} (${t.durationMin} min)` }))}
+          value={draft.type}
+          onChange={(v) => setDraft({ ...draft, type: v })}
+          onAdd={() => {
+            update({ appointmentTypes: [...config.appointmentTypes, { ref: `type_${slug(draft.type)}`, label: draft.type, durationMin: draft.typeDuration, newPatientAllowed: true }] });
+            setDraft({ ...draft, type: "" });
+          }}
+          onRemove={(ref) => update({ appointmentTypes: config.appointmentTypes.filter((t) => t.ref !== ref) })}
+        />
+        <ListEditor
+          title="Destinations de transfert (libellé seulement)"
+          items={config.transferDestinations.map((t) => ({ ref: t.ref, label: t.label }))}
+          value={draft.destination}
+          onChange={(v) => setDraft({ ...draft, destination: v })}
+          onAdd={() => {
+            update({ transferDestinations: [...config.transferDestinations, { ref: `dest_${slug(draft.destination)}`, label: draft.destination }] });
+            setDraft({ ...draft, destination: "" });
+          }}
+          onRemove={(ref) => update({ transferDestinations: config.transferDestinations.filter((t) => t.ref !== ref) })}
+        />
+      </section>
+
+      <section className={card}>
+        <h2 className="text-xl font-bold">Consigne en cas de détresse exprimée</h2>
+        <p className="text-sm text-muted-foreground">NJP CALL n'évalue aucune situation médicale. Quand un appelant exprime une détresse, l'assistante lit cette consigne et propose un humain si une destination est prévue.</p>
+        <textarea aria-label="Consigne d'urgence" className={field} rows={3} value={config.urgency.notice ?? DEFAULT_URGENCY_NOTICE} onChange={(e) => update({ urgency: { ...config.urgency, notice: e.target.value, validatedByCabinet: false } })} />
+        <select aria-label="Destination humaine" className={field} value={config.urgency.humanDestinationRef ?? ""} onChange={(e) => update({ urgency: { ...config.urgency, humanDestinationRef: e.target.value || undefined } })}>
+          <option value="">Aucun transfert</option>
+          {config.transferDestinations.map((d) => (
+            <option key={d.ref} value={d.ref}>{d.label}</option>
+          ))}
+        </select>
+        <label className="flex items-center gap-2 text-sm">
+          <input type="checkbox" checked={config.urgency.validatedByCabinet} onChange={(e) => update({ urgency: { ...config.urgency, validatedByCabinet: e.target.checked } })} />
+          Le cabinet a relu et valide cette consigne
+        </label>
+      </section>
+
+      <section className={card}>
+        <h2 className="text-xl font-bold">Rappels, conservation, secours</h2>
+        <label className="flex items-center gap-2 text-sm">
+          <input type="checkbox" checked={config.reminders.enabled} onChange={(e) => update({ reminders: { ...config.reminders, enabled: e.target.checked } })} /> Rappels automatiques de rendez-vous
+        </label>
+        <div className="grid gap-4 md:grid-cols-2">
+          <div>
+            <label className={label} htmlFor="hoursBefore">Délai du rappel (heures avant)</label>
+            <input id="hoursBefore" type="number" min={2} max={96} className={field} value={config.reminders.hoursBefore} onChange={(e) => update({ reminders: { ...config.reminders, hoursBefore: Number(e.target.value) } })} />
           </div>
-        </Section>
-
-        {/* Services */}
-        <Section title="Services et transferts" icon={Headphones}>
-          <div className="space-y-4">
-            {config.services.map((svc, idx) => (
-              <div key={svc.id} className="p-4 bg-secondary/30 border-2 border-foreground">
-                <div className="flex items-center justify-between mb-3">
-                  <span className="font-heading font-bold text-sm">Service {idx + 1}</span>
-                  {config.services.length > 1 && (
-                    <button
-                      onClick={() => removeService(svc.id)}
-                      className="text-accent hover:text-destructive transition-colors"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  )}
-                </div>
-                <div className="grid sm:grid-cols-3 gap-3">
-                  <Input
-                    value={svc.name}
-                    onChange={(e) => updateService(svc.id, { name: e.target.value })}
-                    placeholder="Nom du service"
-                    className="border-2 border-foreground shadow-[2px_2px_0px] shadow-foreground text-sm"
-                  />
-                  <Input
-                    value={svc.transferTarget}
-                    onChange={(e) => updateService(svc.id, { transferTarget: e.target.value })}
-                    placeholder="N° de transfert"
-                    className="border-2 border-foreground shadow-[2px_2px_0px] shadow-foreground text-sm"
-                  />
-                  <Input
-                    value={svc.email}
-                    onChange={(e) => updateService(svc.id, { email: e.target.value })}
-                    placeholder="Email du service"
-                    className="border-2 border-foreground shadow-[2px_2px_0px] shadow-foreground text-sm"
-                  />
-                </div>
-              </div>
-            ))}
-            <button
-              onClick={addService}
-              className="brutal-btn bg-card text-foreground px-4 py-2 text-sm flex items-center gap-2 w-full justify-center"
-            >
-              <Plus className="w-4 h-4" />
-              Ajouter un service
-            </button>
+          <div>
+            <label className={label} htmlFor="retention">Conservation des comptes rendus (jours)</label>
+            <input id="retention" type="number" min={1} max={3650} className={field} value={config.retention.callRecordDays} onChange={(e) => update({ retention: { callRecordDays: Number(e.target.value), storeAudio: false } })} />
           </div>
-        </Section>
+        </div>
+        <p className="text-xs text-muted-foreground">L'audio des appels n'est pas conservé.</p>
+        <div>
+          <label className={label} htmlFor="degraded">Si la compréhension automatique est indisponible</label>
+          <select id="degraded" className={field} value={config.degradedMode} onChange={(e) => update({ degradedMode: e.target.value as CabinetConfig["degradedMode"] })}>
+            <option value="message_only">Continuer en prise de message guidée</option>
+            <option value="notice_only">Informer et raccrocher</option>
+          </select>
+        </div>
+      </section>
 
-        {/* Contact */}
-        <Section title="Emails et notifications" icon={Mail}>
-          <FieldRow>
-            <div className="space-y-2">
-              <Label className="font-heading font-semibold">Email principal (standard)</Label>
-              <Input
-                value={config.emailMain}
-                onChange={(e) => updateConfig({ emailMain: e.target.value })}
-                placeholder="contact@entreprise.com"
-                className="border-2 border-foreground shadow-[2px_2px_0px] shadow-foreground"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label className="font-heading font-semibold">CRM / Ticketing (optionnel)</Label>
-              <Select value={config.crmTool || "none"} onValueChange={(v) => updateConfig({ crmTool: v === "none" ? "" : v })}>
-                <SelectTrigger className="border-2 border-foreground shadow-[2px_2px_0px] shadow-foreground">
-                  <SelectValue placeholder="Aucun" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="none">Aucun</SelectItem>
-                  <SelectItem value="HubSpot">HubSpot</SelectItem>
-                  <SelectItem value="Notion">Notion</SelectItem>
-                  <SelectItem value="Zendesk">Zendesk</SelectItem>
-                  <SelectItem value="Salesforce">Salesforce</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </FieldRow>
-        </Section>
+      <section className={card}>
+        <h2 className="text-xl font-bold">Consignes et connaissances du cabinet</h2>
+        <p className="text-sm text-muted-foreground">Elles complètent les règles de NJP CALL (secrétariat administratif, aucune donnée inventée, aucun conseil médical…) et ne peuvent pas les remplacer.</p>
+        <textarea aria-label="Consignes du cabinet" className={field} rows={4} value={config.cabinetInstructions} onChange={(e) => update({ cabinetInstructions: e.target.value })} />
+        <textarea aria-label="Connaissances du cabinet" className={field} rows={4} placeholder="Accès, parking, documents à apporter…" value={config.cabinetKnowledge} onChange={(e) => update({ cabinetKnowledge: e.target.value })} />
+      </section>
 
-        {/* Calendar */}
-        <Section title="Agenda et rendez-vous" icon={Calendar}>
-          <FieldRow>
-            <div className="space-y-2">
-              <Label className="font-heading font-semibold">Fournisseur de calendrier</Label>
-              <Select value={config.calendarProvider} onValueChange={(v) => updateConfig({ calendarProvider: v })}>
-                <SelectTrigger className="border-2 border-foreground shadow-[2px_2px_0px] shadow-foreground">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Google Calendar">Google Calendar</SelectItem>
-                  <SelectItem value="Outlook">Outlook</SelectItem>
-                  <SelectItem value="Webex Scheduler">Webex Scheduler</SelectItem>
-                  <SelectItem value="Autre">Autre</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="space-y-2">
-              <Label className="font-heading font-semibold">ID du calendrier</Label>
-              <Input
-                value={config.calendarId}
-                onChange={(e) => updateConfig({ calendarId: e.target.value })}
-                placeholder="Ex: mon-calendrier@gmail.com"
-                className="border-2 border-foreground shadow-[2px_2px_0px] shadow-foreground"
-              />
-            </div>
-          </FieldRow>
-        </Section>
+      <section className={card}>
+        <h2 className="text-xl font-bold">Activation</h2>
+        {blockers.length ? (
+          <ul className="list-disc pl-5 text-sm">{blockers.map((b) => <li key={b}>{BLOCKERS[b] ?? b}</li>)}</ul>
+        ) : (
+          <p className="text-sm">Aucun point bloquant côté configuration. L'activation se fait dans NJP CARE, après installation depuis le Store.</p>
+        )}
+        <div className="flex flex-wrap gap-3">
+          <button type="button" className="brutal-btn" onClick={download}>Exporter</button>
+          <button type="button" className="brutal-btn" onClick={() => fileRef.current?.click()}>Importer</button>
+          <input ref={fileRef} type="file" accept="application/json" hidden onChange={(e) => e.target.files?.[0] && upload(e.target.files[0])} />
+          <button type="button" className="brutal-btn" onClick={reset}>Réinitialiser</button>
+        </div>
+      </section>
+    </div>
+  );
+}
 
-        {/* Custom Greetings */}
-        <Section title="Messages personnalisés" icon={Globe} defaultOpen={false}>
-          <div className="space-y-5">
-            <div className="space-y-2">
-              <Label className="font-heading font-semibold">Message d'accueil (heures ouvrées)</Label>
-              <Textarea
-                value={config.customGreeting}
-                onChange={(e) => updateConfig({ customGreeting: e.target.value })}
-                placeholder={`Bonjour, vous êtes bien chez [COMPANY_NAME], ici [ASSISTANT_NAME]. Je vous écoute — comment puis-je vous aider ?`}
-                rows={3}
-                className="border-2 border-foreground shadow-[2px_2px_0px] shadow-foreground resize-none"
-              />
-              <p className="text-xs text-muted-foreground">
-                Variables disponibles : [COMPANY_NAME], [ASSISTANT_NAME]
-              </p>
-            </div>
-            <div className="space-y-2">
-              <Label className="font-heading font-semibold">Message hors horaires</Label>
-              <Textarea
-                value={config.customClosedGreeting}
-                onChange={(e) => updateConfig({ customClosedGreeting: e.target.value })}
-                placeholder={`Bonjour, vous êtes chez [COMPANY_NAME]. Nous sommes actuellement fermés. Je peux prendre un message et vous faire rappeler, ou planifier un rendez-vous. Que préférez-vous ?`}
-                rows={3}
-                className="border-2 border-foreground shadow-[2px_2px_0px] shadow-foreground resize-none"
-              />
-            </div>
-          </div>
-        </Section>
-
-        {/* === NOUVELLE SECTION : Configuration IA conversationnelle === */}
-        <Section title="Instructions IA avancées (Vraie IA)" icon={Brain} defaultOpen={true}>
-          <div className="space-y-6">
-            <div className="p-4 bg-primary/10 border-2 border-primary">
-              <p className="text-sm text-primary-foreground/90">
-                Ces instructions sont envoyées directement à l'IA (Groq). Laisse vide pour utiliser le comportement par défaut intelligent.
-              </p>
-            </div>
-
-            <div className="space-y-2">
-              <Label className="font-heading font-semibold">Prompt système personnalisé (optionnel)</Label>
-              <Textarea
-                value={config.customSystemPrompt}
-                onChange={(e) => updateConfig({ customSystemPrompt: e.target.value })}
-                placeholder="Ex: Tu es une assistante très empathique et experte en support technique. Toujours proposer des solutions concrètes avant de transférer. Ne jamais dire 'je ne sais pas' sans proposer une alternative."
-                rows={6}
-                className="border-2 border-foreground shadow-[2px_2px_0px] shadow-foreground resize-y font-mono text-sm"
-              />
-              <p className="text-xs text-muted-foreground">
-                Si rempli, ce prompt remplace / complète le prompt par défaut. Sois précis sur le style, les règles et les priorités.
-              </p>
-            </div>
-
-            <div className="space-y-2">
-              <Label className="font-heading font-semibold">Connaissances spécifiques de l'entreprise</Label>
-              <Textarea
-                value={config.companyKnowledge}
-                onChange={(e) => updateConfig({ companyKnowledge: e.target.value })}
-                placeholder="Ex: Nous vendons des logiciels SaaS B2B. Notre produit phare est 'FlowCRM'. Délai moyen de réponse support = 4h. Politique de remboursement : 30 jours."
-                rows={5}
-                className="border-2 border-foreground shadow-[2px_2px_0px] shadow-foreground resize-y"
-              />
-              <p className="text-xs text-muted-foreground">
-                L'IA utilisera ces informations pour répondre de façon précise et contextuelle.
-              </p>
-            </div>
-          </div>
-        </Section>
-
-        {/* Prompt Preview */}
-        <Section title="Aperçu du prompt système envoyé à l'IA" icon={Phone} defaultOpen={false}>
-          <div className="p-4 bg-foreground text-background font-mono text-sm leading-relaxed border-2 border-foreground overflow-x-auto whitespace-pre-wrap max-h-96 overflow-y-auto">
-{config.customSystemPrompt 
-  ? config.customSystemPrompt 
-  : `Tu es ${config.assistantName || "[ASSISTANT_NAME]"}, l'assistant(e) d'accueil téléphonique de ${config.companyName || "[COMPANY_NAME]"}.
-Tu réponds comme une vraie secrétaire : naturel, rapide, professionnel, empathique.
-Ton : ${config.tone}
-Langue : ${config.language}${config.otherLanguages ? ` + ${config.otherLanguages}` : ""}
-Horaires : ${config.openingHours}
-Fuseau : ${config.timezone}
-
-Services disponibles :
-${config.services.map((s) => `- ${s.name}${s.transferTarget ? ` → ${s.transferTarget}` : ""}${s.email ? ` (${s.email})` : ""}`).join("\n")}
-
-Email standard : ${config.emailMain || "[EMAIL_MAIN]"}
-Calendrier : ${config.calendarProvider} (${config.calendarId || "[CALENDAR_ID]"})
-${config.crmTool ? `CRM : ${config.crmTool}` : ""}
-Téléphonie : ${config.telephonyProvider}
-${config.recordingNotice ? "Annonce d'enregistrement : activée" : ""}
-
-${config.companyKnowledge ? `Connaissances spécifiques :
-${config.companyKnowledge}` : ""}`}
-          </div>
-          <p className="text-xs text-muted-foreground mt-2">
-            C'est ce que l'IA reçoit comme instructions principales.
-          </p>
-        </Section>
+function ListEditor(props: {
+  title: string;
+  items: { ref: string; label: string }[];
+  value: string;
+  onChange: (v: string) => void;
+  onAdd: () => void;
+  onRemove: (ref: string) => void;
+}) {
+  return (
+    <div>
+      <p className={label}>{props.title}</p>
+      <ul className="text-sm mb-2 space-y-1">
+        {props.items.map((i) => (
+          <li key={i.ref} className="flex items-center justify-between border-2 border-foreground px-2 py-1">
+            <span>{i.label} <code className="text-xs text-muted-foreground">{i.ref}</code></span>
+            <button type="button" className="text-xs underline" onClick={() => props.onRemove(i.ref)}>Retirer</button>
+          </li>
+        ))}
+      </ul>
+      <div className="flex gap-2">
+        <input aria-label={`Ajouter — ${props.title}`} className={field} value={props.value} onChange={(e) => props.onChange(e.target.value)} />
+        <button type="button" className="brutal-btn" disabled={!props.value.trim()} onClick={props.onAdd}>Ajouter</button>
       </div>
     </div>
   );
