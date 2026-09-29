@@ -357,6 +357,42 @@ describe("pannes du service avec redémarrage réel du processus", () => {
   }, 30_000);
 });
 
+describe("aucune fuite dans les sorties du processus", () => {
+  it("ni jeton, ni secret, ni clé, ni nom, ni numéro dans stdout/stderr du service", async () => {
+    const t = await setup();
+    const svc = await launch(t.env());
+    t.station.start();
+    await t.stationBack();
+    await t.upToConfirm("call_leak");
+    await t.confirm("call_leak");
+    // Tentatives hostiles : mauvais jeton, signature fausse.
+    await fetch(`http://127.0.0.1:${t.env().PORT}/v1/care/next`, {
+      headers: { authorization: `Bearer ${TOKEN}x` },
+    });
+    await fetch(`http://127.0.0.1:${t.env().PORT}/v1/telephony/sim/webhook`, {
+      method: "POST",
+      headers: { "x-njp-signature": "t=1,v1=" + "0".repeat(64) },
+      body: "{}",
+    });
+    await t.station.stop();
+    svc.proc.kill("SIGTERM");
+    await svc.exited;
+    const all = svc.stdout.join("") + svc.stderr.join("");
+    expect(all.length).toBeGreaterThan(100);
+    for (const secret of [
+      TOKEN,
+      SECRET,
+      KEY_HEX,
+      "Camille",
+      "Fictive",
+      "0600000001",
+      "06 00 00 00 01",
+      "+33600000001",
+    ])
+      expect(all).not.toContain(secret);
+  }, 40_000);
+});
+
 describe("démarrage : refus prudents", () => {
   const refused = async (env: Record<string, string>) => {
     const t = await setup();
