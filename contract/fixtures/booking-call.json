@@ -1,0 +1,56 @@
+[
+  {
+    "format": "njp.call.command",
+    "v": 1,
+    "extensionId": "njp.call",
+    "cabinetId": "cab_fixture",
+    "callId": "call_fixture_rdv",
+    "seq": 1,
+    "idempotencyKey": "call_fixture_rdv/appointment.book/1",
+    "issuedAt": "2026-09-29T08:00:07.000Z",
+    "command": {
+      "type": "appointment.book",
+      "payload": {
+        "person": {
+          "declaredName": "Léa Fictive",
+          "phone": "+33600000003",
+          "relation": "self"
+        },
+        "newPatient": false,
+        "slot": {
+          "slotRef": "slot_001",
+          "start": "2026-10-01T14:00:00+02:00",
+          "end": "2026-10-01T14:30:00+02:00",
+          "practitionerRef": "prac_a"
+        }
+      }
+    }
+  },
+  {
+    "format": "njp.call.command",
+    "v": 1,
+    "extensionId": "njp.call",
+    "cabinetId": "cab_fixture",
+    "callId": "call_fixture_rdv",
+    "seq": 2,
+    "idempotencyKey": "call_fixture_rdv/call.report/1",
+    "issuedAt": "2026-09-29T08:00:08.000Z",
+    "command": {
+      "type": "call.report",
+      "payload": {
+        "startedAt": "2026-09-29T08:00:00.000Z",
+        "endedAt": "2026-09-29T08:00:08.000Z",
+        "outcome": "appointment",
+        "summary": "Appel traité par l'assistante automatisée. Demande : appointment_new. Opérations : appointment.book : confirmed.",
+        "commands": [
+          {
+            "idempotencyKey": "call_fixture_rdv/appointment.book/1",
+            "type": "appointment.book",
+            "status": "confirmed",
+            "reference": "appt_0001"
+          }
+        ]
+      }
+    }
+  }
+]

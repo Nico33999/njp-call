@@ -1,0 +1,56 @@
+[
+  {
+    "format": "njp.call.command",
+    "v": 1,
+    "extensionId": "njp.call",
+    "cabinetId": "cab_fixture",
+    "callId": "call_fixture_msg",
+    "seq": 1,
+    "idempotencyKey": "call_fixture_msg/message.create/1",
+    "issuedAt": "2026-09-29T08:00:05.000Z",
+    "command": {
+      "type": "message.create",
+      "payload": {
+        "caller": {
+          "declaredName": "Camille Fictive",
+          "phone": "+33600000001",
+          "relation": "self"
+        },
+        "recipient": {
+          "kind": "secretariat"
+        },
+        "confirmedText": "Merci de m'envoyer une attestation.",
+        "aiSummary": "Message de Camille Fictive.",
+        "category": "administratif",
+        "level": "normal"
+      }
+    }
+  },
+  {
+    "format": "njp.call.command",
+    "v": 1,
+    "extensionId": "njp.call",
+    "cabinetId": "cab_fixture",
+    "callId": "call_fixture_msg",
+    "seq": 2,
+    "idempotencyKey": "call_fixture_msg/call.report/1",
+    "issuedAt": "2026-09-29T08:00:06.000Z",
+    "command": {
+      "type": "call.report",
+      "payload": {
+        "startedAt": "2026-09-29T08:00:00.000Z",
+        "endedAt": "2026-09-29T08:00:06.000Z",
+        "outcome": "message",
+        "summary": "Appel traité par l'assistante automatisée. Demande : message. Opérations : message.create : confirmed.",
+        "commands": [
+          {
+            "idempotencyKey": "call_fixture_msg/message.create/1",
+            "type": "message.create",
+            "status": "confirmed",
+            "reference": "msg_0001"
+          }
+        ]
+      }
+    }
+  }
+]

@@ -1,0 +1,31 @@
+{
+  "contrat": 2,
+  "id": "njp.call",
+  "nom": "NJP CALL",
+  "editeur": "by NJP CARE",
+  "version": "0.1.0",
+  "resume": "La secrétaire vocale automatisée du cabinet : elle répond aux appels, s'annonce comme assistante automatisée, prend messages, demandes de rappel et demandes de rendez-vous, et les enregistre dans NJP CARE.",
+  "hote": { "protocoleMin": 1, "protocoleMax": 1 },
+  "permissions": [
+    "secretariat.messages.create",
+    "secretariat.messages.read",
+    "secretariat.callbacks.create",
+    "secretariat.calls.write",
+    "appointments.requests.create",
+    "planning.availability.read",
+    "appointments.book",
+    "appointments.reschedule",
+    "appointments.cancel",
+    "notifications.create",
+    "telephony.transfer"
+  ],
+  "points": [
+    "shell.secretariat",
+    "shell.today",
+    "shell.sidebar",
+    "planning.actions",
+    "patient.tabs"
+  ],
+  "distribution": "separee",
+  "clinique": true
+}
