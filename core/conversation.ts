@@ -333,11 +333,13 @@ export const fallbackUnderstand = (
     delete u.confirmation;
   }
   if (
-    /\b(premiere fois|jamais venu|nouveau patient|nouvelle patiente)\b/.test(s)
+    /\b(premiere fois|jamais venue?|nouveau patient|nouvelle patiente)\b/.test(
+      s
+    )
   )
     u.entities.newPatient = true;
   if (
-    /\b(deja venu|deja patient|je suis suivi|suivie? par|je viens deja|deja consulte)\b/.test(
+    /\b(deja venue?|deja patiente?|je suis suivie?|suivie? par|je viens deja|deja consulte)\b/.test(
       s
     )
   )

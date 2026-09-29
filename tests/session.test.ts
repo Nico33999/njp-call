@@ -721,6 +721,41 @@ describe("rendez-vous", () => {
     expect(care.requests).toHaveLength(1);
   });
 
+  it("réservation non proposée par le cabinet : une demande directe, sans consulter le planning", async () => {
+    const { deps, callId, care } = setup();
+    let consulted = 0;
+    const session = CallSession.create({
+      ...deps,
+      config: sanitizeConfig({ ...config, offerSlots: false }),
+      availability: {
+        findSlots: async (c, q) => (consulted++, care.findSlots(c, q)),
+      },
+    });
+    const { said } = await run(
+      session,
+      events(callId, [...BOOKING, { caller: "oui" }])
+    );
+    expect(consulted).toBe(0);
+    expect(said).not.toContain("Je ne peux pas consulter le planning");
+    expect(said).toContain("Je récapitule : demande de rendez-vous");
+    expect(care.requests).toHaveLength(1);
+  });
+
+  it("« je suis déjà venue » (au féminin, sans « oui ») est compris (régression)", async () => {
+    const { session, callId } = setup();
+    await run(
+      session,
+      events(callId, [
+        { caller: "je voudrais un rendez-vous" },
+        { caller: "Léa Fictive" },
+        { caller: "06 00 00 00 03" },
+        { caller: "je suis déjà venue" },
+      ])
+    );
+    expect(session.state.collected.newPatient).toBe(false);
+    expect(session.state.asking).toBe("preference");
+  });
+
   it("date ambiguë : on fait préciser avant de chercher", async () => {
     const { session, callId } = setup();
     const { said } = await run(

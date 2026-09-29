@@ -1950,6 +1950,461 @@
    }
   },
   {
+   "utterance": "je suis déjà venue",
+   "asking": null,
+   "u": {
+    "entities": {
+     "newPatient": false
+    }
+   }
+  },
+  {
+   "utterance": "je suis déjà venue",
+   "asking": "callerName",
+   "u": {
+    "entities": {
+     "newPatient": false
+    }
+   }
+  },
+  {
+   "utterance": "je suis déjà venue",
+   "asking": "concernedName",
+   "u": {
+    "entities": {
+     "newPatient": false,
+     "concernedName": "Je Suis Déjà Venue"
+    }
+   }
+  },
+  {
+   "utterance": "je suis déjà venue",
+   "asking": "phone",
+   "u": {
+    "entities": {
+     "newPatient": false
+    }
+   }
+  },
+  {
+   "utterance": "je suis déjà venue",
+   "asking": "newPatient",
+   "u": {
+    "entities": {
+     "newPatient": false
+    }
+   }
+  },
+  {
+   "utterance": "je suis déjà venue",
+   "asking": "messageText",
+   "u": {
+    "entities": {
+     "newPatient": false,
+     "messageText": "je suis déjà venue"
+    }
+   }
+  },
+  {
+   "utterance": "je suis déjà venue",
+   "asking": "reason",
+   "u": {
+    "entities": {
+     "newPatient": false,
+     "reason": "je suis déjà venue"
+    }
+   }
+  },
+  {
+   "utterance": "je suis déjà venue",
+   "asking": "confirmation",
+   "u": {
+    "entities": {
+     "newPatient": false
+    }
+   }
+  },
+  {
+   "utterance": "je suis déjà venue",
+   "asking": "slot",
+   "u": {
+    "entities": {
+     "newPatient": false
+    }
+   }
+  },
+  {
+   "utterance": "je suis déjà venue",
+   "asking": "anything_else",
+   "u": {
+    "entities": {
+     "newPatient": false
+    }
+   }
+  },
+  {
+   "utterance": "je suis déjà venue",
+   "asking": "currentStart",
+   "u": {
+    "entities": {
+     "newPatient": false
+    }
+   }
+  },
+  {
+   "utterance": "je suis déjà venue",
+   "asking": "preference",
+   "u": {
+    "entities": {
+     "newPatient": false
+    }
+   }
+  },
+  {
+   "utterance": "je ne suis jamais venue",
+   "asking": null,
+   "u": {
+    "entities": {
+     "newPatient": true,
+     "dateTimeText": "je ne suis jamais venue"
+    }
+   }
+  },
+  {
+   "utterance": "je ne suis jamais venue",
+   "asking": "callerName",
+   "u": {
+    "entities": {
+     "newPatient": true,
+     "dateTimeText": "je ne suis jamais venue"
+    }
+   }
+  },
+  {
+   "utterance": "je ne suis jamais venue",
+   "asking": "concernedName",
+   "u": {
+    "entities": {
+     "newPatient": true,
+     "dateTimeText": "je ne suis jamais venue"
+    }
+   }
+  },
+  {
+   "utterance": "je ne suis jamais venue",
+   "asking": "phone",
+   "u": {
+    "entities": {
+     "newPatient": true,
+     "dateTimeText": "je ne suis jamais venue"
+    }
+   }
+  },
+  {
+   "utterance": "je ne suis jamais venue",
+   "asking": "newPatient",
+   "u": {
+    "entities": {
+     "newPatient": true,
+     "dateTimeText": "je ne suis jamais venue"
+    }
+   }
+  },
+  {
+   "utterance": "je ne suis jamais venue",
+   "asking": "messageText",
+   "u": {
+    "entities": {
+     "newPatient": true,
+     "dateTimeText": "je ne suis jamais venue",
+     "messageText": "je ne suis jamais venue"
+    }
+   }
+  },
+  {
+   "utterance": "je ne suis jamais venue",
+   "asking": "reason",
+   "u": {
+    "entities": {
+     "newPatient": true,
+     "dateTimeText": "je ne suis jamais venue",
+     "reason": "je ne suis jamais venue"
+    }
+   }
+  },
+  {
+   "utterance": "je ne suis jamais venue",
+   "asking": "confirmation",
+   "u": {
+    "entities": {
+     "newPatient": true,
+     "dateTimeText": "je ne suis jamais venue"
+    }
+   }
+  },
+  {
+   "utterance": "je ne suis jamais venue",
+   "asking": "slot",
+   "u": {
+    "entities": {
+     "newPatient": true,
+     "dateTimeText": "je ne suis jamais venue"
+    }
+   }
+  },
+  {
+   "utterance": "je ne suis jamais venue",
+   "asking": "anything_else",
+   "u": {
+    "entities": {
+     "newPatient": true,
+     "dateTimeText": "je ne suis jamais venue"
+    }
+   }
+  },
+  {
+   "utterance": "je ne suis jamais venue",
+   "asking": "currentStart",
+   "u": {
+    "entities": {
+     "newPatient": true,
+     "dateTimeText": "je ne suis jamais venue"
+    }
+   }
+  },
+  {
+   "utterance": "je ne suis jamais venue",
+   "asking": "preference",
+   "u": {
+    "entities": {
+     "newPatient": true,
+     "dateTimeText": "je ne suis jamais venue"
+    }
+   }
+  },
+  {
+   "utterance": "je suis déjà patiente",
+   "asking": null,
+   "u": {
+    "entities": {
+     "newPatient": false
+    }
+   }
+  },
+  {
+   "utterance": "je suis déjà patiente",
+   "asking": "callerName",
+   "u": {
+    "entities": {
+     "newPatient": false
+    }
+   }
+  },
+  {
+   "utterance": "je suis déjà patiente",
+   "asking": "concernedName",
+   "u": {
+    "entities": {
+     "newPatient": false,
+     "concernedName": "Je Suis Déjà Patiente"
+    }
+   }
+  },
+  {
+   "utterance": "je suis déjà patiente",
+   "asking": "phone",
+   "u": {
+    "entities": {
+     "newPatient": false
+    }
+   }
+  },
+  {
+   "utterance": "je suis déjà patiente",
+   "asking": "newPatient",
+   "u": {
+    "entities": {
+     "newPatient": false
+    }
+   }
+  },
+  {
+   "utterance": "je suis déjà patiente",
+   "asking": "messageText",
+   "u": {
+    "entities": {
+     "newPatient": false,
+     "messageText": "je suis déjà patiente"
+    }
+   }
+  },
+  {
+   "utterance": "je suis déjà patiente",
+   "asking": "reason",
+   "u": {
+    "entities": {
+     "newPatient": false,
+     "reason": "je suis déjà patiente"
+    }
+   }
+  },
+  {
+   "utterance": "je suis déjà patiente",
+   "asking": "confirmation",
+   "u": {
+    "entities": {
+     "newPatient": false
+    }
+   }
+  },
+  {
+   "utterance": "je suis déjà patiente",
+   "asking": "slot",
+   "u": {
+    "entities": {
+     "newPatient": false
+    }
+   }
+  },
+  {
+   "utterance": "je suis déjà patiente",
+   "asking": "anything_else",
+   "u": {
+    "entities": {
+     "newPatient": false
+    }
+   }
+  },
+  {
+   "utterance": "je suis déjà patiente",
+   "asking": "currentStart",
+   "u": {
+    "entities": {
+     "newPatient": false
+    }
+   }
+  },
+  {
+   "utterance": "je suis déjà patiente",
+   "asking": "preference",
+   "u": {
+    "entities": {
+     "newPatient": false
+    }
+   }
+  },
+  {
+   "utterance": "je suis suivie ici",
+   "asking": null,
+   "u": {
+    "entities": {
+     "newPatient": false
+    }
+   }
+  },
+  {
+   "utterance": "je suis suivie ici",
+   "asking": "callerName",
+   "u": {
+    "entities": {
+     "newPatient": false
+    }
+   }
+  },
+  {
+   "utterance": "je suis suivie ici",
+   "asking": "concernedName",
+   "u": {
+    "entities": {
+     "newPatient": false,
+     "concernedName": "Je Suis Suivie Ici"
+    }
+   }
+  },
+  {
+   "utterance": "je suis suivie ici",
+   "asking": "phone",
+   "u": {
+    "entities": {
+     "newPatient": false
+    }
+   }
+  },
+  {
+   "utterance": "je suis suivie ici",
+   "asking": "newPatient",
+   "u": {
+    "entities": {
+     "newPatient": false
+    }
+   }
+  },
+  {
+   "utterance": "je suis suivie ici",
+   "asking": "messageText",
+   "u": {
+    "entities": {
+     "newPatient": false,
+     "messageText": "je suis suivie ici"
+    }
+   }
+  },
+  {
+   "utterance": "je suis suivie ici",
+   "asking": "reason",
+   "u": {
+    "entities": {
+     "newPatient": false,
+     "reason": "je suis suivie ici"
+    }
+   }
+  },
+  {
+   "utterance": "je suis suivie ici",
+   "asking": "confirmation",
+   "u": {
+    "entities": {
+     "newPatient": false
+    }
+   }
+  },
+  {
+   "utterance": "je suis suivie ici",
+   "asking": "slot",
+   "u": {
+    "entities": {
+     "newPatient": false
+    }
+   }
+  },
+  {
+   "utterance": "je suis suivie ici",
+   "asking": "anything_else",
+   "u": {
+    "entities": {
+     "newPatient": false
+    }
+   }
+  },
+  {
+   "utterance": "je suis suivie ici",
+   "asking": "currentStart",
+   "u": {
+    "entities": {
+     "newPatient": false
+    }
+   }
+  },
+  {
+   "utterance": "je suis suivie ici",
+   "asking": "preference",
+   "u": {
+    "entities": {
+     "newPatient": false
+    }
+   }
+  },
+  {
    "utterance": "c'est la première fois",
    "asking": null,
    "u": {
@@ -8758,28 +9213,36 @@
    "utterance": "Oui je suis déjà venue",
    "asking": null,
    "u": {
-    "entities": {}
+    "entities": {
+     "newPatient": false
+    }
    }
   },
   {
    "utterance": "Oui je suis déjà venue",
    "asking": "callerName",
    "u": {
-    "entities": {}
+    "entities": {
+     "newPatient": false
+    }
    }
   },
   {
    "utterance": "Oui je suis déjà venue",
    "asking": "concernedName",
    "u": {
-    "entities": {}
+    "entities": {
+     "newPatient": false
+    }
    }
   },
   {
    "utterance": "Oui je suis déjà venue",
    "asking": "phone",
    "u": {
-    "entities": {}
+    "entities": {
+     "newPatient": false
+    }
    }
   },
   {
@@ -8796,6 +9259,7 @@
    "asking": "messageText",
    "u": {
     "entities": {
+     "newPatient": false,
      "messageText": "Oui je suis déjà venue"
     }
    }
@@ -8805,6 +9269,7 @@
    "asking": "reason",
    "u": {
     "entities": {
+     "newPatient": false,
      "reason": "Oui je suis déjà venue"
     }
    }
@@ -8813,7 +9278,9 @@
    "utterance": "Oui je suis déjà venue",
    "asking": "confirmation",
    "u": {
-    "entities": {},
+    "entities": {
+     "newPatient": false
+    },
     "confirmation": "yes"
    }
   },
@@ -8821,14 +9288,18 @@
    "utterance": "Oui je suis déjà venue",
    "asking": "slot",
    "u": {
-    "entities": {}
+    "entities": {
+     "newPatient": false
+    }
    }
   },
   {
    "utterance": "Oui je suis déjà venue",
    "asking": "anything_else",
    "u": {
-    "entities": {},
+    "entities": {
+     "newPatient": false
+    },
     "confirmation": "yes"
    }
   },
@@ -8836,14 +9307,18 @@
    "utterance": "Oui je suis déjà venue",
    "asking": "currentStart",
    "u": {
-    "entities": {}
+    "entities": {
+     "newPatient": false
+    }
    }
   },
   {
    "utterance": "Oui je suis déjà venue",
    "asking": "preference",
    "u": {
-    "entities": {}
+    "entities": {
+     "newPatient": false
+    }
    }
   },
   {
@@ -9047,6 +9522,327 @@
    "asking": "preference",
    "u": {
     "entities": {}
+   }
+  },
+  {
+   "utterance": "Je voudrais déplacer mon rendez-vous",
+   "asking": null,
+   "u": {
+    "entities": {},
+    "intent": "appointment_reschedule"
+   }
+  },
+  {
+   "utterance": "Je voudrais déplacer mon rendez-vous",
+   "asking": "callerName",
+   "u": {
+    "entities": {},
+    "intent": "appointment_reschedule"
+   }
+  },
+  {
+   "utterance": "Je voudrais déplacer mon rendez-vous",
+   "asking": "concernedName",
+   "u": {
+    "entities": {},
+    "intent": "appointment_reschedule"
+   }
+  },
+  {
+   "utterance": "Je voudrais déplacer mon rendez-vous",
+   "asking": "phone",
+   "u": {
+    "entities": {},
+    "intent": "appointment_reschedule"
+   }
+  },
+  {
+   "utterance": "Je voudrais déplacer mon rendez-vous",
+   "asking": "newPatient",
+   "u": {
+    "entities": {},
+    "intent": "appointment_reschedule"
+   }
+  },
+  {
+   "utterance": "Je voudrais déplacer mon rendez-vous",
+   "asking": "messageText",
+   "u": {
+    "entities": {
+     "messageText": "Je voudrais déplacer mon rendez-vous"
+    }
+   }
+  },
+  {
+   "utterance": "Je voudrais déplacer mon rendez-vous",
+   "asking": "reason",
+   "u": {
+    "entities": {
+     "reason": "Je voudrais déplacer mon rendez-vous"
+    },
+    "intent": "appointment_reschedule"
+   }
+  },
+  {
+   "utterance": "Je voudrais déplacer mon rendez-vous",
+   "asking": "confirmation",
+   "u": {
+    "entities": {},
+    "intent": "appointment_reschedule"
+   }
+  },
+  {
+   "utterance": "Je voudrais déplacer mon rendez-vous",
+   "asking": "slot",
+   "u": {
+    "entities": {},
+    "intent": "appointment_reschedule"
+   }
+  },
+  {
+   "utterance": "Je voudrais déplacer mon rendez-vous",
+   "asking": "anything_else",
+   "u": {
+    "entities": {},
+    "intent": "appointment_reschedule"
+   }
+  },
+  {
+   "utterance": "Je voudrais déplacer mon rendez-vous",
+   "asking": "currentStart",
+   "u": {
+    "entities": {},
+    "intent": "appointment_reschedule"
+   }
+  },
+  {
+   "utterance": "Je voudrais déplacer mon rendez-vous",
+   "asking": "preference",
+   "u": {
+    "entities": {},
+    "intent": "appointment_reschedule"
+   }
+  },
+  {
+   "utterance": "jeudi 1 octobre à 14h",
+   "asking": null,
+   "u": {
+    "entities": {
+     "dateTimeText": "jeudi 1 octobre à 14h"
+    }
+   }
+  },
+  {
+   "utterance": "jeudi 1 octobre à 14h",
+   "asking": "callerName",
+   "u": {
+    "entities": {
+     "dateTimeText": "jeudi 1 octobre à 14h"
+    }
+   }
+  },
+  {
+   "utterance": "jeudi 1 octobre à 14h",
+   "asking": "concernedName",
+   "u": {
+    "entities": {
+     "dateTimeText": "jeudi 1 octobre à 14h"
+    }
+   }
+  },
+  {
+   "utterance": "jeudi 1 octobre à 14h",
+   "asking": "phone",
+   "u": {
+    "entities": {
+     "dateTimeText": "jeudi 1 octobre à 14h"
+    }
+   }
+  },
+  {
+   "utterance": "jeudi 1 octobre à 14h",
+   "asking": "newPatient",
+   "u": {
+    "entities": {
+     "dateTimeText": "jeudi 1 octobre à 14h"
+    }
+   }
+  },
+  {
+   "utterance": "jeudi 1 octobre à 14h",
+   "asking": "messageText",
+   "u": {
+    "entities": {
+     "dateTimeText": "jeudi 1 octobre à 14h",
+     "messageText": "jeudi 1 octobre à 14h"
+    }
+   }
+  },
+  {
+   "utterance": "jeudi 1 octobre à 14h",
+   "asking": "reason",
+   "u": {
+    "entities": {
+     "dateTimeText": "jeudi 1 octobre à 14h",
+     "reason": "jeudi 1 octobre à 14h"
+    }
+   }
+  },
+  {
+   "utterance": "jeudi 1 octobre à 14h",
+   "asking": "confirmation",
+   "u": {
+    "entities": {
+     "dateTimeText": "jeudi 1 octobre à 14h"
+    }
+   }
+  },
+  {
+   "utterance": "jeudi 1 octobre à 14h",
+   "asking": "slot",
+   "u": {
+    "entities": {
+     "dateTimeText": "jeudi 1 octobre à 14h"
+    }
+   }
+  },
+  {
+   "utterance": "jeudi 1 octobre à 14h",
+   "asking": "anything_else",
+   "u": {
+    "entities": {
+     "dateTimeText": "jeudi 1 octobre à 14h"
+    }
+   }
+  },
+  {
+   "utterance": "jeudi 1 octobre à 14h",
+   "asking": "currentStart",
+   "u": {
+    "entities": {
+     "dateTimeText": "jeudi 1 octobre à 14h"
+    }
+   }
+  },
+  {
+   "utterance": "jeudi 1 octobre à 14h",
+   "asking": "preference",
+   "u": {
+    "entities": {
+     "dateTimeText": "jeudi 1 octobre à 14h"
+    }
+   }
+  },
+  {
+   "utterance": "vendredi matin",
+   "asking": null,
+   "u": {
+    "entities": {
+     "dateTimeText": "vendredi matin"
+    }
+   }
+  },
+  {
+   "utterance": "vendredi matin",
+   "asking": "callerName",
+   "u": {
+    "entities": {
+     "callerName": "Vendredi Matin",
+     "dateTimeText": "vendredi matin"
+    }
+   }
+  },
+  {
+   "utterance": "vendredi matin",
+   "asking": "concernedName",
+   "u": {
+    "entities": {
+     "concernedName": "Vendredi Matin",
+     "dateTimeText": "vendredi matin"
+    }
+   }
+  },
+  {
+   "utterance": "vendredi matin",
+   "asking": "phone",
+   "u": {
+    "entities": {
+     "dateTimeText": "vendredi matin"
+    }
+   }
+  },
+  {
+   "utterance": "vendredi matin",
+   "asking": "newPatient",
+   "u": {
+    "entities": {
+     "dateTimeText": "vendredi matin"
+    }
+   }
+  },
+  {
+   "utterance": "vendredi matin",
+   "asking": "messageText",
+   "u": {
+    "entities": {
+     "dateTimeText": "vendredi matin",
+     "messageText": "vendredi matin"
+    }
+   }
+  },
+  {
+   "utterance": "vendredi matin",
+   "asking": "reason",
+   "u": {
+    "entities": {
+     "dateTimeText": "vendredi matin",
+     "reason": "vendredi matin"
+    }
+   }
+  },
+  {
+   "utterance": "vendredi matin",
+   "asking": "confirmation",
+   "u": {
+    "entities": {
+     "dateTimeText": "vendredi matin"
+    }
+   }
+  },
+  {
+   "utterance": "vendredi matin",
+   "asking": "slot",
+   "u": {
+    "entities": {
+     "dateTimeText": "vendredi matin"
+    }
+   }
+  },
+  {
+   "utterance": "vendredi matin",
+   "asking": "anything_else",
+   "u": {
+    "entities": {
+     "dateTimeText": "vendredi matin"
+    }
+   }
+  },
+  {
+   "utterance": "vendredi matin",
+   "asking": "currentStart",
+   "u": {
+    "entities": {
+     "dateTimeText": "vendredi matin"
+    }
+   }
+  },
+  {
+   "utterance": "vendredi matin",
+   "asking": "preference",
+   "u": {
+    "entities": {
+     "dateTimeText": "vendredi matin"
+    }
    }
   },
   {
@@ -9580,28 +10376,36 @@
    "utterance": "oui je suis déjà venue",
    "asking": null,
    "u": {
-    "entities": {}
+    "entities": {
+     "newPatient": false
+    }
    }
   },
   {
    "utterance": "oui je suis déjà venue",
    "asking": "callerName",
    "u": {
-    "entities": {}
+    "entities": {
+     "newPatient": false
+    }
    }
   },
   {
    "utterance": "oui je suis déjà venue",
    "asking": "concernedName",
    "u": {
-    "entities": {}
+    "entities": {
+     "newPatient": false
+    }
    }
   },
   {
    "utterance": "oui je suis déjà venue",
    "asking": "phone",
    "u": {
-    "entities": {}
+    "entities": {
+     "newPatient": false
+    }
    }
   },
   {
@@ -9618,6 +10422,7 @@
    "asking": "messageText",
    "u": {
     "entities": {
+     "newPatient": false,
      "messageText": "oui je suis déjà venue"
     }
    }
@@ -9627,6 +10432,7 @@
    "asking": "reason",
    "u": {
     "entities": {
+     "newPatient": false,
      "reason": "oui je suis déjà venue"
     }
    }
@@ -9635,245 +10441,46 @@
    "utterance": "oui je suis déjà venue",
    "asking": "confirmation",
    "u": {
-    "entities": {},
-    "confirmation": "yes"
-   }
-  },
-  {
-   "utterance": "oui je suis déjà venue",
-   "asking": "slot",
-   "u": {
-    "entities": {}
-   }
-  },
-  {
-   "utterance": "oui je suis déjà venue",
-   "asking": "anything_else",
-   "u": {
-    "entities": {},
-    "confirmation": "yes"
-   }
-  },
-  {
-   "utterance": "oui je suis déjà venue",
-   "asking": "currentStart",
-   "u": {
-    "entities": {}
-   }
-  },
-  {
-   "utterance": "oui je suis déjà venue",
-   "asking": "preference",
-   "u": {
-    "entities": {}
-   }
-  },
-  {
-   "utterance": "Je voudrais déplacer mon rendez-vous",
-   "asking": null,
-   "u": {
-    "entities": {},
-    "intent": "appointment_reschedule"
-   }
-  },
-  {
-   "utterance": "Je voudrais déplacer mon rendez-vous",
-   "asking": "callerName",
-   "u": {
-    "entities": {},
-    "intent": "appointment_reschedule"
-   }
-  },
-  {
-   "utterance": "Je voudrais déplacer mon rendez-vous",
-   "asking": "concernedName",
-   "u": {
-    "entities": {},
-    "intent": "appointment_reschedule"
-   }
-  },
-  {
-   "utterance": "Je voudrais déplacer mon rendez-vous",
-   "asking": "phone",
-   "u": {
-    "entities": {},
-    "intent": "appointment_reschedule"
-   }
-  },
-  {
-   "utterance": "Je voudrais déplacer mon rendez-vous",
-   "asking": "newPatient",
-   "u": {
-    "entities": {},
-    "intent": "appointment_reschedule"
-   }
-  },
-  {
-   "utterance": "Je voudrais déplacer mon rendez-vous",
-   "asking": "messageText",
-   "u": {
     "entities": {
-     "messageText": "Je voudrais déplacer mon rendez-vous"
-    }
-   }
-  },
-  {
-   "utterance": "Je voudrais déplacer mon rendez-vous",
-   "asking": "reason",
-   "u": {
-    "entities": {
-     "reason": "Je voudrais déplacer mon rendez-vous"
+     "newPatient": false
     },
-    "intent": "appointment_reschedule"
+    "confirmation": "yes"
    }
   },
   {
-   "utterance": "Je voudrais déplacer mon rendez-vous",
-   "asking": "confirmation",
-   "u": {
-    "entities": {},
-    "intent": "appointment_reschedule"
-   }
-  },
-  {
-   "utterance": "Je voudrais déplacer mon rendez-vous",
-   "asking": "slot",
-   "u": {
-    "entities": {},
-    "intent": "appointment_reschedule"
-   }
-  },
-  {
-   "utterance": "Je voudrais déplacer mon rendez-vous",
-   "asking": "anything_else",
-   "u": {
-    "entities": {},
-    "intent": "appointment_reschedule"
-   }
-  },
-  {
-   "utterance": "Je voudrais déplacer mon rendez-vous",
-   "asking": "currentStart",
-   "u": {
-    "entities": {},
-    "intent": "appointment_reschedule"
-   }
-  },
-  {
-   "utterance": "Je voudrais déplacer mon rendez-vous",
-   "asking": "preference",
-   "u": {
-    "entities": {},
-    "intent": "appointment_reschedule"
-   }
-  },
-  {
-   "utterance": "jeudi 1 octobre à 14h",
-   "asking": null,
-   "u": {
-    "entities": {
-     "dateTimeText": "jeudi 1 octobre à 14h"
-    }
-   }
-  },
-  {
-   "utterance": "jeudi 1 octobre à 14h",
-   "asking": "callerName",
-   "u": {
-    "entities": {
-     "dateTimeText": "jeudi 1 octobre à 14h"
-    }
-   }
-  },
-  {
-   "utterance": "jeudi 1 octobre à 14h",
-   "asking": "concernedName",
-   "u": {
-    "entities": {
-     "dateTimeText": "jeudi 1 octobre à 14h"
-    }
-   }
-  },
-  {
-   "utterance": "jeudi 1 octobre à 14h",
-   "asking": "phone",
-   "u": {
-    "entities": {
-     "dateTimeText": "jeudi 1 octobre à 14h"
-    }
-   }
-  },
-  {
-   "utterance": "jeudi 1 octobre à 14h",
-   "asking": "newPatient",
-   "u": {
-    "entities": {
-     "dateTimeText": "jeudi 1 octobre à 14h"
-    }
-   }
-  },
-  {
-   "utterance": "jeudi 1 octobre à 14h",
-   "asking": "messageText",
-   "u": {
-    "entities": {
-     "dateTimeText": "jeudi 1 octobre à 14h",
-     "messageText": "jeudi 1 octobre à 14h"
-    }
-   }
-  },
-  {
-   "utterance": "jeudi 1 octobre à 14h",
-   "asking": "reason",
-   "u": {
-    "entities": {
-     "dateTimeText": "jeudi 1 octobre à 14h",
-     "reason": "jeudi 1 octobre à 14h"
-    }
-   }
-  },
-  {
-   "utterance": "jeudi 1 octobre à 14h",
-   "asking": "confirmation",
-   "u": {
-    "entities": {
-     "dateTimeText": "jeudi 1 octobre à 14h"
-    }
-   }
-  },
-  {
-   "utterance": "jeudi 1 octobre à 14h",
+   "utterance": "oui je suis déjà venue",
    "asking": "slot",
    "u": {
     "entities": {
-     "dateTimeText": "jeudi 1 octobre à 14h"
+     "newPatient": false
     }
    }
   },
   {
-   "utterance": "jeudi 1 octobre à 14h",
+   "utterance": "oui je suis déjà venue",
    "asking": "anything_else",
    "u": {
     "entities": {
-     "dateTimeText": "jeudi 1 octobre à 14h"
-    }
+     "newPatient": false
+    },
+    "confirmation": "yes"
    }
   },
   {
-   "utterance": "jeudi 1 octobre à 14h",
+   "utterance": "oui je suis déjà venue",
    "asking": "currentStart",
    "u": {
     "entities": {
-     "dateTimeText": "jeudi 1 octobre à 14h"
+     "newPatient": false
     }
    }
   },
   {
-   "utterance": "jeudi 1 octobre à 14h",
+   "utterance": "oui je suis déjà venue",
    "asking": "preference",
    "u": {
     "entities": {
-     "dateTimeText": "jeudi 1 octobre à 14h"
+     "newPatient": false
     }
    }
   },
@@ -13386,6 +13993,22 @@
    "e164": null
   },
   {
+   "spoken": "je suis déjà venue",
+   "e164": null
+  },
+  {
+   "spoken": "je ne suis jamais venue",
+   "e164": null
+  },
+  {
+   "spoken": "je suis déjà patiente",
+   "e164": null
+  },
+  {
+   "spoken": "je suis suivie ici",
+   "e164": null
+  },
+  {
    "spoken": "c'est la première fois",
    "e164": null
   },
@@ -13666,6 +14289,18 @@
    "e164": null
   },
   {
+   "spoken": "Je voudrais déplacer mon rendez-vous",
+   "e164": null
+  },
+  {
+   "spoken": "jeudi 1 octobre à 14h",
+   "e164": null
+  },
+  {
+   "spoken": "vendredi matin",
+   "e164": null
+  },
+  {
    "spoken": "à 3h",
    "e164": null
   },
@@ -13687,14 +14322,6 @@
   },
   {
    "spoken": "oui je suis déjà venue",
-   "e164": null
-  },
-  {
-   "spoken": "Je voudrais déplacer mon rendez-vous",
-   "e164": null
-  },
-  {
-   "spoken": "jeudi 1 octobre à 14h",
    "e164": null
   },
   {
@@ -14026,6 +14653,26 @@
   },
   {
    "utterance": "je suis déjà venu",
+   "handOff": false,
+   "matched": []
+  },
+  {
+   "utterance": "je suis déjà venue",
+   "handOff": false,
+   "matched": []
+  },
+  {
+   "utterance": "je ne suis jamais venue",
+   "handOff": false,
+   "matched": []
+  },
+  {
+   "utterance": "je suis déjà patiente",
+   "handOff": false,
+   "matched": []
+  },
+  {
+   "utterance": "je suis suivie ici",
    "handOff": false,
    "matched": []
   },
@@ -14390,6 +15037,21 @@
    "matched": []
   },
   {
+   "utterance": "Je voudrais déplacer mon rendez-vous",
+   "handOff": false,
+   "matched": []
+  },
+  {
+   "utterance": "jeudi 1 octobre à 14h",
+   "handOff": false,
+   "matched": []
+  },
+  {
+   "utterance": "vendredi matin",
+   "handOff": false,
+   "matched": []
+  },
+  {
    "utterance": "à 3h",
    "handOff": false,
    "matched": []
@@ -14416,16 +15078,6 @@
   },
   {
    "utterance": "oui je suis déjà venue",
-   "handOff": false,
-   "matched": []
-  },
-  {
-   "utterance": "Je voudrais déplacer mon rendez-vous",
-   "handOff": false,
-   "matched": []
-  },
-  {
-   "utterance": "jeudi 1 octobre à 14h",
    "handOff": false,
    "matched": []
   },
@@ -14598,6 +15250,22 @@
   },
   {
    "utterance": "je suis déjà venu",
+   "injection": false
+  },
+  {
+   "utterance": "je suis déjà venue",
+   "injection": false
+  },
+  {
+   "utterance": "je ne suis jamais venue",
+   "injection": false
+  },
+  {
+   "utterance": "je suis déjà patiente",
+   "injection": false
+  },
+  {
+   "utterance": "je suis suivie ici",
    "injection": false
   },
   {
@@ -14881,6 +15549,18 @@
    "injection": false
   },
   {
+   "utterance": "Je voudrais déplacer mon rendez-vous",
+   "injection": false
+  },
+  {
+   "utterance": "jeudi 1 octobre à 14h",
+   "injection": false
+  },
+  {
+   "utterance": "vendredi matin",
+   "injection": false
+  },
+  {
    "utterance": "à 3h",
    "injection": false
   },
@@ -14902,14 +15582,6 @@
   },
   {
    "utterance": "oui je suis déjà venue",
-   "injection": false
-  },
-  {
-   "utterance": "Je voudrais déplacer mon rendez-vous",
-   "injection": false
-  },
-  {
-   "utterance": "jeudi 1 octobre à 14h",
    "injection": false
   },
   {

@@ -296,6 +296,23 @@ export const SCENARIOS: Scenario[] = [
     steps: [...BOOKING, { caller: "oui" }],
   },
   {
+    name: "rendez_vous_sans_proposition_de_creneaux",
+    config: { offerSlots: false },
+    steps: [...BOOKING, { caller: "oui" }, { caller: "non merci" }],
+  },
+  {
+    name: "deplacement_sans_proposition_de_creneaux",
+    config: { offerSlots: false },
+    steps: [
+      { caller: "Je voudrais déplacer mon rendez-vous" },
+      { caller: "Camille Durand" },
+      { caller: "06 12 34 56 78" },
+      { caller: "jeudi 1 octobre à 14h" },
+      { caller: "vendredi matin" },
+      { caller: "oui" },
+    ],
+  },
+  {
     name: "reservation_heure_ambigue",
     steps: [
       ...BOOKING.slice(0, 4),
@@ -588,6 +605,10 @@ const EXTRA_UTTERANCES = [
   "c'est Martine",
   "moi c'est Karim Benali",
   "je suis déjà venu",
+  "je suis déjà venue",
+  "je ne suis jamais venue",
+  "je suis déjà patiente",
+  "je suis suivie ici",
   "c'est la première fois",
   "nouveau patient",
   "je suis suivie par le docteur Martin",

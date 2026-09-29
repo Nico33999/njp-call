@@ -54,6 +54,13 @@ export interface CabinetConfig {
   cabinetKnowledge: string;
   /** Mode simulation : ne peut être activé que par un geste explicite. */
   simulation: boolean;
+  /**
+   * Proposer des créneaux au téléphone. Faux quand le cabinet n'a pas activé
+   * la réservation : l'appelant n'entend pas « je ne peux pas consulter le
+   * planning », il dépose directement une demande. Posé par l'hôte (NJP CARE)
+   * d'après ses réglages, jamais deviné.
+   */
+  offerSlots: boolean;
 }
 
 export const defaultConfig = (): CabinetConfig => ({
@@ -79,6 +86,7 @@ export const defaultConfig = (): CabinetConfig => ({
   cabinetInstructions: "",
   cabinetKnowledge: "",
   simulation: false,
+  offerSlots: true,
 });
 
 const REF = /^[A-Za-z0-9_-]{3,64}$/;
@@ -210,6 +218,7 @@ export const sanitizeConfig = (raw: unknown): CabinetConfig => {
     cabinetInstructions: s(o.cabinetInstructions, 4000),
     cabinetKnowledge: s(o.cabinetKnowledge, 4000),
     simulation: o.simulation === true,
+    offerSlots: o.offerSlots !== false,
   };
 };
 

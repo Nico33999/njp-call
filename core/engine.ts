@@ -337,6 +337,16 @@ const advance = (
     !state.collected.chosenSlot &&
     !state.offeredSlots.length &&
     state.confirmation !== "no";
+  if (needsSlots && ctx.config.offerSlots === false) {
+    // Le cabinet ne fait pas proposer de créneaux par téléphone : une
+    // demande à valider, sans consulter le planning.
+    if (state.intent === "appointment_reschedule") {
+      state.intent = "message";
+      state.collected.messageText = `Souhaite déplacer le rendez-vous du ${speakInstant(state.collected.currentStart!)}${state.collected.preferenceText ? `, de préférence ${state.collected.preferenceText}` : ""}.`;
+    }
+    state.confirmation = "no";
+    return advance(state, ctx, say);
+  }
   if (needsSlots) {
     state.phase = "offering";
     state.asking = undefined;
