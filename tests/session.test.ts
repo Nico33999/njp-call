@@ -280,6 +280,27 @@ describe("demande de rappel, question médicale, proche", () => {
     });
   });
 
+  it("le message dicté est pris tel quel, même s'il parle de traitement ou de rappel (régression)", async () => {
+    const { session, care, callId } = setup();
+    await run(
+      session,
+      events(callId, [
+        { caller: "C'est pour un renouvellement d'ordonnance" },
+        { caller: "je m'appelle Marc Leroy" },
+        { caller: "07 01 02 03 04" },
+        { caller: "Le traitement habituel, merci de me rappeler." },
+        { caller: "oui" },
+      ])
+    );
+    const m = care.messages.find(
+      x => x.envelope.command.type === "message.create"
+    )!;
+    expect(m.envelope.command.payload).toMatchObject({
+      confirmedText: "Le traitement habituel, merci de me rappeler.",
+      category: "renouvellement",
+    });
+  });
+
   it("un appel pour un enfant exige le nom de l'enfant", async () => {
     const { session, care, callId } = setup();
     const { said } = await run(
@@ -678,6 +699,26 @@ describe("rendez-vous", () => {
       ])
     );
     expect(care.appointments[0].declaredName).toBe("Léa Fictive");
+  });
+
+  it("aucun créneau proposé ne convient : une demande, pas les mêmes créneaux en boucle (régression)", async () => {
+    const { session, care, callId } = setup();
+    const { outs } = await run(
+      session,
+      events(callId, [
+        ...BOOKING,
+        { caller: "aucun ne me convient" },
+        { caller: "oui" },
+      ])
+    );
+    const after = outs.at(-2)!.say.join(" ");
+    expect(after).not.toContain("Je peux vous proposer");
+    expect(after).toContain("demande de rendez-vous");
+    expect(outs.at(-1)!.say.join(" ")).toContain(
+      "Votre demande de rendez-vous est enregistrée"
+    );
+    expect(care.appointments).toHaveLength(0);
+    expect(care.requests).toHaveLength(1);
   });
 
   it("date ambiguë : on fait préciser avant de chercher", async () => {

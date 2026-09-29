@@ -18,7 +18,9 @@
     "package:build": "tsx scripts/build-package.ts",
     "package:verify": "tsx scripts/verify-package.ts",
     "check:secrets": "tsx scripts/check-secrets.ts",
-    "ci": "pnpm typecheck && pnpm test && pnpm build && pnpm package:build && pnpm package:verify && pnpm check:secrets",
+    "conformance:export": "tsx scripts/export-conformance.ts",
+    "conformance:check": "tsx scripts/export-conformance.ts --check",
+    "ci": "pnpm typecheck && pnpm test && pnpm conformance:check && pnpm build && pnpm package:build && pnpm package:verify && pnpm check:secrets",
     "store:backup": "tsx scripts/store-backup.ts",
     "store:verify": "tsx scripts/store-verify.ts"
   },

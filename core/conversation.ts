@@ -405,8 +405,13 @@ export const fallbackUnderstand = (
     u.entities.dateTimeText = utterance;
   }
 
-  if (state.asking === "messageText" && !u.intent)
+  // Pendant la dictée d'un message, ce qui est dit EST le message, même s'il
+  // contient « traitement » ou « me rappeler » : sinon la réplique suivante
+  // (« oui ») serait prise pour le message.
+  if (state.asking === "messageText" && u.intent !== "human") {
     u.entities.messageText = utterance.trim();
+    delete u.intent;
+  }
   if (state.asking === "reason") u.entities.reason = utterance.trim();
   return u;
 };

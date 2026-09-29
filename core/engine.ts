@@ -516,8 +516,10 @@ export const onCallerTurn = (
         say.push("Je laisse votre rendez-vous actuel inchangé.");
         state.intent = "message";
         state.collected.messageText = `Souhaite déplacer le rendez-vous du ${speakInstant(state.collected.currentStart!)} ; aucun créneau proposé ne convient.`;
+        state.confirmation = "none";
       }
-      state.confirmation = "none";
+      // Nouveau rendez-vous : `confirmation = "no"` évite de reproposer les
+      // mêmes créneaux ; on passe à une demande à valider par le cabinet.
       return done(advance(state, ctx, say));
     }
     say.push(
