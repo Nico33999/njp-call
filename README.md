@@ -30,7 +30,7 @@ service NJP CALL 24/7 ◄──── relais authentifié (le poste se connecte)
 | `scripts/` | construction, signature, vérification du paquet ; détection de secrets ; fixtures de contrat |
 | `contract/fixtures/` | enveloppes réellement émises par des appels simulés, rejouées par les tests Rust de NJP CARE |
 | `keys/` | clé **publique** d'essai. Aucune clé privée. |
-| `docs/` | architecture, contrat NJP CARE, paquet, téléphonie, exploitation, flux de données, données de santé |
+| `docs/` | architecture, contrat NJP CARE, paquet, téléphonie, exploitation, flux de données, données de santé, validations externes avant pilote |
 
 ## Commandes
 
