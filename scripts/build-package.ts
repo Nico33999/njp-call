@@ -56,6 +56,22 @@ const bytes = buildPackage(manifest, [
     bytes: readFileSync(path.join(root, "extension/surfaces.json")),
   },
   { path: "defaults/config.json", bytes: json(defaultConfig()) },
+  // Ce que l'extension DÉCLARE de son traitement, affiché au consentement :
+  // tout se fait sur le poste ; rien d'externalisé par défaut.
+  {
+    path: "defaults/traitement.json",
+    bytes: json({
+      version: 1,
+      traitement: "poste",
+      reconnaissanceVocale: "poste",
+      syntheseVocale: "poste",
+      comprehension: "poste-sans-ia",
+      iaExterne: false,
+      enregistrementAudio: false,
+      reservationParDefaut: false,
+      operateur: "acheminement seulement (enregistrement, messagerie et transcription de l'opérateur à désactiver)",
+    }),
+  },
   {
     path: "rules/mandatory-rules.json",
     bytes: json({ version: 1, rules: MANDATORY_RULES }),

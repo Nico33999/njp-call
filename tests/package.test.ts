@@ -56,9 +56,11 @@ describe("paquet d'extension", () => {
       id: "njp.call",
       nom: "NJP CALL",
       editeur: "by NJP CARE",
-      version: "0.1.0",
+      version: "0.2.0",
       distribution: "separee",
     });
+    // Décrocher sur le poste est un accès à part, demandé explicitement.
+    expect(manifest.permissions).toContain("telephony.answer");
     expect(
       manifestDefects({
         ...manifest,

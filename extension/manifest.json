@@ -3,10 +3,14 @@
   "id": "njp.call",
   "nom": "NJP CALL",
   "editeur": "by NJP CARE",
-  "version": "0.1.0",
-  "resume": "La secrétaire vocale automatisée du cabinet : elle répond aux appels, s'annonce comme assistante automatisée, prend messages, demandes de rappel et demandes de rendez-vous, et les enregistre dans NJP CARE.",
-  "hote": { "protocoleMin": 1, "protocoleMax": 1 },
+  "version": "0.2.0",
+  "resume": "La secrétaire vocale automatisée du cabinet, exécutée sur le poste d'accueil NJP CARE : elle répond aux appels que l'opérateur du cabinet achemine jusqu'au poste, s'annonce comme assistante automatisée, prend messages, demandes de rappel et demandes de rendez-vous, et les enregistre dans le coffre du cabinet. Reconnaissance et synthèse de la parole sur le poste ; aucun service d'IA externe.",
+  "hote": {
+    "protocoleMin": 1,
+    "protocoleMax": 1
+  },
   "permissions": [
+    "telephony.answer",
     "secretariat.messages.create",
     "secretariat.messages.read",
     "secretariat.callbacks.create",

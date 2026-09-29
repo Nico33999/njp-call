@@ -47,6 +47,7 @@ export const CONTRACT_V2_PERMISSIONS = [
   "secretariat.calls.write",
   "notifications.create",
   "telephony.transfer",
+  "telephony.answer",
 ] as const;
 
 export const CONTRACT_V2_POINTS = [
