@@ -213,6 +213,11 @@ export class DurableRelay implements CommandQueue {
     return `relay|${part}|${r.cabinet_id}|${r.item_id}`;
   }
 
+  /** Le poste attend-il EN CE MOMENT (relève longue en cours) ? */
+  isWaiting(cabinetId: string) {
+    return (this.waiters.get(cabinetId)?.length ?? 0) > 0;
+  }
+
   isOnline(cabinetId: string) {
     return (
       (this.waiters.get(cabinetId)?.length ?? 0) > 0 ||
@@ -227,9 +232,7 @@ export class DurableRelay implements CommandQueue {
   }
 
   private notify(cabinetId: string) {
-    const list = this.waiters.get(cabinetId) ?? [];
-    this.waiters.set(cabinetId, []);
-    for (const w of list) w();
+    for (const w of [...(this.waiters.get(cabinetId) ?? [])]) w();
   }
 
   private insert(
@@ -364,24 +367,36 @@ export class DurableRelay implements CommandQueue {
   }
 
   /** Le poste relève. Attente longue bornée ; rend un élément réservé, ou `null`. */
-  async next(cabinetId: string, waitMs: number): Promise<RelayItem | null> {
+  async next(
+    cabinetId: string,
+    waitMs: number,
+    abandoned?: Promise<void>
+  ): Promise<RelayItem | null> {
     this.lastSeen.set(cabinetId, this.now());
     const first = this.lease(cabinetId);
     if (first || waitMs <= 0) return first;
+    let gone = false;
     await new Promise<void>(resolve => {
-      const timer = setTimeout(done, waitMs);
       const list = this.waiters.get(cabinetId) ?? [];
-      function done() {
+      const done = () => {
         clearTimeout(timer);
+        // Retiré de la liste : un poste parti ne passe plus pour « en attente ».
+        this.waiters.set(
+          cabinetId,
+          (this.waiters.get(cabinetId) ?? []).filter(w => w !== done)
+        );
         resolve();
-      }
+      };
+      const timer = setTimeout(done, waitMs);
       list.push(done);
       this.waiters.set(cabinetId, list);
+      void abandoned?.then(() => {
+        gone = true;
+        done();
+      });
     });
-    this.waiters.set(
-      cabinetId,
-      (this.waiters.get(cabinetId) ?? []).filter(Boolean)
-    );
+    // Connexion coupée pendant l'attente : ne rien réserver pour personne.
+    if (gone) return null;
     this.lastSeen.set(cabinetId, this.now());
     return this.lease(cabinetId);
   }
@@ -472,9 +487,22 @@ export class DurableRelay implements CommandQueue {
           if (stored) return stored; // réponse tardive ou déjà connue : rendue telle quelle
           throw new OutcomeUnknown("relay item abandoned");
         }
+        const effective = EFFECTIVE_COMMANDS.includes(envelope.command.type);
         if (!existing && !this.isOnline(envelope.cabinetId))
           throw new NotDelivered("care station not connected");
-        const effective = EFFECTIVE_COMMANDS.includes(envelope.command.type);
+        // Une demande (message, rappel…) n'impose pas d'attente à l'appelant
+        // si le poste n'est pas EN TRAIN de relever : elle part en file, sera
+        // remise au retour du poste, et l'appelant l'entend dire tout de suite.
+        if (!existing && !effective && !this.isWaiting(envelope.cabinetId)) {
+          this.insert(
+            envelope.cabinetId,
+            envelope.idempotencyKey,
+            "command",
+            envelope,
+            null
+          );
+          throw new NotDelivered("queued: care station not polling right now");
+        }
         const id =
           existing?.item_id ??
           this.insert(

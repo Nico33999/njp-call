@@ -252,6 +252,21 @@ describe("service 24/7", () => {
     expect(all).not.toContain("attestation");
   });
 
+  it("poste parti depuis peu (plus en relève) : le message part en file sans faire attendre l'appelant", async () => {
+    const { webhook, svc, station } = await start({
+      relay: { verdictTimeoutMs: 5000 },
+    });
+    const care = new FakeCare("cab_a", SLOTS);
+    const s = station(TOKEN_A, care);
+    await until(() => s.polls > 1);
+    await s.stop(); // vu il y a un instant, mais plus personne n'attend
+    const t0 = Date.now();
+    const r = await leaveMessage(webhook, "call_just_left");
+    expect(Date.now() - t0).toBeLessThan(2000);
+    expect(spoken(r)).toContain("Votre demande est transmise");
+    expect(svc.relay.queuedCount("cab_a")).toBe(1);
+  });
+
   it("poste connecté, autorisation fraîche : réservation réelle via le relais", async () => {
     const { webhook, station } = await start();
     const care = new FakeCare("cab_a", SLOTS);

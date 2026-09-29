@@ -15,6 +15,7 @@
  * | `NJP_CALL_NUMBER_ROUTES` | `+33XXXXXXXXX=cabinetId;…` |
  * | `NJP_CALL_CONFIG_DIR` | dossier de configurations PUBLIQUES `<cabinetId>.json` |
  * | `NJP_CALL_LLM_*` | fournisseur d'IA, désactivé si absent (voir llm.ts) |
+ * | `NJP_CALL_TLS_CERT` / `NJP_CALL_TLS_KEY` | recette : TLS terminé par le service (PEM) ; en exploitation, un frontal TLS |
  * | `NJP_CALL_TEST_FAULT` | bancs de panne : `point` ou `point@n` — honoré en `recette` SEULEMENT |
  * | `PORT` | port d'écoute |
  */
@@ -154,6 +155,14 @@ const service = createService({
   configs,
   understander: llm ? new LlmUnderstander(llm) : new FallbackUnderstander(),
   fault,
+  ...(env.NJP_CALL_TLS_CERT && env.NJP_CALL_TLS_KEY
+    ? {
+        tls: {
+          cert: readFileSync(env.NJP_CALL_TLS_CERT, "utf8"),
+          key: readFileSync(env.NJP_CALL_TLS_KEY, "utf8"),
+        },
+      }
+    : {}),
   ...(env.NJP_CALL_RELAY_LEASE_MS
     ? {
         relay: { leaseMs: Math.max(1000, Number(env.NJP_CALL_RELAY_LEASE_MS)) },
@@ -181,6 +190,7 @@ service.server.listen(Number(env.PORT ?? 8787), env.HOST ?? "127.0.0.1", () => {
       mode,
       port: typeof addr === "object" && addr ? addr.port : null,
       storage: dbPath ? "durable" : "volatile",
+      tls: env.NJP_CALL_TLS_CERT ? "service" : "frontal",
       cabinets: configs.size,
       llm: llm ? "configured" : "fallback",
     })

@@ -26,6 +26,7 @@ import {
   type Server,
   type ServerResponse,
 } from "node:http";
+import { createServer as createHttpsServer } from "node:https";
 import type { CabinetConfig } from "../core/config";
 import { QueueingGateway } from "../core/gateway";
 import {
@@ -68,6 +69,12 @@ export interface ServiceOptions {
   maxWaitMs?: number;
   /** Bancs de panne : appelé aux points nommés. Jamais branché en exploitation. */
   fault?: (point: FaultPoint) => void;
+  /**
+   * TLS terminé par le service lui-même (PEM). En exploitation, un frontal
+   * TLS est attendu devant le service ; ceci sert aux bancs de recette qui
+   * éprouvent le chemin HTTPS du poste avec une autorité de test.
+   */
+  tls?: { cert: string; key: string };
 }
 
 class HttpError extends Error {
@@ -165,7 +172,9 @@ export const createService = (opts: ServiceOptions): Service => {
       understander,
       gateway: new StatusGate(
         store,
-        new QueueingGateway(relay.transport(), relay)
+        // Aucun re-essai immédiat : c'est le MÊME élément qui serait
+        // attendu de nouveau ; la réconciliation passe par le relais.
+        new QueueingGateway(relay.transport(), relay, 0)
       ),
       availability: gatedAvailability(store, relay.availability()),
       journal,
@@ -266,7 +275,12 @@ export const createService = (opts: ServiceOptions): Service => {
           Math.max(Number(url.searchParams.get("wait") ?? 0) || 0, 0),
           opts.maxWaitMs ?? 25_000
         );
-        const item = await relay.next(cabinetId, wait);
+        const abandoned = new Promise<void>(resolve =>
+          res.on("close", () => {
+            if (!res.writableEnded) resolve();
+          })
+        );
+        const item = await relay.next(cabinetId, wait, abandoned);
         if (item) opts.fault?.("item_leased");
         return item ? send(res, 200, { item }) : send(res, 204);
       }
@@ -334,7 +348,7 @@ export const createService = (opts: ServiceOptions): Service => {
     throw new HttpError(404, "not_found");
   };
 
-  const server = createHttpServer((req, res) => {
+  const onRequest = (req: IncomingMessage, res: ServerResponse) => {
     req.setTimeout(30_000);
     handle(req, res).catch((e: unknown) => {
       if (e instanceof HttpError || e instanceof InboundError)
@@ -342,7 +356,13 @@ export const createService = (opts: ServiceOptions): Service => {
       log({ at: new Date(now()).toISOString(), event: "internal_error" });
       send(res, 500, { error: "internal" });
     });
-  });
+  };
+  const server: Server = opts.tls
+    ? createHttpsServer(
+        { cert: opts.tls.cert, key: opts.tls.key, minVersion: "TLSv1.2" },
+        onRequest
+      )
+    : createHttpServer(onRequest);
   server.headersTimeout = 10_000;
   server.requestTimeout = 35_000;
 
