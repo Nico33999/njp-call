@@ -1,5 +1,7 @@
 # Flux de données, conservation, sous-traitants, information des appelants
 
+> **Cible actuelle : traitement au poste du cabinet.** Ce document décrit les flux du **service hébergé**, qui n'est plus la cible. Les flux de la cible — traitement au poste du cabinet — sont décrits, avec ce qui sort encore vers l'opérateur et le cloud NJP CARE, dans NJP CARE `desktop/docs/NJP-CALL-POSTE-LOCAL.md` §2–3.
+
 > **Matériau préparatoire. Ce n'est PAS une validation réglementaire.** Aucune
 > conformité (RGPD, HDS, AI Act) n'est déclarée. Chaque ligne « à valider »
 > exige une décision et une preuve (DPO, juriste, éditeur). Complète

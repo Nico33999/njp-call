@@ -1,5 +1,7 @@
 # Données personnelles et de santé — cartographie et points à valider
 
+> **Cible actuelle : traitement au poste du cabinet.** La cartographie de la cible (traitement au poste) et ses points à qualifier sont dans NJP CARE `desktop/docs/NJP-CALL-POSTE-LOCAL.md` §2, §3 et §8. Aucune exemption HDS ni conformité n'y est conclue.
+
 > Voir aussi `FLUX-DE-DONNEES.md` (flux détaillés, conservation, sous-traitants,
 > projet d'information des appelants).
 

@@ -15,20 +15,31 @@ dépôt NJP CALL ──► paquet .njpx versionné et signé ──► NJP CARE 
                                                          │ installation, permissions, activation
                                                          ▼
                                   NJP CARE : espace « Secrétariat », Aujourd'hui, planning…
-service NJP CALL 24/7 ◄──── relais authentifié (le poste se connecte) ────► moteur Rust NJP CARE
+opérateur du cabinet ── SIP/RTP ──► POSTE D'ACCUEIL (NJP CARE) : voix locale, moteur, coffre
 ```
+
+**Cible : traitement au poste du cabinet.** Les appels sont décrochés,
+compris et enregistrés **dans NJP CARE**, sur un poste du cabinet : ligne SIP
+de l'opérateur existant, reconnaissance vocale locale, moteur de conversation
+porté en Rust, journal au coffre. Aucun serveur NJP CALL, aucun service d'IA
+externe. Ce dépôt reste la **référence** du moteur : `contract/conformance/`
+exporte 39 appels et un corpus de langue que le port Rust de NJP CARE doit
+reproduire à l'identique (`pnpm conformance:check`). Le `service/` est un outil
+de recette, pas la cible. Détails, flux sortants et limites : NJP CARE
+`desktop/docs/NJP-CALL-POSTE-LOCAL.md`.
 
 ## Contenu du dépôt
 
 | Dossier | Rôle |
 |---|---|
 | `core/` | moteur pur : commandes typées, passerelles, conversation, règles, session, dates Europe/Paris, urgences, rappels, téléphonie abstraite |
-| `service/` | service 24/7 : stockage durable chiffré, webhooks signés, relais à bail vers le poste, déclaration du poste, limites, journaux expurgés, IA optionnelle (approuvée) |
+| `service/` | **outil de recette** (ancien mode hébergé, non recommandé) — service 24/7 : stockage durable chiffré, webhooks signés, relais à bail vers le poste, déclaration du poste, limites, journaux expurgés, IA optionnelle (approuvée) |
 | `deploy/` | gabarits d'exploitation (unité systemd, environnement sans valeur) — rien n'est déployé |
 | `client/` | configurateur et **banc de recette** (simulation explicite, rien n'est réel) |
 | `extension/` | manifeste Store (contrat NJP CARE v2) et surfaces déclarées |
 | `scripts/` | construction, signature, vérification du paquet ; détection de secrets ; fixtures de contrat |
 | `contract/fixtures/` | enveloppes réellement émises par des appels simulés, rejouées par les tests Rust de NJP CARE |
+| `contract/conformance/` | appels et corpus de langue du moteur de référence, que le port Rust de NJP CARE doit reproduire à l'identique |
 | `keys/` | clé **publique** d'essai. Aucune clé privée. |
 | `docs/` | architecture, contrat NJP CARE, paquet, téléphonie, exploitation, flux de données, données de santé, validations externes avant pilote |
 

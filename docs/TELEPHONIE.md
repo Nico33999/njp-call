@@ -1,5 +1,7 @@
 # Téléphonie
 
+> **Cible actuelle : traitement au poste du cabinet.** Cible : l'opérateur du cabinet **achemine** l'appel vers le poste d'accueil par une ligne SIP (compte existant de l'opérateur) ; l'audio est traité sur le poste (`njp-call-voice` dans NJP CARE). Aucun fournisseur de voix programmable (Twilio, etc.) n'est requis ; les contrats `TelephonyProvider` ci-dessous restent pour la recette.
+
 ## Ce qui est construit
 
 - Événements neutres (`call.started`, `caller.utterance` avec interruption et

@@ -1,5 +1,7 @@
 # NJP CALL — architecture
 
+> **Cible actuelle : traitement au poste du cabinet.** Les §§ ci-dessous décrivent le moteur de référence (TypeScript) et le service hébergé. En production, le moteur tourne **dans NJP CARE**, porté en Rust et vérifié contre ce moteur de référence (`contract/conformance/`) ; le service n'est plus qu'un outil de recette.
+
 ## 1. Chaîne de décision
 
 ```text

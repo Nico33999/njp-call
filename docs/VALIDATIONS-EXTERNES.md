@@ -1,5 +1,7 @@
 # Validations externes — ce qu'il reste à éprouver avant un pilote
 
+> **Cible actuelle : traitement au poste du cabinet.** Depuis le passage au traitement au poste, l'hébergement, le fournisseur de voix programmable et le fournisseur d'IA ne sont plus des prérequis. Les validations qui restent pour la cible sont listées dans NJP CARE `desktop/docs/NJP-CALL-POSTE-LOCAL.md` §8 et §10.
+
 > Préparation, pas exécution : aucun compte payant, numéro, contrat ou
 > hébergement n'a été pris. Rien ici ne rend le pilote possible : il faut que
 > les intégrations soient réalisées et les validations réussies (§6).
