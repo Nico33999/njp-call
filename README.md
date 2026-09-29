@@ -1,39 +1,52 @@
-# NJP Call - Assistant d'accueil téléphonique IA
+# NJP CALL — by NJP CARE
 
-Application web moderne pour configurer et simuler un assistant IA d'accueil téléphonique professionnel.
+La **secrétaire vocale automatisée** du cabinet, distribuée comme **extension
+officielle** depuis le NJP CARE STORE. Elle répond aux appels, s'annonce comme
+assistante automatisée, prend messages, demandes de rappel et demandes de
+rendez-vous, propose des créneaux réellement autorisés, et n'annonce une
+opération qu'après confirmation par NJP CARE.
 
-## ✨ Nouveauté : Vraie IA intégrée !
-- L'assistant utilise maintenant **Groq (Llama 3.3)** via une fonction serverless Vercel pour des réponses naturelles et intelligentes.
-- Fallback automatique vers la logique locale si l'IA est indisponible.
-- Comportement fidèle à ta configuration (nom, ton, services, horaires...).
+NJP CARE reste l'autorité (cabinet, utilisateur, permissions, patients,
+planning, messages). NJP CALL ne crée ni fichier patients, ni agenda, ni
+authentification.
 
-## Configuration de l'IA (obligatoire pour la vraie IA)
-1. Va dans les **Settings** de ton projet Vercel
-2. **Environment Variables** → Ajoute :
-   - `GROQ_API_KEY` = ta clé API Groq (gratuite sur https://console.groq.com)
-3. Redeploie le projet
-
-Sans la clé, l'application utilise le mode simulation locale (toujours fonctionnel).
-
-## Développement
-```bash
-pnpm install
-pnpm dev
+```text
+dépôt NJP CALL ──► paquet .njpx versionné et signé ──► NJP CARE STORE
+                                                         │ installation, permissions, activation
+                                                         ▼
+                                  NJP CARE : espace « Secrétariat », Aujourd'hui, planning…
+service NJP CALL 24/7 ◄──── relais authentifié (le poste se connecte) ────► moteur Rust NJP CARE
 ```
 
-## Build & Déploiement Vercel
+## Contenu du dépôt
+
+| Dossier | Rôle |
+|---|---|
+| `core/` | moteur pur : commandes typées, passerelles, conversation, règles, session, dates Europe/Paris, urgences, rappels, téléphonie abstraite |
+| `service/` | service 24/7 : webhooks signés, relais vers le poste, limites, journaux expurgés, IA optionnelle |
+| `client/` | configurateur et **banc de recette** (simulation explicite, rien n'est réel) |
+| `extension/` | manifeste Store (contrat NJP CARE v2) et surfaces déclarées |
+| `scripts/` | construction, signature, vérification du paquet ; détection de secrets ; fixtures de contrat |
+| `contract/fixtures/` | enveloppes réellement émises par des appels simulés, rejouées par les tests Rust de NJP CARE |
+| `keys/` | clé **publique** d'essai. Aucune clé privée. |
+| `docs/` | architecture, paquet, téléphonie, données de santé |
+
+## Commandes
+
 ```bash
-pnpm build
+pnpm install --frozen-lockfile
+pnpm typecheck        # navigateur + moteur + service + scripts
+pnpm test             # vitest (aucun appel réseau réel, aucune donnée réelle)
+pnpm build            # configurateur
+pnpm package:build    # dist/package/njp.call-<version>.njpx (+ .minisig si NJP_CALL_SIGNING_KEY_FILE)
+pnpm package:verify
+pnpm check:secrets
+pnpm ci               # tout ce qui précède
 ```
 
-Le site est prêt pour la production avec vraie IA conversationnelle.
+## Ce qui est réel, ce qui est simulé
 
-## Structure
-- `client/` : Frontend React + Vite
-- `api/chat.ts` : Proxy IA (Groq)
-- `server/` : Ancien serveur statique (non utilisé sur Vercel)
-
-## Design
-Style Néo-Brutaliste Télécom (Signal) — fluide et professionnel.
-
-Prochaines améliorations possibles : vraie intégration téléphonie (Twilio, etc.), historique persistant, analytics.
+Voir `docs/ARCHITECTURE.md` §6. En bref : le moteur, le service, le relais et
+le paquet signé sont réels et testés ; le fournisseur téléphonique, le
+fournisseur d'IA et la clé de distribution sont des **décisions externes**
+non prises. Aucune conformité réglementaire n'est déclarée.
