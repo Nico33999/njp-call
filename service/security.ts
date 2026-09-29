@@ -72,6 +72,25 @@ export const cabinetForBearer = (
   return null;
 };
 
+/**
+ * Authentifie un poste : empreinte connue ET non révoquée. Rend aussi
+ * l'empreinte (pour une révocation), jamais le jeton.
+ */
+export const authenticateBearer = (
+  header: string | undefined,
+  byHash: Map<string, string>,
+  isRevoked: (hash: string) => boolean
+): { cabinetId: string; tokenHash: string } | null => {
+  const m = header?.match(/^Bearer ([A-Za-z0-9._~-]{32,256})$/);
+  if (!m) return null;
+  const h = tokenHash(m[1]);
+  let cabinetId: string | null = null;
+  for (const [known, cabinet] of byHash)
+    if (safeEqual(known, h)) cabinetId = cabinet;
+  if (!cabinetId || isRevoked(h)) return null;
+  return { cabinetId, tokenHash: h };
+};
+
 /** Seau à jetons simple, par clé. */
 export class RateLimiter {
   private readonly buckets = new Map<string, { tokens: number; at: number }>();
@@ -79,6 +98,17 @@ export class RateLimiter {
     private readonly capacity: number,
     private readonly perMs: number
   ) {}
+  /** Reste-t-il de la réserve, sans rien consommer ? */
+  peek(key: string, now = Date.now()): boolean {
+    const b = this.buckets.get(key);
+    if (!b) return true;
+    return (
+      Math.min(
+        this.capacity,
+        b.tokens + ((now - b.at) / this.perMs) * this.capacity
+      ) >= 1
+    );
+  }
   allow(key: string, now = Date.now()): boolean {
     const b = this.buckets.get(key) ?? { tokens: this.capacity, at: now };
     b.tokens = Math.min(

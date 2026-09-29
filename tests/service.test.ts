@@ -4,7 +4,9 @@ import { sanitizeConfig } from "../core/config";
 import type { SlotChoice } from "../core/commands";
 import { FakeCare } from "../core/testing/fakeCare";
 import { initialState } from "../core/conversation";
+import { SimulatorInbound } from "../service/inbound";
 import { buildMessages, LlmUnderstander } from "../service/llm";
+import type { RelayOptions } from "../service/relay";
 import {
   allowedOutbound,
   makeLogger,
@@ -14,11 +16,15 @@ import {
   tokenHash,
   verifyWebhook,
 } from "../service/security";
-import { createService } from "../service/server";
+import { createService, type Service } from "../service/server";
+import { ServiceStore } from "../service/store";
+import { Station, STATUS_OK } from "./helpers/station";
 
 const SECRET = "whsec_" + "t".repeat(40); // secret de test, factice
 const TOKEN_A = "tok_A_" + "a".repeat(40);
+const TOKEN_A2 = "tok_A2_" + "c".repeat(40);
 const TOKEN_B = "tok_B_" + "b".repeat(40);
+const KEY = Buffer.alloc(32, 7); // clé de stockage de banc
 const NOW = Date.parse("2026-09-29T08:00:00Z");
 const SLOTS: SlotChoice[] = [
   {
@@ -29,16 +35,33 @@ const SLOTS: SlotChoice[] = [
   },
 ];
 
-const servers: { close: () => void }[] = [];
-afterEach(() => servers.splice(0).forEach(s => s.close()));
+const running: Service[] = [];
+afterEach(async () => {
+  for (const s of running.splice(0)) await s.shutdown().catch(() => undefined);
+});
 
-const start = async () => {
+const start = async (
+  o: {
+    clock?: { t: number };
+    relay?: Partial<RelayOptions>;
+    tokens?: () => Map<string, string>;
+  } = {}
+) => {
   const lines: string[] = [];
+  const clock = o.clock ?? { t: NOW };
+  const store = new ServiceStore({
+    path: ":memory:",
+    key: KEY,
+    now: () => clock.t,
+  });
   const svc = createService({
-    webhookSecret: SECRET,
-    deviceTokens: parseDeviceTokens(
-      `cab_a=${tokenHash(TOKEN_A)};cab_b=${tokenHash(TOKEN_B)}`
-    ),
+    store,
+    inbound: new SimulatorInbound(SECRET),
+    deviceTokens:
+      o.tokens ??
+      parseDeviceTokens(
+        `cab_a=${tokenHash(TOKEN_A)};cab_b=${tokenHash(TOKEN_B)}`
+      ),
     numberRoutes: new Map([
       ["+33100000001", "cab_a"],
       ["+33100000002", "cab_b"],
@@ -48,11 +71,11 @@ const start = async () => {
       ["cab_b", sanitizeConfig({ cabinetName: "Cabinet B" })],
     ]),
     log: makeLogger(l => lines.push(l)),
-    now: () => NOW,
     maxWaitMs: 2000,
+    relay: { verdictTimeoutMs: 1500, ...o.relay },
   });
   await new Promise<void>(r => svc.server.listen(0, "127.0.0.1", r));
-  servers.push(svc.server);
+  running.push(svc);
   const base = `http://127.0.0.1:${(svc.server.address() as AddressInfo).port}`;
   let ev = 0;
   const webhook = async (
@@ -65,7 +88,7 @@ const start = async () => {
       to: opts.to ?? "+33100000001",
       event: {
         id: event.id ?? `${callId}-e${++ev}`,
-        at: new Date(NOW).toISOString(),
+        at: new Date(clock.t).toISOString(),
         ...event,
       },
     });
@@ -74,7 +97,7 @@ const start = async () => {
       headers: {
         "x-njp-signature":
           opts.sig ??
-          signWebhook(SECRET, opts.ts ?? Math.floor(NOW / 1000), body),
+          signWebhook(SECRET, opts.ts ?? Math.floor(clock.t / 1000), body),
         "content-type": "application/json",
       },
       body,
@@ -87,46 +110,76 @@ const start = async () => {
           : await res.json().catch(() => null),
     };
   };
-  /** Le poste NJP CARE : relève le relais et applique par la doublure. */
-  const station = (token: string, care: FakeCare) => {
-    let stop = false;
-    const loop = (async () => {
-      while (!stop) {
-        const r = await fetch(`${base}/v1/care/next?wait=300`, {
-          headers: { authorization: `Bearer ${token}` },
-        });
-        if (r.status !== 200) continue;
-        const { item } = await r.json();
-        const result =
-          item.kind === "command"
-            ? await care.send(item.envelope)
-            : await care.findSlots(care.cabinetId, item.query);
-        await fetch(`${base}/v1/care/result`, {
-          method: "POST",
-          headers: {
-            authorization: `Bearer ${token}`,
-            "content-type": "application/json",
-          },
-          body: JSON.stringify({ id: item.id, result }),
-        });
-      }
-    })();
-    return {
-      stop: async () => {
-        stop = true;
-        await loop.catch(() => undefined);
+  const station = (
+    token: string,
+    care: FakeCare,
+    opts: ConstructorParameters<typeof Station>[3] = {}
+  ) =>
+    new Station(() => base, token, care, {
+      status: STATUS_OK(new Date(clock.t).toISOString()),
+      ...opts,
+    }).start();
+  const get = (path: string, token: string) =>
+    fetch(`${base}${path}`, { headers: { authorization: `Bearer ${token}` } });
+  const post = (path: string, token: string, body: unknown) =>
+    fetch(`${base}${path}`, {
+      method: "POST",
+      headers: {
+        authorization: `Bearer ${token}`,
+        "content-type": "application/json",
       },
-    };
-  };
-  return { base, svc, lines, webhook, station };
+      body: JSON.stringify(body),
+    });
+  return { base, svc, store, clock, lines, webhook, station, get, post };
 };
 
+type Env = Awaited<ReturnType<typeof start>>;
+
 const say = async (
-  w: Awaited<ReturnType<typeof start>>["webhook"],
+  w: Env["webhook"],
   callId: string,
   text: string,
   id?: string
 ) => w(callId, { type: "caller.utterance", text, ...(id ? { id } : {}) });
+
+const spoken = (r: { json: { actions: { say?: string }[] } }) =>
+  r.json.actions.map(a => a.say ?? "").join(" ");
+
+const leaveMessage = async (
+  w: Env["webhook"],
+  c: string,
+  confirmId?: string
+) => {
+  await w(c, { type: "call.started", open: false });
+  for (const t of [
+    "je voudrais laisser un message",
+    "Camille Durand",
+    "06 12 34 56 78",
+    "Merci de m'envoyer une attestation de présence.",
+  ])
+    await say(w, c, t);
+  return say(w, c, "oui", confirmId);
+};
+
+const bookUntilConfirm = async (w: Env["webhook"], c: string) => {
+  await w(c, { type: "call.started", open: true });
+  for (const t of [
+    "je voudrais un rendez-vous",
+    "Camille Durand",
+    "06 12 34 56 78",
+    "oui je suis déjà venue",
+  ])
+    await say(w, c, t);
+  const offer = await say(w, c, "jeudi après-midi");
+  await say(w, c, "le premier");
+  return offer;
+};
+
+const until = async (cond: () => boolean, ms = 3000) => {
+  const end = Date.now() + ms;
+  while (!cond() && Date.now() < end) await new Promise(r => setTimeout(r, 20));
+  return cond();
+};
 
 describe("service 24/7", () => {
   it("refuse une signature fausse, périmée ou absente", async () => {
@@ -178,26 +231,15 @@ describe("service 24/7", () => {
     const { webhook, svc, station, lines } = await start();
     const care = new FakeCare("cab_a", SLOTS);
     const c = "call_off1";
-    const greet = await webhook(c, { type: "call.started", open: false });
-    expect(greet.json.actions[0].say).toContain(
-      "assistante vocale automatisée"
-    );
-    await say(webhook, c, "je voudrais laisser un message");
-    await say(webhook, c, "Camille Durand");
-    await say(webhook, c, "06 12 34 56 78");
-    await say(webhook, c, "Merci de m'envoyer une attestation de présence.");
-    const confirm = await say(webhook, c, "oui", "call_off1-confirm");
-    expect(
-      confirm.json.actions.map((a: { say?: string }) => a.say).join(" ")
-    ).toContain("Votre demande est transmise");
+    const confirm = await leaveMessage(webhook, c, "call_off1-confirm");
+    expect(spoken(confirm)).toContain("Votre demande est transmise");
     const dup = await say(webhook, c, "oui", "call_off1-confirm"); // webhook rejoué
     expect(dup.json.duplicate).toBe(true);
+    expect(spoken(dup)).toBe(spoken(confirm)); // rejeu explicite de la même réponse
     expect(svc.relay.queuedCount("cab_a")).toBe(1);
 
     const s = station(TOKEN_A, care);
-    for (let i = 0; i < 50 && svc.relay.queuedCount("cab_a"); i++)
-      await new Promise(r => setTimeout(r, 20));
-    await new Promise(r => setTimeout(r, 50));
+    expect(await until(() => svc.relay.queuedCount("cab_a") === 0)).toBe(true);
     await s.stop();
     expect(
       care.messages.filter(m => m.envelope.command.type === "message.create")
@@ -207,13 +249,28 @@ describe("service 24/7", () => {
     expect(all).not.toContain("06 12 34 56 78");
     expect(all).not.toContain("+33612345678");
     expect(all).not.toContain("Durand");
+    expect(all).not.toContain("attestation");
   });
 
-  it("poste connecté : réservation réelle via le relais, créneau proposé par NJP CARE", async () => {
+  it("poste connecté, autorisation fraîche : réservation réelle via le relais", async () => {
     const { webhook, station } = await start();
     const care = new FakeCare("cab_a", SLOTS);
     const s = station(TOKEN_A, care);
-    const c = "call_on1";
+    await until(() => s.acked >= 0 && s.networkErrors === 0, 100);
+    const offer = await bookUntilConfirm(webhook, "call_on1");
+    expect(spoken(offer)).toContain("jeudi 1 octobre à 14 h");
+    const done = await say(webhook, "call_on1", "oui");
+    await s.stop();
+    expect(spoken(done)).toContain("C'est confirmé");
+    expect(care.appointments).toHaveLength(1);
+  });
+
+  it("aucune déclaration du poste : pas de créneau proposé, jamais « confirmé »", async () => {
+    const { webhook, station } = await start();
+    const care = new FakeCare("cab_a", SLOTS);
+    const s = station(TOKEN_A, care, { status: null });
+    await new Promise(r => setTimeout(r, 50));
+    const c = "call_nostatus";
     await webhook(c, { type: "call.started", open: true });
     for (const t of [
       "je voudrais un rendez-vous",
@@ -222,57 +279,290 @@ describe("service 24/7", () => {
       "oui je suis déjà venue",
     ])
       await say(webhook, c, t);
-    const offer = await say(webhook, c, "jeudi après-midi");
-    expect(
-      offer.json.actions.map((a: { say?: string }) => a.say).join(" ")
-    ).toContain("jeudi 1 octobre à 14 h");
-    await say(webhook, c, "le premier");
-    const done = await say(webhook, c, "oui");
+    const r = await say(webhook, c, "jeudi après-midi");
     await s.stop();
+    expect(spoken(r)).not.toContain("C'est confirmé");
+    expect(care.appointments).toHaveLength(0);
+  });
+
+  it("autorisation périmée : la réservation devient une demande, rien n'est réservé", async () => {
+    const clock = { t: NOW };
+    const { webhook, station, store } = await start({ clock });
+    const care = new FakeCare("cab_a", SLOTS);
+    const s = station(TOKEN_A, care);
+    await until(() => store.cabinetStatus("cab_a") !== null);
+    await bookUntilConfirm(webhook, "call_stale");
+    clock.t += 2 * 3600_000; // la déclaration (1 h) a expiré entre-temps
+    // Le poste ne redéclare pas (arrêté) : il ne reste que le service.
+    await s.stop();
+    const done = await say(webhook, "call_stale", "oui");
+    expect(spoken(done)).toContain("Je ne peux pas modifier le planning");
+    expect(care.appointments).toHaveLength(0);
+  });
+
+  it("extension désactivée côté poste : le service ne promet plus rien", async () => {
+    const { webhook, post } = await start();
     expect(
-      done.json.actions.map((a: { say?: string }) => a.say).join(" ")
-    ).toContain("C'est confirmé");
-    expect(care.appointments).toHaveLength(1);
+      (
+        await post(
+          "/v1/care/status",
+          TOKEN_A,
+          STATUS_OK(new Date(NOW).toISOString(), { extensionEnabled: false })
+        )
+      ).status
+    ).toBe(204);
+    const c = "call_disabled";
+    const r = await leaveMessage(webhook, c);
+    expect(spoken(r)).toContain("Le cabinet n'a pas activé cette fonction");
+  });
+
+  it("déclaration invalide refusée (champ inconnu, durée > 24 h, type faux)", async () => {
+    const { post } = await start();
+    const at = new Date(NOW).toISOString();
+    for (const bad of [
+      { ...STATUS_OK(at), extra: 1 },
+      STATUS_OK(at, { validForSeconds: 90_000 }),
+      STATUS_OK(at, { extensionEnabled: "yes" }),
+      STATUS_OK(at, { permissions: ["../../etc"] }),
+      [],
+    ])
+      expect((await post("/v1/care/status", TOKEN_A, bad)).status).toBe(400);
   });
 
   it("isolation : le jeton d'un cabinet ne relève ni ne répond pour un autre", async () => {
-    const { base, webhook, svc } = await start();
-    const c = "call_iso1";
-    await webhook(c, { type: "call.started", open: false });
-    for (const t of [
-      "je voudrais laisser un message",
-      "Camille Durand",
-      "06 12 34 56 78",
-      "Une attestation svp.",
-      "oui",
-    ])
-      await say(webhook, c, t);
+    const { webhook, svc, get, post } = await start();
+    await leaveMessage(webhook, "call_iso1");
     expect(svc.relay.queuedCount("cab_a")).toBe(1);
-    const r = await fetch(`${base}/v1/care/next?wait=0`, {
-      headers: { authorization: `Bearer ${TOKEN_B}` },
-    });
-    expect(r.status).toBe(204);
-    expect(svc.relay.queuedCount("cab_a")).toBe(1);
-    const a = await fetch(`${base}/v1/care/next?wait=0`, {
-      headers: { authorization: `Bearer ${TOKEN_A}` },
-    });
-    const { item } = await a.json();
-    const forged = await fetch(`${base}/v1/care/result`, {
-      method: "POST",
-      headers: {
-        authorization: `Bearer ${TOKEN_B}`,
-        "content-type": "application/json",
+    expect((await get("/v1/care/next?wait=0", TOKEN_B)).status).toBe(204);
+    const { item } = await (await get("/v1/care/next?wait=0", TOKEN_A)).json();
+    const forged = await post("/v1/care/result", TOKEN_B, {
+      id: item.id,
+      lease: item.lease,
+      result: {
+        idempotencyKey: item.envelope.idempotencyKey,
+        status: "confirmed",
+        reference: "msg_0001",
       },
-      body: JSON.stringify({ id: item.id, result: { status: "confirmed" } }),
     });
     expect(forged.status).toBe(404);
+    expect(svc.relay.stateOf("cab_a", item.envelope.idempotencyKey)).toBe(
+      "leased"
+    );
+    expect((await get("/v1/care/next", "nope")).status).toBe(401);
+  });
+});
+
+describe("relais à bail", () => {
+  it("relever ne supprime rien ; bail expiré ⇒ redistribué ; ancien bail refusé ; verdict accusé une fois enregistré", async () => {
+    const clock = { t: NOW };
+    const { webhook, svc, get, post } = await start({
+      clock,
+      relay: { leaseMs: 30_000 },
+    });
+    await leaveMessage(webhook, "call_lease");
+    const first = (await (await get("/v1/care/next?wait=0", TOKEN_A)).json())
+      .item;
+    expect(first.id).toMatch(/^it_[0-9a-f]{24}$/);
+    // Réservé : pas redistribué pendant le bail.
+    expect((await get("/v1/care/next?wait=0", TOKEN_A)).status).toBe(204);
+    expect(svc.relay.stateOf("cab_a", first.envelope.idempotencyKey)).toBe(
+      "leased"
+    );
+    // Le poste disparaît ; le bail expire ; temporisation ; redistribution.
+    clock.t += 31_000;
+    expect((await get("/v1/care/next?wait=0", TOKEN_A)).status).toBe(204); // temporisation 1 s
+    clock.t += 1_000;
+    const second = (await (await get("/v1/care/next?wait=0", TOKEN_A)).json())
+      .item;
+    expect(second.id).toBe(first.id); // identifiant stable
+    expect(second.lease).not.toBe(first.lease);
+    const verdict = {
+      idempotencyKey: first.envelope.idempotencyKey,
+      status: "confirmed",
+      reference: "msg_0001",
+    };
     expect(
       (
-        await fetch(`${base}/v1/care/next`, {
-          headers: { authorization: "Bearer nope" },
+        await post("/v1/care/result", TOKEN_A, {
+          id: first.id,
+          lease: first.lease,
+          result: verdict,
         })
       ).status
-    ).toBe(401);
+    ).toBe(409);
+    expect(
+      (
+        await post("/v1/care/result", TOKEN_A, {
+          id: second.id,
+          lease: second.lease,
+          result: verdict,
+        })
+      ).status
+    ).toBe(204);
+    // Même verdict rendu de nouveau (accusé perdu) : accusé ; verdict différent : conflit.
+    expect(
+      (
+        await post("/v1/care/result", TOKEN_A, {
+          id: second.id,
+          lease: second.lease,
+          result: verdict,
+        })
+      ).status
+    ).toBe(204);
+    expect(
+      (
+        await post("/v1/care/result", TOKEN_A, {
+          id: second.id,
+          lease: second.lease,
+          result: { ...verdict, reference: "msg_0002" },
+        })
+      ).status
+    ).toBe(409);
+    expect(svc.relay.stateOf("cab_a", first.envelope.idempotencyKey)).toBe(
+      "done"
+    );
+  });
+
+  it("validation stricte des verdicts du poste", async () => {
+    const { webhook, get, post } = await start();
+    await leaveMessage(webhook, "call_strict");
+    const { item } = await (await get("/v1/care/next?wait=0", TOKEN_A)).json();
+    const key = item.envelope.idempotencyKey;
+    for (const bad of [
+      { idempotencyKey: key, status: "simulated", reference: "x_001" },
+      {
+        idempotencyKey: "autre/message.create/1",
+        status: "confirmed",
+        reference: "msg_1",
+      },
+      { idempotencyKey: key, status: "confirmed" }, // confirmé sans référence
+      {
+        idempotencyKey: key,
+        status: "confirmed",
+        reference: "msg_1",
+        injected: "<script>",
+      },
+      { idempotencyKey: key, status: "whatever" },
+      "confirmed",
+    ])
+      expect(
+        (
+          await post("/v1/care/result", TOKEN_A, {
+            id: item.id,
+            lease: item.lease,
+            result: bad,
+          })
+        ).status
+      ).toBe(400);
+    expect(
+      (
+        await post("/v1/care/result", TOKEN_A, {
+          id: item.id,
+          lease: "0".repeat(31),
+          result: {},
+        })
+      ).status
+    ).toBe(400);
+    expect(
+      (
+        await post("/v1/care/result", TOKEN_A, {
+          id: item.id,
+          lease: item.lease,
+          result: {},
+          x: 1,
+        })
+      ).status
+    ).toBe(400);
+  });
+
+  it("panne du POSTE après application, avant verdict : redistribué, rejoué par NJP CARE, un seul effet", async () => {
+    const clock = { t: NOW };
+    const { webhook, svc, station } = await start({
+      clock,
+      relay: { leaseMs: 200 },
+    });
+    const care = new FakeCare("cab_a", SLOTS);
+    await leaveMessage(webhook, "call_stcrash");
+    const s = station(TOKEN_A, care);
+    s.crashAfterApplyOnce = true;
+    await until(() => care.messages.length === 1);
+    clock.t += 1_000; // bail écoulé : l'élément revient, temporisé
+    expect(
+      await until(
+        () =>
+          svc.relay.stateOf(
+            "cab_a",
+            care.messages[0].envelope.idempotencyKey
+          ) === "ready"
+      )
+    ).toBe(true);
+    clock.t += 2_000; // temporisation écoulée : redistribué, NJP CARE rejoue
+    expect(await until(() => svc.relay.queuedCount("cab_a") === 0)).toBe(true);
+    await s.stop();
+    expect(care.messages).toHaveLength(1);
+    expect(care.audit.filter(a => a.type === "message.create")).toHaveLength(1);
+  });
+});
+
+describe("jetons de poste : rotation, révocation, essais", () => {
+  it("rotation : ancien et nouveau jetons valides pendant la bascule, puis l'ancien est retiré", async () => {
+    let spec = `cab_a=${tokenHash(TOKEN_A)};cab_a=${tokenHash(TOKEN_A2)}`;
+    const { get } = await start({ tokens: () => parseDeviceTokens(spec) });
+    expect((await get("/v1/care/next?wait=0", TOKEN_A)).status).toBe(204);
+    expect((await get("/v1/care/next?wait=0", TOKEN_A2)).status).toBe(204);
+    spec = `cab_a=${tokenHash(TOKEN_A2)}`;
+    expect((await get("/v1/care/next?wait=0", TOKEN_A)).status).toBe(401);
+    expect((await get("/v1/care/next?wait=0", TOKEN_A2)).status).toBe(204);
+  });
+
+  it("révocation (désinstallation) : jeton refusé ensuite, extension déclarée désactivée", async () => {
+    const { get, post, webhook } = await start();
+    expect((await post("/v1/care/revoke", TOKEN_A, {})).status).toBe(204);
+    expect((await get("/v1/care/next?wait=0", TOKEN_A)).status).toBe(401);
+    expect(spoken(await leaveMessage(webhook, "call_revoked"))).toContain(
+      "n'a pas activé"
+    );
+    // L'autre cabinet n'est pas touché.
+    expect((await get("/v1/care/next?wait=0", TOKEN_B)).status).toBe(204);
+  });
+
+  it("essais de jetons répétés : freinés par adresse", async () => {
+    const { get } = await start();
+    const codes: number[] = [];
+    for (let i = 0; i < 12; i++)
+      codes.push(
+        (await get("/v1/care/next?wait=0", `tok_bad_${"x".repeat(40)}${i}`))
+          .status
+      );
+    expect(codes.slice(0, 10).every(c => c === 401)).toBe(true);
+    expect(codes.slice(10)).toEqual([429, 429]);
+  });
+});
+
+describe("exploitation", () => {
+  it("santé : des comptes, aucun identifiant de cabinet ni contenu", async () => {
+    const { base, webhook } = await start();
+    await leaveMessage(webhook, "call_health");
+    const h = await (await fetch(`${base}/healthz`)).json();
+    expect(h).toMatchObject({
+      ok: true,
+      telephony: "simulator",
+      schema: 1,
+      relayReady: 1,
+    });
+    expect(JSON.stringify(h)).not.toMatch(/cab_|call_|Durand|\+33/);
+  });
+
+  it("arrêt propre : une relève en attente rend la main, le stockage se ferme", async () => {
+    const { get, svc, store } = await start();
+    const pending = get("/v1/care/next?wait=2000", TOKEN_A);
+    await new Promise(r => setTimeout(r, 50));
+    const t0 = Date.now();
+    running.splice(running.indexOf(svc), 1);
+    await svc.shutdown();
+    expect((await pending).status).toBe(204);
+    expect(Date.now() - t0).toBeLessThan(1500);
+    expect(() => store.health()).toThrow();
   });
 });
 

@@ -405,7 +405,7 @@ describe("rendez-vous", () => {
     ).toHaveLength(1);
   });
 
-  it("reprise après panne du service : la session se reconstruit et renvoie la même clé", async () => {
+  it("reprise après panne du service : l'événement interrompu est retraité avec la même clé, puis sa réponse est rejouée", async () => {
     const care = new FakeCare("cab_test", SLOTS);
     const journal = new InMemoryJournal();
     const { session, callId, deps } = setup({ care, journal });
@@ -415,39 +415,115 @@ describe("rendez-vous", () => {
       { caller: "oui" },
     ]);
     for (const e of ev.slice(0, -1)) await session.handle(e);
-    // Le service tombe après avoir journalisé l'envoi, avant d'avoir la réponse.
-    const crashing: CareGateway = {
+    // NJP CARE applique la réservation, puis le processus meurt avant d'avoir
+    // lu la réponse : l'issue est inconnue du service.
+    const dying: CareGateway = {
       mode: "live",
-      submit: async () => {
+      submit: async e => {
+        await care.send(e);
         throw new Error("process killed");
       },
     };
-    const beforeCrash = await CallSession.resume({
-      ...deps,
-      gateway: crashing,
-    });
-    expect(beforeCrash.state.phase).toBe("confirming"); // reprise fidèle, rien en vol
+    const beforeCrash = await CallSession.resume({ ...deps, gateway: dying });
+    expect(beforeCrash.state.phase).toBe("confirming");
     await beforeCrash.handle(ev.at(-1)!).catch(() => undefined);
-    // Le journal contient l'événement et l'envoi, pas le résultat.
-    const log = await journal.load(callId);
+    const log = await journal.load({ cabinetId: "cab_test", callId });
     expect(log.filter(e => e.k === "submitted")).toHaveLength(1);
     expect(log.filter(e => e.k === "result")).toHaveLength(0);
-    // Reprise : même clé, un rendez-vous, et l'état final est connu.
+    expect(log.filter(e => e.k === "output")).toHaveLength(ev.length - 1); // le dernier n'est PAS exécuté
+    // Nouveau processus : l'événement n'est pas tenu pour exécuté…
     const resumed = await CallSession.resume({
       ...deps,
       gateway: new QueueingGateway(care, new InMemoryCommandQueue()),
     });
+    expect(resumed.state.phase).toBe("confirming");
+    // … le fournisseur le renvoie : retraité, MÊME clé, rejoué par NJP CARE.
+    const out = await resumed.handle(ev.at(-1)!);
+    expect(out.duplicate).toBeUndefined();
+    expect(out.say.join(" ")).toContain("C'est confirmé");
     expect(care.appointments).toHaveLength(1);
-    expect(resumed.state.lastResult).toMatchObject({
-      type: "appointment.book",
-      status: "confirmed",
-    });
+    expect(
+      [...care.records.values()].filter(r => r.result.status === "confirmed")
+    ).toHaveLength(1);
+    // Réponse HTTP perdue, redémarrage, nouvel envoi du même événement :
+    // la MÊME réponse est rejouée explicitement, rien n'est refait.
     const again = await CallSession.resume({
       ...deps,
       gateway: new QueueingGateway(care, new InMemoryCommandQueue()),
     });
+    const replay = await again.handle(ev.at(-1)!);
+    expect(replay.duplicate).toBe(true);
+    expect(replay.say).toEqual(out.say);
     expect(care.appointments).toHaveLength(1);
-    expect(again.state.lastResult?.status).toBe("confirmed");
+  });
+
+  it("deux cabinets, le même identifiant d'appel : journaux et sessions strictement séparés", async () => {
+    const journal = new InMemoryJournal();
+    const careA = new FakeCare("cab_aaaa", SLOTS);
+    const careB = new FakeCare("cab_bbbb", SLOTS);
+    const mk = (cabinetId: string, care: FakeCare) => ({
+      cabinetId,
+      callId: "call_same",
+      config,
+      understander: new FallbackUnderstander(),
+      gateway: new QueueingGateway(care, new InMemoryCommandQueue()),
+      availability: care,
+      journal,
+      now: () => START,
+    });
+    const a = CallSession.create(mk("cab_aaaa", careA));
+    const b = CallSession.create(mk("cab_bbbb", careB));
+    const evA = events("call_same", MESSAGE_CALL.slice(0, 5));
+    // Mêmes identifiants d'événements côté fournisseur, deux cabinets.
+    for (const e of evA) await a.handle(e);
+    for (const e of evA) {
+      const out = await b.handle(e);
+      expect(out.duplicate).toBeUndefined();
+    }
+    expect(
+      careA.messages.filter(m => m.envelope.command.type === "message.create")
+    ).toHaveLength(1);
+    expect(
+      careB.messages.filter(m => m.envelope.command.type === "message.create")
+    ).toHaveLength(1);
+    const logA = await journal.load({
+      cabinetId: "cab_aaaa",
+      callId: "call_same",
+    });
+    const logB = await journal.load({
+      cabinetId: "cab_bbbb",
+      callId: "call_same",
+    });
+    expect(
+      logA.every(
+        e => e.k !== "submitted" || e.envelope.cabinetId === "cab_aaaa"
+      )
+    ).toBe(true);
+    expect(
+      logB.every(
+        e => e.k !== "submitted" || e.envelope.cabinetId === "cab_bbbb"
+      )
+    ).toBe(true);
+    const ra = await CallSession.resume(mk("cab_aaaa", careA));
+    expect(ra.state.lastResult?.status).toBe("confirmed");
+  });
+
+  it("appel clos : le journal est compacté, sans aucun propos de l'appelant", async () => {
+    const journal = new InMemoryJournal();
+    const { deps, callId, care } = setup({ journal });
+    const session = CallSession.create(deps);
+    const ev = events(callId, MESSAGE_CALL);
+    for (const e of ev) await session.handle(e);
+    const log = await journal.load({ cabinetId: "cab_test", callId });
+    expect(log).toHaveLength(1);
+    expect(log[0].k).toBe("closed");
+    expect(JSON.stringify(log)).not.toMatch(/Camille|facture|06 12|612345678/);
+    const resumed = await CallSession.resume(deps);
+    const dup = await resumed.handle(ev[2]);
+    expect(dup).toMatchObject({ duplicate: true, hangup: true, say: [] });
+    expect(
+      care.messages.filter(m => m.envelope.command.type === "message.create")
+    ).toHaveLength(1);
   });
 
   it("déplacement : l'ancien n'est libéré qu'avec le nouveau ; refus si l'identité ne correspond pas", async () => {

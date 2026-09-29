@@ -153,7 +153,7 @@ export interface CareTransport {
 /** File durable de commandes en attente d'un NJP CARE joignable. */
 export interface CommandQueue {
   put(envelope: CommandEnvelope): Promise<void>;
-  has(idempotencyKey: string): Promise<boolean>;
+  has(cabinetId: string, idempotencyKey: string): Promise<boolean>;
 }
 
 export class InMemoryCommandQueue implements CommandQueue {
@@ -162,7 +162,7 @@ export class InMemoryCommandQueue implements CommandQueue {
     if (!this.items.has(envelope.idempotencyKey))
       this.items.set(envelope.idempotencyKey, envelope);
   }
-  async has(key: string) {
+  async has(_cabinetId: string, key: string) {
     return this.items.has(key);
   }
 }

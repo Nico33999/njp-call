@@ -2,6 +2,9 @@
   "name": "njp-call",
   "version": "0.1.0",
   "type": "module",
+  "engines": {
+    "node": ">=22.5"
+  },
   "license": "UNLICENSED",
   "scripts": {
     "dev": "vite --host",

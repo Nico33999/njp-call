@@ -12,8 +12,17 @@
  *
  * ## Idempotence
  *
- * - Un événement téléphonique porte l'identifiant du fournisseur ; reçu deux
- *   fois, il est ignoré la seconde fois (webhooks rejoués).
+ * - Un événement téléphonique porte l'identifiant du fournisseur. Il n'est
+ *   tenu pour EXÉCUTÉ que lorsque la réponse faite à l'appelant (`output`)
+ *   est journalisée. Reçu de nouveau après cela, la même réponse est
+ *   **rejouée** (`duplicate: true`) : si la réponse HTTP au fournisseur s'est
+ *   perdue, l'appelant entend la même chose, et rien n'est refait. Reçu de
+ *   nouveau AVANT cela (panne en cours de traitement), il est retraité — avec
+ *   la même compréhension et les mêmes clés de commande.
+ * - Le journal est adressé par (cabinet, appel) : deux cabinets peuvent
+ *   recevoir le même identifiant d'appel sans jamais se mélanger.
+ * - À la clôture, le journal est compacté : il ne garde que les identifiants
+ *   d'événements, sans aucun propos de l'appelant.
  * - Une commande porte une clé stable (`callId/type/rang`). Si le service
  *   tombe entre l'envoi et la réponse, la reprise renvoie **la même clé** :
  *   NJP CARE rend le résultat déjà enregistré au lieu de créer un doublon.
@@ -81,15 +90,25 @@ export type JournalEntry =
   | { k: "understanding"; eventId: string; u: Understanding; degraded: boolean }
   | { k: "availability"; result: AvailabilityResult }
   | { k: "submitted"; envelope: CommandEnvelope }
-  | { k: "result"; result: CommandResult };
+  | { k: "result"; result: CommandResult }
+  /** L'événement est exécuté : voici exactement ce qui a été répondu. */
+  | { k: "output"; eventId: string; out: SessionOutput }
+  /** Appel clos et compacté : plus aucun propos conservé. */
+  | { k: "closed"; at: string; eventIds: string[] };
 
 /** Ce que le fournisseur doit faire après un événement. */
 export interface SessionOutput {
   say: string[];
   transferTo?: string;
   hangup: boolean;
-  /** Vrai si l'événement était un doublon déjà traité. */
+  /** Vrai si l'événement était un doublon déjà traité : la réponse est REJOUÉE. */
   duplicate?: boolean;
+}
+
+/** Une session est désignée par son cabinet ET son appel. */
+export interface SessionKey {
+  cabinetId: string;
+  callId: string;
 }
 
 // ---------------------------------------------------------------------------
@@ -115,19 +134,33 @@ export class FallbackUnderstander implements Understander {
 // ---------------------------------------------------------------------------
 
 export interface JournalStore {
-  append(callId: string, entry: JournalEntry): Promise<void>;
-  load(callId: string): Promise<JournalEntry[]>;
+  append(key: SessionKey, entry: JournalEntry): Promise<void>;
+  load(key: SessionKey): Promise<JournalEntry[]>;
+  /** Remplace le journal d'un appel clos par une pierre tombale sans propos. */
+  compact(
+    key: SessionKey,
+    tombstone: Extract<JournalEntry, { k: "closed" }>
+  ): Promise<void>;
 }
 
+const keyOf = (k: SessionKey) => `${k.cabinetId}\u0000${k.callId}`;
+
+/** Pour les tests seulement : le service refuse de démarrer sans stockage durable. */
 export class InMemoryJournal implements JournalStore {
   readonly calls = new Map<string, JournalEntry[]>();
-  async append(callId: string, entry: JournalEntry) {
-    const list = this.calls.get(callId) ?? [];
+  async append(key: SessionKey, entry: JournalEntry) {
+    const list = this.calls.get(keyOf(key)) ?? [];
     list.push(structuredClone(entry));
-    this.calls.set(callId, list);
+    this.calls.set(keyOf(key), list);
   }
-  async load(callId: string) {
-    return structuredClone(this.calls.get(callId) ?? []);
+  async load(key: SessionKey) {
+    return structuredClone(this.calls.get(keyOf(key)) ?? []);
+  }
+  async compact(
+    key: SessionKey,
+    tombstone: Extract<JournalEntry, { k: "closed" }>
+  ) {
+    this.calls.set(keyOf(key), [structuredClone(tombstone)]);
   }
 }
 
@@ -140,7 +173,18 @@ export interface SessionDeps {
   availability: AvailabilityReader;
   journal: JournalStore;
   now: () => number;
+  /**
+   * Points d'observation nommés (bancs de panne uniquement) : le service de
+   * recette peut y interrompre le processus pour prouver la reprise.
+   */
+  probe?: (point: SessionProbe) => void;
 }
+
+export type SessionProbe =
+  | "event_recorded"
+  | "command_recorded"
+  | "result_recorded"
+  | "output_recorded";
 
 interface Tracked {
   envelope: CommandEnvelope;
@@ -151,6 +195,15 @@ export class CallSession {
   state: ConversationState = initialState();
   readonly commands: Tracked[] = [];
   private seen = new Set<string>();
+  /** Réponse faite pour chaque événement exécuté, rejouée en cas de doublon. */
+  private outputs = new Map<string, SessionOutput>();
+  /** Appel clos et compacté : les doublons n'obtiennent qu'un raccrochage. */
+  private closedTombstone = false;
+  /** Ce qu'un traitement interrompu avait déjà obtenu, réutilisé à la reprise. */
+  private carried = {
+    understandings: new Map<string, { u: Understanding; degraded: boolean }>(),
+    results: new Map<string, CommandResult>(),
+  };
   private ordinals = new Map<CommandType, number>();
   private seq = 0;
   private silences = 0;
@@ -167,7 +220,7 @@ export class CallSession {
   /** Reconstruit une session depuis son journal, puis termine ce qui était en vol. */
   static async resume(deps: SessionDeps): Promise<CallSession> {
     const s = new CallSession(deps);
-    const log = await deps.journal.load(deps.callId);
+    const log = await deps.journal.load(s.key);
     await s.replay(log);
     // Une commande soumise sans résultat connu : on la renvoie avec la MÊME clé.
     for (const t of s.commands) {
@@ -191,12 +244,61 @@ export class CallSession {
     };
   }
 
+  get key(): SessionKey {
+    return { cabinetId: this.deps.cabinetId, callId: this.deps.callId };
+  }
+
   private async record(entry: JournalEntry) {
-    await this.deps.journal.append(this.deps.callId, entry);
+    await this.deps.journal.append(this.key, entry);
+  }
+
+  /**
+   * Découpe le journal en segments (un événement et ce qu'il a produit).
+   * Seuls les segments TERMINÉS (réponse journalisée) sont rejoués ; un
+   * segment interrompu laisse sa compréhension et ses résultats en réserve,
+   * et l'événement sera retraité quand le fournisseur le renverra.
+   */
+  private async replay(full: JournalEntry[]) {
+    const closed = full.find(
+      (e): e is Extract<JournalEntry, { k: "closed" }> => e.k === "closed"
+    );
+    if (closed) {
+      this.closedTombstone = true;
+      this.reported = true;
+      this.state.phase = "ended";
+      for (const id of closed.eventIds) this.seen.add(id);
+      return;
+    }
+    const segments: JournalEntry[][] = [];
+    for (const e of full) {
+      if (e.k === "event") segments.push([e]);
+      else if (segments.length) segments[segments.length - 1].push(e);
+    }
+    const log: JournalEntry[] = [];
+    for (const seg of segments) {
+      const done = seg.find(
+        (e): e is Extract<JournalEntry, { k: "output" }> => e.k === "output"
+      );
+      if (done) {
+        log.push(...seg);
+        this.outputs.set(done.eventId, done.out);
+      } else {
+        for (const e of seg) {
+          if (e.k === "understanding")
+            this.carried.understandings.set(e.eventId, {
+              u: e.u,
+              degraded: e.degraded,
+            });
+          if (e.k === "result")
+            this.carried.results.set(e.result.idempotencyKey, e.result);
+        }
+      }
+    }
+    await this.replayLog(log);
   }
 
   /** Rejoue sans appeler ni l'IA, ni NJP CARE. */
-  private async replay(log: JournalEntry[]) {
+  private async replayLog(log: JournalEntry[]) {
     const understandings = new Map<
       string,
       { u: Understanding; degraded: boolean }
@@ -246,11 +348,30 @@ export class CallSession {
 
   /** Point d'entrée : un événement du fournisseur téléphonique. */
   async handle(event: TelephonyEvent): Promise<SessionOutput> {
-    if (this.seen.has(event.id))
-      return { say: [], hangup: false, duplicate: true };
+    if (this.seen.has(event.id)) {
+      const previous = this.outputs.get(event.id);
+      if (previous) return { ...structuredClone(previous), duplicate: true };
+      // Appel clos (compacté) ou traitement concurrent : rien n'est refait.
+      return { say: [], hangup: this.closedTombstone, duplicate: true };
+    }
+    if (this.closedTombstone) return { say: [], hangup: true, duplicate: true };
     this.seen.add(event.id);
     await this.record({ k: "event", event });
-    return this.apply(event);
+    this.deps.probe?.("event_recorded");
+    const out = await this.apply(event);
+    // L'événement n'est EXÉCUTÉ qu'à partir d'ici.
+    this.outputs.set(event.id, structuredClone(out));
+    await this.record({ k: "output", eventId: event.id, out });
+    this.deps.probe?.("output_recorded");
+    if (this.ended && this.reported) {
+      await this.deps.journal.compact(this.key, {
+        k: "closed",
+        at: event.at,
+        eventIds: Array.from(this.seen),
+      });
+      this.closedTombstone = true;
+    }
+    return out;
   }
 
   private async apply(
@@ -304,6 +425,18 @@ export class CallSession {
           this.degraded = replay.understanding.degraded;
         } else if (replay) {
           u = fallbackUnderstand(event.text, this.state);
+        } else if (this.carried.understandings.has(event.id)) {
+          // Traitement interrompu puis repris : la compréhension déjà obtenue
+          // est réutilisée (pas de second appel à l'IA, même décision).
+          const c = this.carried.understandings.get(event.id)!;
+          u = c.u;
+          this.degraded ||= c.degraded;
+          await this.record({
+            k: "understanding",
+            eventId: event.id,
+            u,
+            degraded: c.degraded,
+          });
         } else {
           let degraded = false;
           try {
@@ -452,16 +585,24 @@ export class CallSession {
     if (!tracked) {
       tracked = { envelope };
       this.commands.push(tracked);
-      if (!replayResults) await this.record({ k: "submitted", envelope });
+      if (!replayResults) {
+        await this.record({ k: "submitted", envelope });
+        this.deps.probe?.("command_recorded");
+      }
     }
     if (replayResults) {
       const r = replayResults.get(envelope.idempotencyKey);
       if (r) tracked.result = r;
       return tracked;
     }
-    const result = await this.deps.gateway.submit(envelope);
+    // Un résultat obtenu avant une interruption est réutilisé tel quel ; sinon
+    // on (re)soumet avec la même clé, et NJP CARE rejoue son verdict.
+    const result =
+      this.carried.results.get(envelope.idempotencyKey) ??
+      (await this.deps.gateway.submit(envelope));
     tracked.result = result;
     await this.record({ k: "result", result });
+    this.deps.probe?.("result_recorded");
     return tracked;
   }
 
@@ -555,6 +696,11 @@ export class CallSession {
       at,
       replaying ? new Map() : undefined
     );
+  }
+
+  /** Appel clos et compacté : la session peut quitter le cache. */
+  get closed() {
+    return this.closedTombstone;
   }
 
   get ended() {

@@ -725,7 +725,7 @@ export const onResult = (
       break;
     case "failed":
       if (
-        result.reason === "care_offline" &&
+        AS_REQUEST_REASONS.includes(result.reason ?? "") &&
         (type === "appointment.book" ||
           type === "appointment.reschedule" ||
           type === "appointment.cancel")
@@ -775,6 +775,17 @@ export const onResult = (
   state.turns.push(...say.map(text => ({ role: "assistant" as const, text })));
   return { state, say };
 };
+
+/**
+ * Raisons pour lesquelles une modification effective n'a PAS eu lieu et doit
+ * devenir une demande : poste absent, autorité des créneaux injoignable,
+ * autorisation déclarée par le poste périmée.
+ */
+export const AS_REQUEST_REASONS: readonly string[] = [
+  "care_offline",
+  "authority_unreachable",
+  "authorization_stale",
+];
 
 /** Résultat d'un transfert téléphonique : un échec ramène à la prise de message. */
 export const onTransferResult = (
