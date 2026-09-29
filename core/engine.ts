@@ -70,6 +70,9 @@ const QUESTIONS: Record<Field, string> = {
   reason: "Pouvez-vous m'indiquer brièvement le motif, sans détail médical ?",
 };
 
+const PHONE_AGAIN =
+  "Je n'ai pas bien compris le numéro. Dites-le chiffre par chiffre, ou tapez-le sur le clavier de votre téléphone.";
+
 /** Champs requis, dans l'ordre où on les demande. */
 export const requiredFields = (
   intent: Intent | null,
@@ -326,9 +329,12 @@ const advance = (
   state.missing = requiredFields(state.intent, state.collected);
   if (state.missing.length) {
     const f = state.missing[0];
+    // Numéro redemandé : la reconnaissance vocale se trompe sur les chiffres ;
+    // le clavier du téléphone (DTMF) est toujours accepté.
+    const again = f === "phone" && state.asking === "phone";
     state.phase = "collecting";
     state.asking = f;
-    say.push(QUESTIONS[f]);
+    say.push(again ? PHONE_AGAIN : QUESTIONS[f]);
     return { state, say };
   }
   const needsSlots =

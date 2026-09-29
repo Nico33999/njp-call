@@ -880,4 +880,25 @@ describe("humain, urgences, détournement, silences", () => {
         .envelope.command.payload
     ).toMatchObject({ caller: { phone: "+33612345678" } });
   });
+
+  it("numéro mal reconnu : redemandé avec le clavier proposé, puis tapé (régression voix locale)", async () => {
+    const { session, callId, care } = setup();
+    const { said } = await run(
+      session,
+      events(callId, [
+        { caller: "je voudrais laisser un message" },
+        { caller: "Camille Durand" },
+        { caller: "06 12 34 56 60 18" },
+        { dtmf: "0612345678" },
+        { caller: "Merci de me renvoyer l'attestation." },
+        { caller: "oui" },
+      ])
+    );
+    expect(said.split("À quel numéro")).toHaveLength(2);
+    expect(said).toContain("tapez-le sur le clavier de votre téléphone");
+    expect(
+      care.messages.find(m => m.envelope.command.type === "message.create")!
+        .envelope.command.payload
+    ).toMatchObject({ caller: { phone: "+33612345678" } });
+  });
 });

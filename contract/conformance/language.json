@@ -11968,6 +11968,494 @@
    }
   },
   {
+   "utterance": "Bonjour, je voudrais laisser un message.",
+   "asking": null,
+   "u": {
+    "entities": {},
+    "intent": "message"
+   }
+  },
+  {
+   "utterance": "Bonjour, je voudrais laisser un message.",
+   "asking": "callerName",
+   "u": {
+    "entities": {},
+    "intent": "message"
+   }
+  },
+  {
+   "utterance": "Bonjour, je voudrais laisser un message.",
+   "asking": "concernedName",
+   "u": {
+    "entities": {},
+    "intent": "message"
+   }
+  },
+  {
+   "utterance": "Bonjour, je voudrais laisser un message.",
+   "asking": "phone",
+   "u": {
+    "entities": {},
+    "intent": "message"
+   }
+  },
+  {
+   "utterance": "Bonjour, je voudrais laisser un message.",
+   "asking": "newPatient",
+   "u": {
+    "entities": {},
+    "intent": "message"
+   }
+  },
+  {
+   "utterance": "Bonjour, je voudrais laisser un message.",
+   "asking": "messageText",
+   "u": {
+    "entities": {
+     "messageText": "Bonjour, je voudrais laisser un message."
+    }
+   }
+  },
+  {
+   "utterance": "Bonjour, je voudrais laisser un message.",
+   "asking": "reason",
+   "u": {
+    "entities": {
+     "reason": "Bonjour, je voudrais laisser un message."
+    },
+    "intent": "message"
+   }
+  },
+  {
+   "utterance": "Bonjour, je voudrais laisser un message.",
+   "asking": "confirmation",
+   "u": {
+    "entities": {},
+    "intent": "message"
+   }
+  },
+  {
+   "utterance": "Bonjour, je voudrais laisser un message.",
+   "asking": "slot",
+   "u": {
+    "entities": {},
+    "intent": "message",
+    "slotChoice": 1
+   }
+  },
+  {
+   "utterance": "Bonjour, je voudrais laisser un message.",
+   "asking": "anything_else",
+   "u": {
+    "entities": {},
+    "intent": "message"
+   }
+  },
+  {
+   "utterance": "Bonjour, je voudrais laisser un message.",
+   "asking": "currentStart",
+   "u": {
+    "entities": {},
+    "intent": "message"
+   }
+  },
+  {
+   "utterance": "Bonjour, je voudrais laisser un message.",
+   "asking": "preference",
+   "u": {
+    "entities": {},
+    "intent": "message"
+   }
+  },
+  {
+   "utterance": "T'as mis du rond.",
+   "asking": null,
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "T'as mis du rond.",
+   "asking": "callerName",
+   "u": {
+    "entities": {
+     "callerName": "T'as Mis Du Rond"
+    }
+   }
+  },
+  {
+   "utterance": "T'as mis du rond.",
+   "asking": "concernedName",
+   "u": {
+    "entities": {
+     "concernedName": "T'as Mis Du Rond"
+    }
+   }
+  },
+  {
+   "utterance": "T'as mis du rond.",
+   "asking": "phone",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "T'as mis du rond.",
+   "asking": "newPatient",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "T'as mis du rond.",
+   "asking": "messageText",
+   "u": {
+    "entities": {
+     "messageText": "T'as mis du rond."
+    }
+   }
+  },
+  {
+   "utterance": "T'as mis du rond.",
+   "asking": "reason",
+   "u": {
+    "entities": {
+     "reason": "T'as mis du rond."
+    }
+   }
+  },
+  {
+   "utterance": "T'as mis du rond.",
+   "asking": "confirmation",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "T'as mis du rond.",
+   "asking": "slot",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "T'as mis du rond.",
+   "asking": "anything_else",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "T'as mis du rond.",
+   "asking": "currentStart",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "T'as mis du rond.",
+   "asking": "preference",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "06 12 34 56 60 18",
+   "asking": null,
+   "u": {
+    "entities": {
+     "dateTimeText": "06 12 34 56 60 18"
+    }
+   }
+  },
+  {
+   "utterance": "06 12 34 56 60 18",
+   "asking": "callerName",
+   "u": {
+    "entities": {
+     "dateTimeText": "06 12 34 56 60 18"
+    }
+   }
+  },
+  {
+   "utterance": "06 12 34 56 60 18",
+   "asking": "concernedName",
+   "u": {
+    "entities": {
+     "dateTimeText": "06 12 34 56 60 18"
+    }
+   }
+  },
+  {
+   "utterance": "06 12 34 56 60 18",
+   "asking": "phone",
+   "u": {
+    "entities": {
+     "dateTimeText": "06 12 34 56 60 18"
+    }
+   }
+  },
+  {
+   "utterance": "06 12 34 56 60 18",
+   "asking": "newPatient",
+   "u": {
+    "entities": {
+     "dateTimeText": "06 12 34 56 60 18"
+    }
+   }
+  },
+  {
+   "utterance": "06 12 34 56 60 18",
+   "asking": "messageText",
+   "u": {
+    "entities": {
+     "dateTimeText": "06 12 34 56 60 18",
+     "messageText": "06 12 34 56 60 18"
+    }
+   }
+  },
+  {
+   "utterance": "06 12 34 56 60 18",
+   "asking": "reason",
+   "u": {
+    "entities": {
+     "dateTimeText": "06 12 34 56 60 18",
+     "reason": "06 12 34 56 60 18"
+    }
+   }
+  },
+  {
+   "utterance": "06 12 34 56 60 18",
+   "asking": "confirmation",
+   "u": {
+    "entities": {
+     "dateTimeText": "06 12 34 56 60 18"
+    }
+   }
+  },
+  {
+   "utterance": "06 12 34 56 60 18",
+   "asking": "slot",
+   "u": {
+    "entities": {
+     "dateTimeText": "06 12 34 56 60 18"
+    }
+   }
+  },
+  {
+   "utterance": "06 12 34 56 60 18",
+   "asking": "anything_else",
+   "u": {
+    "entities": {
+     "dateTimeText": "06 12 34 56 60 18"
+    }
+   }
+  },
+  {
+   "utterance": "06 12 34 56 60 18",
+   "asking": "currentStart",
+   "u": {
+    "entities": {
+     "dateTimeText": "06 12 34 56 60 18"
+    }
+   }
+  },
+  {
+   "utterance": "06 12 34 56 60 18",
+   "asking": "preference",
+   "u": {
+    "entities": {
+     "dateTimeText": "06 12 34 56 60 18"
+    }
+   }
+  },
+  {
+   "utterance": "Oui, c'est ça.",
+   "asking": null,
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "Oui, c'est ça.",
+   "asking": "callerName",
+   "u": {
+    "entities": {
+     "callerName": "Ça"
+    }
+   }
+  },
+  {
+   "utterance": "Oui, c'est ça.",
+   "asking": "concernedName",
+   "u": {
+    "entities": {
+     "concernedName": "Oui C'est Ça"
+    }
+   }
+  },
+  {
+   "utterance": "Oui, c'est ça.",
+   "asking": "phone",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "Oui, c'est ça.",
+   "asking": "newPatient",
+   "u": {
+    "entities": {
+     "newPatient": false
+    }
+   }
+  },
+  {
+   "utterance": "Oui, c'est ça.",
+   "asking": "messageText",
+   "u": {
+    "entities": {
+     "messageText": "Oui, c'est ça."
+    }
+   }
+  },
+  {
+   "utterance": "Oui, c'est ça.",
+   "asking": "reason",
+   "u": {
+    "entities": {
+     "reason": "Oui, c'est ça."
+    }
+   }
+  },
+  {
+   "utterance": "Oui, c'est ça.",
+   "asking": "confirmation",
+   "u": {
+    "entities": {},
+    "confirmation": "yes"
+   }
+  },
+  {
+   "utterance": "Oui, c'est ça.",
+   "asking": "slot",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "Oui, c'est ça.",
+   "asking": "anything_else",
+   "u": {
+    "entities": {},
+    "confirmation": "yes"
+   }
+  },
+  {
+   "utterance": "Oui, c'est ça.",
+   "asking": "currentStart",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "Oui, c'est ça.",
+   "asking": "preference",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "Nous merci. Au revoir.",
+   "asking": null,
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "Nous merci. Au revoir.",
+   "asking": "callerName",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "Nous merci. Au revoir.",
+   "asking": "concernedName",
+   "u": {
+    "entities": {
+     "concernedName": "Nous Merci Au Revoir"
+    }
+   }
+  },
+  {
+   "utterance": "Nous merci. Au revoir.",
+   "asking": "phone",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "Nous merci. Au revoir.",
+   "asking": "newPatient",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "Nous merci. Au revoir.",
+   "asking": "messageText",
+   "u": {
+    "entities": {
+     "messageText": "Nous merci. Au revoir."
+    }
+   }
+  },
+  {
+   "utterance": "Nous merci. Au revoir.",
+   "asking": "reason",
+   "u": {
+    "entities": {
+     "reason": "Nous merci. Au revoir."
+    }
+   }
+  },
+  {
+   "utterance": "Nous merci. Au revoir.",
+   "asking": "confirmation",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "Nous merci. Au revoir.",
+   "asking": "slot",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "Nous merci. Au revoir.",
+   "asking": "anything_else",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "Nous merci. Au revoir.",
+   "asking": "currentStart",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "Nous merci. Au revoir.",
+   "asking": "preference",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
    "utterance": "Quels sont vos horaires d'ouverture ?",
    "asking": null,
    "u": {
@@ -14381,6 +14869,26 @@
    "e164": null
   },
   {
+   "spoken": "Bonjour, je voudrais laisser un message.",
+   "e164": null
+  },
+  {
+   "spoken": "T'as mis du rond.",
+   "e164": null
+  },
+  {
+   "spoken": "06 12 34 56 60 18",
+   "e164": null
+  },
+  {
+   "spoken": "Oui, c'est ça.",
+   "e164": null
+  },
+  {
+   "spoken": "Nous merci. Au revoir.",
+   "e164": null
+  },
+  {
    "spoken": "Quels sont vos horaires d'ouverture ?",
    "e164": null
   },
@@ -15156,6 +15664,31 @@
    "matched": []
   },
   {
+   "utterance": "Bonjour, je voudrais laisser un message.",
+   "handOff": false,
+   "matched": []
+  },
+  {
+   "utterance": "T'as mis du rond.",
+   "handOff": false,
+   "matched": []
+  },
+  {
+   "utterance": "06 12 34 56 60 18",
+   "handOff": false,
+   "matched": []
+  },
+  {
+   "utterance": "Oui, c'est ça.",
+   "handOff": false,
+   "matched": []
+  },
+  {
+   "utterance": "Nous merci. Au revoir.",
+   "handOff": false,
+   "matched": []
+  },
+  {
    "utterance": "Quels sont vos horaires d'ouverture ?",
    "handOff": false,
    "matched": []
@@ -15638,6 +16171,26 @@
   },
   {
    "utterance": "Merci de me renvoyer l'attestation.",
+   "injection": false
+  },
+  {
+   "utterance": "Bonjour, je voudrais laisser un message.",
+   "injection": false
+  },
+  {
+   "utterance": "T'as mis du rond.",
+   "injection": false
+  },
+  {
+   "utterance": "06 12 34 56 60 18",
+   "injection": false
+  },
+  {
+   "utterance": "Oui, c'est ça.",
+   "injection": false
+  },
+  {
+   "utterance": "Nous merci. Au revoir.",
    "injection": false
   },
   {

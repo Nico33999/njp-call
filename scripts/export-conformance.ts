@@ -429,6 +429,19 @@ export const SCENARIOS: Scenario[] = [
     ],
   },
   {
+    name: "numero_mal_reconnu_puis_clavier",
+    steps: [
+      { caller: "Bonjour, je voudrais laisser un message." },
+      { caller: "T'as mis du rond." },
+      { caller: "06 12 34 56 60 18" },
+      { caller: "Je n'ai pas reçu ma facture du mois dernier." },
+      { dtmf: "0612345678" },
+      { caller: "Je n'ai pas reçu ma facture du mois dernier." },
+      { caller: "Oui, c'est ça." },
+      { caller: "Nous merci. Au revoir." },
+    ],
+  },
+  {
     name: "cabinet_ferme",
     open: false,
     config: { closedGreeting: "Nos horaires sont du lundi au vendredi." },

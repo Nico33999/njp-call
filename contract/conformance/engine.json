@@ -6605,130 +6605,9 @@
    ]
   },
   {
-   "name": "cabinet_ferme",
+   "name": "numero_mal_reconnu_puis_clavier",
    "cabinetId": "cab_fixture",
    "callId": "call_0036",
-   "config": {
-    "schema": 2,
-    "assistantName": "Clara",
-    "cabinetName": "Cabinet Fictif",
-    "greeting": "",
-    "closedGreeting": "Nos horaires sont du lundi au vendredi.",
-    "languages": [
-     "fr"
-    ],
-    "openingHours": [],
-    "practitioners": [
-     {
-      "ref": "prac_a",
-      "displayName": "Docteur Martin",
-      "aliases": [
-       "Martin"
-      ]
-     }
-    ],
-    "appointmentTypes": [],
-    "transferDestinations": [
-     {
-      "ref": "dest_accueil",
-      "label": "Accueil"
-     }
-    ],
-    "urgency": {
-     "validatedByCabinet": true
-    },
-    "afterHours": "message",
-    "degradedMode": "message_only",
-    "reminders": {
-     "enabled": false,
-     "hoursBefore": 24,
-     "channel": "sms"
-    },
-    "retention": {
-     "callRecordDays": 90,
-     "storeAudio": false
-    },
-    "cabinetInstructions": "",
-    "cabinetKnowledge": "",
-    "simulation": false,
-    "offerSlots": true
-   },
-   "events": [
-    {
-     "id": "call_0036-ev1",
-     "type": "call.started",
-     "at": "2026-09-29T08:00:00.000Z",
-     "open": false
-    },
-    {
-     "id": "call_0036-ev2",
-     "type": "caller.utterance",
-     "at": "2026-09-29T08:00:01.000Z",
-     "text": "je voudrais laisser un message"
-    },
-    {
-     "id": "call_0036-ev3",
-     "type": "call.ended",
-     "at": "2026-09-29T08:00:02.000Z",
-     "reason": "hangup"
-    }
-   ],
-   "outputs": [
-    {
-     "say": [
-      "Bonjour, vous êtes bien au cabinet Cabinet Fictif. Je suis Clara, l'assistante vocale automatisée du cabinet.",
-      "Nos horaires sont du lundi au vendredi.",
-      "Le cabinet est actuellement fermé.",
-      "Que puis-je faire pour vous ?"
-     ],
-     "hangup": false
-    },
-    {
-     "say": [
-      "Pouvez-vous me donner votre nom et votre prénom ?"
-     ],
-     "hangup": false
-    },
-    {
-     "say": [],
-     "hangup": true
-    }
-   ],
-   "exchanges": [
-    {
-     "kind": "submit",
-     "envelope": {
-      "format": "njp.call.command",
-      "v": 1,
-      "extensionId": "njp.call",
-      "cabinetId": "cab_fixture",
-      "callId": "call_0036",
-      "seq": 1,
-      "idempotencyKey": "call_0036/call.report/1",
-      "issuedAt": "2026-09-29T08:00:02.000Z",
-      "command": {
-       "type": "call.report",
-       "payload": {
-        "startedAt": "2026-09-29T08:00:00.000Z",
-        "endedAt": "2026-09-29T08:00:02.000Z",
-        "outcome": "abandoned",
-        "summary": "Appel traité par l'assistante automatisée. Demande : message. Aucune opération.",
-        "commands": []
-       }
-      }
-     },
-     "result": {
-      "idempotencyKey": "call_0036/call.report/1",
-      "status": "confirmed",
-      "reference": "rpt_0001"
-     }
-    }
-   ]
-  },
-  {
-   "name": "information_pratique_sans_ia",
-   "cabinetId": "cab_fixture",
-   "callId": "call_0037",
    "config": {
     "schema": 2,
     "assistantName": "Clara",
@@ -6776,22 +6655,58 @@
    },
    "events": [
     {
-     "id": "call_0037-ev1",
+     "id": "call_0036-ev1",
      "type": "call.started",
      "at": "2026-09-29T08:00:00.000Z",
      "open": true
     },
     {
-     "id": "call_0037-ev2",
+     "id": "call_0036-ev2",
      "type": "caller.utterance",
      "at": "2026-09-29T08:00:01.000Z",
-     "text": "Quels sont vos horaires d'ouverture ?"
+     "text": "Bonjour, je voudrais laisser un message."
     },
     {
-     "id": "call_0037-ev3",
+     "id": "call_0036-ev3",
      "type": "caller.utterance",
      "at": "2026-09-29T08:00:02.000Z",
-     "text": "non merci"
+     "text": "T'as mis du rond."
+    },
+    {
+     "id": "call_0036-ev4",
+     "type": "caller.utterance",
+     "at": "2026-09-29T08:00:03.000Z",
+     "text": "06 12 34 56 60 18"
+    },
+    {
+     "id": "call_0036-ev5",
+     "type": "caller.utterance",
+     "at": "2026-09-29T08:00:04.000Z",
+     "text": "Je n'ai pas reçu ma facture du mois dernier."
+    },
+    {
+     "id": "call_0036-ev6",
+     "type": "caller.dtmf",
+     "at": "2026-09-29T08:00:05.000Z",
+     "digits": "0612345678"
+    },
+    {
+     "id": "call_0036-ev7",
+     "type": "caller.utterance",
+     "at": "2026-09-29T08:00:06.000Z",
+     "text": "Je n'ai pas reçu ma facture du mois dernier."
+    },
+    {
+     "id": "call_0036-ev8",
+     "type": "caller.utterance",
+     "at": "2026-09-29T08:00:07.000Z",
+     "text": "Oui, c'est ça."
+    },
+    {
+     "id": "call_0036-ev9",
+     "type": "caller.utterance",
+     "at": "2026-09-29T08:00:08.000Z",
+     "text": "Nous merci. Au revoir."
     }
    ],
    "outputs": [
@@ -6804,7 +6719,44 @@
     },
     {
      "say": [
-      "Je n'ai pas cette information. Souhaitez-vous laisser un message au cabinet ?"
+      "Pouvez-vous me donner votre nom et votre prénom ?"
+     ],
+     "hangup": false
+    },
+    {
+     "say": [
+      "À quel numéro le cabinet peut-il vous joindre ?"
+     ],
+     "hangup": false
+    },
+    {
+     "say": [
+      "Je n'ai pas bien compris le numéro. Dites-le chiffre par chiffre, ou tapez-le sur le clavier de votre téléphone."
+     ],
+     "hangup": false
+    },
+    {
+     "say": [
+      "Je n'ai pas bien compris le numéro. Dites-le chiffre par chiffre, ou tapez-le sur le clavier de votre téléphone."
+     ],
+     "hangup": false
+    },
+    {
+     "say": [
+      "Je vous écoute : quel message souhaitez-vous laisser ?"
+     ],
+     "hangup": false
+    },
+    {
+     "say": [
+      "Je récapitule : message de T'as Mis Du Rond, à rappeler au 06 12 34 56 78. Votre message : « Je n'ai pas reçu ma facture du mois dernier. ». Est-ce exact ?"
+     ],
+     "hangup": false
+    },
+    {
+     "say": [
+      "Votre message est enregistré pour le cabinet.",
+      "Puis-je faire autre chose pour vous ?"
      ],
      "hangup": false
     },
@@ -6812,6 +6764,169 @@
      "say": [
       "Merci de votre appel. Au revoir."
      ],
+     "hangup": true
+    }
+   ],
+   "exchanges": [
+    {
+     "kind": "submit",
+     "envelope": {
+      "format": "njp.call.command",
+      "v": 1,
+      "extensionId": "njp.call",
+      "cabinetId": "cab_fixture",
+      "callId": "call_0036",
+      "seq": 1,
+      "idempotencyKey": "call_0036/message.create/1",
+      "issuedAt": "2026-09-29T08:00:07.000Z",
+      "command": {
+       "type": "message.create",
+       "payload": {
+        "caller": {
+         "declaredName": "T'as Mis Du Rond",
+         "phone": "+33612345678",
+         "relation": "self"
+        },
+        "recipient": {
+         "kind": "secretariat"
+        },
+        "confirmedText": "Je n'ai pas reçu ma facture du mois dernier.",
+        "aiSummary": "Message de T'as Mis Du Rond.",
+        "category": "administratif",
+        "level": "normal"
+       }
+      }
+     },
+     "result": {
+      "idempotencyKey": "call_0036/message.create/1",
+      "status": "confirmed",
+      "reference": "msg_0001"
+     }
+    },
+    {
+     "kind": "submit",
+     "envelope": {
+      "format": "njp.call.command",
+      "v": 1,
+      "extensionId": "njp.call",
+      "cabinetId": "cab_fixture",
+      "callId": "call_0036",
+      "seq": 2,
+      "idempotencyKey": "call_0036/call.report/1",
+      "issuedAt": "2026-09-29T08:00:08.000Z",
+      "command": {
+       "type": "call.report",
+       "payload": {
+        "startedAt": "2026-09-29T08:00:00.000Z",
+        "endedAt": "2026-09-29T08:00:08.000Z",
+        "outcome": "message",
+        "summary": "Appel traité par l'assistante automatisée. Demande : message. Opérations : message.create : confirmed.",
+        "commands": [
+         {
+          "idempotencyKey": "call_0036/message.create/1",
+          "type": "message.create",
+          "status": "confirmed",
+          "reference": "msg_0001"
+         }
+        ]
+       }
+      }
+     },
+     "result": {
+      "idempotencyKey": "call_0036/call.report/1",
+      "status": "confirmed",
+      "reference": "rpt_0002"
+     }
+    }
+   ]
+  },
+  {
+   "name": "cabinet_ferme",
+   "cabinetId": "cab_fixture",
+   "callId": "call_0037",
+   "config": {
+    "schema": 2,
+    "assistantName": "Clara",
+    "cabinetName": "Cabinet Fictif",
+    "greeting": "",
+    "closedGreeting": "Nos horaires sont du lundi au vendredi.",
+    "languages": [
+     "fr"
+    ],
+    "openingHours": [],
+    "practitioners": [
+     {
+      "ref": "prac_a",
+      "displayName": "Docteur Martin",
+      "aliases": [
+       "Martin"
+      ]
+     }
+    ],
+    "appointmentTypes": [],
+    "transferDestinations": [
+     {
+      "ref": "dest_accueil",
+      "label": "Accueil"
+     }
+    ],
+    "urgency": {
+     "validatedByCabinet": true
+    },
+    "afterHours": "message",
+    "degradedMode": "message_only",
+    "reminders": {
+     "enabled": false,
+     "hoursBefore": 24,
+     "channel": "sms"
+    },
+    "retention": {
+     "callRecordDays": 90,
+     "storeAudio": false
+    },
+    "cabinetInstructions": "",
+    "cabinetKnowledge": "",
+    "simulation": false,
+    "offerSlots": true
+   },
+   "events": [
+    {
+     "id": "call_0037-ev1",
+     "type": "call.started",
+     "at": "2026-09-29T08:00:00.000Z",
+     "open": false
+    },
+    {
+     "id": "call_0037-ev2",
+     "type": "caller.utterance",
+     "at": "2026-09-29T08:00:01.000Z",
+     "text": "je voudrais laisser un message"
+    },
+    {
+     "id": "call_0037-ev3",
+     "type": "call.ended",
+     "at": "2026-09-29T08:00:02.000Z",
+     "reason": "hangup"
+    }
+   ],
+   "outputs": [
+    {
+     "say": [
+      "Bonjour, vous êtes bien au cabinet Cabinet Fictif. Je suis Clara, l'assistante vocale automatisée du cabinet.",
+      "Nos horaires sont du lundi au vendredi.",
+      "Le cabinet est actuellement fermé.",
+      "Que puis-je faire pour vous ?"
+     ],
+     "hangup": false
+    },
+    {
+     "say": [
+      "Pouvez-vous me donner votre nom et votre prénom ?"
+     ],
+     "hangup": false
+    },
+    {
+     "say": [],
      "hangup": true
     }
    ],
@@ -6833,7 +6948,7 @@
         "startedAt": "2026-09-29T08:00:00.000Z",
         "endedAt": "2026-09-29T08:00:02.000Z",
         "outcome": "abandoned",
-        "summary": "Appel traité par l'assistante automatisée. Aucune opération.",
+        "summary": "Appel traité par l'assistante automatisée. Demande : message. Aucune opération.",
         "commands": []
        }
       }
@@ -6847,7 +6962,7 @@
    ]
   },
   {
-   "name": "intention_incomprise",
+   "name": "information_pratique_sans_ia",
    "cabinetId": "cab_fixture",
    "callId": "call_0038",
    "config": {
@@ -6906,16 +7021,137 @@
      "id": "call_0038-ev2",
      "type": "caller.utterance",
      "at": "2026-09-29T08:00:01.000Z",
-     "text": "euh"
+     "text": "Quels sont vos horaires d'ouverture ?"
     },
     {
      "id": "call_0038-ev3",
      "type": "caller.utterance",
      "at": "2026-09-29T08:00:02.000Z",
+     "text": "non merci"
+    }
+   ],
+   "outputs": [
+    {
+     "say": [
+      "Bonjour, vous êtes bien au cabinet Cabinet Fictif. Je suis Clara, l'assistante vocale automatisée du cabinet.",
+      "Que puis-je faire pour vous ?"
+     ],
+     "hangup": false
+    },
+    {
+     "say": [
+      "Je n'ai pas cette information. Souhaitez-vous laisser un message au cabinet ?"
+     ],
+     "hangup": false
+    },
+    {
+     "say": [
+      "Merci de votre appel. Au revoir."
+     ],
+     "hangup": true
+    }
+   ],
+   "exchanges": [
+    {
+     "kind": "submit",
+     "envelope": {
+      "format": "njp.call.command",
+      "v": 1,
+      "extensionId": "njp.call",
+      "cabinetId": "cab_fixture",
+      "callId": "call_0038",
+      "seq": 1,
+      "idempotencyKey": "call_0038/call.report/1",
+      "issuedAt": "2026-09-29T08:00:02.000Z",
+      "command": {
+       "type": "call.report",
+       "payload": {
+        "startedAt": "2026-09-29T08:00:00.000Z",
+        "endedAt": "2026-09-29T08:00:02.000Z",
+        "outcome": "abandoned",
+        "summary": "Appel traité par l'assistante automatisée. Aucune opération.",
+        "commands": []
+       }
+      }
+     },
+     "result": {
+      "idempotencyKey": "call_0038/call.report/1",
+      "status": "confirmed",
+      "reference": "rpt_0001"
+     }
+    }
+   ]
+  },
+  {
+   "name": "intention_incomprise",
+   "cabinetId": "cab_fixture",
+   "callId": "call_0039",
+   "config": {
+    "schema": 2,
+    "assistantName": "Clara",
+    "cabinetName": "Cabinet Fictif",
+    "greeting": "",
+    "closedGreeting": "",
+    "languages": [
+     "fr"
+    ],
+    "openingHours": [],
+    "practitioners": [
+     {
+      "ref": "prac_a",
+      "displayName": "Docteur Martin",
+      "aliases": [
+       "Martin"
+      ]
+     }
+    ],
+    "appointmentTypes": [],
+    "transferDestinations": [
+     {
+      "ref": "dest_accueil",
+      "label": "Accueil"
+     }
+    ],
+    "urgency": {
+     "validatedByCabinet": true
+    },
+    "afterHours": "message",
+    "degradedMode": "message_only",
+    "reminders": {
+     "enabled": false,
+     "hoursBefore": 24,
+     "channel": "sms"
+    },
+    "retention": {
+     "callRecordDays": 90,
+     "storeAudio": false
+    },
+    "cabinetInstructions": "",
+    "cabinetKnowledge": "",
+    "simulation": false,
+    "offerSlots": true
+   },
+   "events": [
+    {
+     "id": "call_0039-ev1",
+     "type": "call.started",
+     "at": "2026-09-29T08:00:00.000Z",
+     "open": true
+    },
+    {
+     "id": "call_0039-ev2",
+     "type": "caller.utterance",
+     "at": "2026-09-29T08:00:01.000Z",
+     "text": "euh"
+    },
+    {
+     "id": "call_0039-ev3",
+     "type": "caller.utterance",
+     "at": "2026-09-29T08:00:02.000Z",
      "text": "bof"
     },
     {
-     "id": "call_0038-ev4",
+     "id": "call_0039-ev4",
      "type": "call.ended",
      "at": "2026-09-29T08:00:03.000Z",
      "reason": "hangup"
@@ -6954,9 +7190,9 @@
       "v": 1,
       "extensionId": "njp.call",
       "cabinetId": "cab_fixture",
-      "callId": "call_0038",
+      "callId": "call_0039",
       "seq": 1,
-      "idempotencyKey": "call_0038/call.report/1",
+      "idempotencyKey": "call_0039/call.report/1",
       "issuedAt": "2026-09-29T08:00:03.000Z",
       "command": {
        "type": "call.report",
@@ -6970,7 +7206,7 @@
       }
      },
      "result": {
-      "idempotencyKey": "call_0038/call.report/1",
+      "idempotencyKey": "call_0039/call.report/1",
       "status": "confirmed",
       "reference": "rpt_0001"
      }
