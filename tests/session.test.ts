@@ -333,6 +333,50 @@ describe("rendez-vous", () => {
     expect(care.appointments[0].start).toBe(SLOTS[1].start);
   });
 
+  it("autorité des créneaux injoignable : jamais « confirmé », une demande à valider", async () => {
+    const care = new FakeCare("cab_test", SLOTS);
+    care.authority = "down";
+    const { session, callId } = setup({ care });
+    const { said } = await run(
+      session,
+      events(callId, [...BOOKING, { caller: "le premier" }, { caller: "oui" }])
+    );
+    expect(said).not.toContain("C'est confirmé");
+    expect(said).toContain(
+      "Votre demande est transmise au cabinet ; elle n'est pas encore confirmée."
+    );
+    expect(care.appointments).toHaveLength(0);
+    expect(care.requests).toHaveLength(1);
+  });
+
+  it("réponse de l'autorité perdue : « pas encore confirmé », jamais plus", async () => {
+    const care = new FakeCare("cab_test", SLOTS);
+    care.authority = "unknown";
+    const { session, callId } = setup({ care });
+    const { said } = await run(
+      session,
+      events(callId, [...BOOKING, { caller: "le premier" }, { caller: "oui" }])
+    );
+    expect(said).not.toContain("C'est confirmé");
+    expect(said).toContain("elle n'est pas encore confirmée");
+  });
+
+  it("réservation reçue trop tard par le poste (> 2 min) : jamais appliquée", async () => {
+    const care = new FakeCare("cab_test", SLOTS);
+    care.now = () => START + 10 * 60_000;
+    const { session, callId } = setup({ care });
+    const { said } = await run(
+      session,
+      events(callId, [...BOOKING, { caller: "le premier" }, { caller: "oui" }])
+    );
+    expect(said).not.toContain("C'est confirmé");
+    expect(care.appointments).toHaveLength(0);
+    expect(care.audit.at(-1)).toMatchObject({
+      type: "appointment.book",
+      status: "refused",
+    });
+  });
+
   it("concurrence : deux appels ne peuvent pas obtenir le même créneau", async () => {
     const care = new FakeCare("cab_test", SLOTS);
     const a = setup({ care });
@@ -526,7 +570,7 @@ describe("rendez-vous", () => {
     ).toHaveLength(1);
   });
 
-  it("déplacement : l'ancien n'est libéré qu'avec le nouveau ; refus si l'identité ne correspond pas", async () => {
+  it("déplacement : une DEMANDE à valider, l'agenda n'est pas touché, l'appelant le sait", async () => {
     const care = new FakeCare("cab_test", SLOTS);
     care.appointments.push({
       ref: "appt_old",
@@ -551,34 +595,20 @@ describe("rendez-vous", () => {
         { caller: "oui" },
       ])
     );
+    expect(said).toContain("C'est une demande : le cabinet la validera");
     expect(said).toContain(
-      "L'ancien rendez-vous ne sera libéré qu'une fois le nouveau réservé"
+      "Votre rendez-vous n'est pas modifié tant que le cabinet ne l'a pas validée."
     );
-    expect(said).toContain(
-      "C'est confirmé : votre rendez-vous est déplacé au jeudi 1 octobre à 15 h."
-    );
+    expect(said).not.toContain("C'est confirmé");
     expect(care.appointments[0]).toMatchObject({
-      start: SLOTS[1].start,
-      version: 2,
+      start: "2026-10-01T14:00:00+02:00",
+      version: 1,
+      status: "confirmed",
     });
-
-    // Même numéro (partagé), autre nom : refus.
-    const other = setup({ care });
-    const r = await run(
-      other.session,
-      events(other.callId, [
-        { caller: "Je voudrais annuler mon rendez-vous" },
-        { caller: "Jean Durand" },
-        { caller: "06 12 34 56 78" },
-        { caller: "jeudi 1 octobre à 15h" },
-        { caller: "oui" },
-      ])
-    );
-    expect(r.said).toContain("Je ne retrouve pas ce rendez-vous");
-    expect(care.appointments[0].status).toBe("confirmed");
+    expect(care.requests).toHaveLength(1);
   });
 
-  it("annulation : homonymes sur un numéro partagé — seul le bon rendez-vous est annulé", async () => {
+  it("annulation : même réponse que le rendez-vous existe ou non (pas d'énumération) ; homonymes départagés pour le cabinet seulement", async () => {
     const care = new FakeCare("cab_test", SLOTS);
     const base = {
       end: "2026-10-01T14:30:00+02:00",
@@ -600,23 +630,37 @@ describe("rendez-vous", () => {
       end: "2026-10-02T14:30:00+02:00",
       declaredName: "Louis Durand",
     });
-    const { session, callId } = setup({ care });
-    await run(
-      session,
-      events(callId, [
-        { caller: "Je voudrais annuler un rendez-vous" },
-        { caller: "Louis Durand" },
-        { caller: "06 12 34 56 78" },
-        { caller: "vendredi 2 octobre à 14h" },
-        { caller: "oui" },
-      ])
+    const annuler = async (name: string, when: string) => {
+      const { session, callId } = setup({ care });
+      const r = await run(
+        session,
+        events(callId, [
+          { caller: "Je voudrais annuler un rendez-vous" },
+          { caller: name },
+          { caller: "06 12 34 56 78" },
+          { caller: when },
+          { caller: "oui" },
+        ])
+      );
+      return r.said.slice(r.said.indexOf("Je récapitule"));
+    };
+    const juste = await annuler("Louis Durand", "vendredi 2 octobre à 14h");
+    const homonyme = await annuler("Jean Durand", "vendredi 2 octobre à 14h");
+    const inexistant = await annuler(
+      "Louis Durand",
+      "vendredi 2 octobre à 16h"
     );
-    expect(care.appointments.find(a => a.ref === "appt_b")!.status).toBe(
-      "cancelled"
+    // Les réponses ne diffèrent que par ce que l'appelant a lui-même dit.
+    const neutre = (t: string) =>
+      t.replace(/Louis Durand|Jean Durand/g, "X").replace(/14 h|16 h/g, "H");
+    expect(neutre(homonyme)).toBe(neutre(juste));
+    expect(neutre(inexistant)).toBe(neutre(juste));
+    expect(juste).toContain(
+      "Votre rendez-vous n'est pas modifié tant que le cabinet ne l'a pas validée."
     );
-    expect(care.appointments.find(a => a.ref === "appt_a")!.status).toBe(
-      "confirmed"
-    );
+    expect(care.appointments.every(a => a.status === "confirmed")).toBe(true);
+    // Le cabinet, lui, voit l'indice : seule la bonne personne correspond.
+    expect([...care.hints.values()]).toEqual(["appt_b", null, null]);
   });
 
   it("« oui je suis déjà venue » n'est pas un nom (régression)", async () => {

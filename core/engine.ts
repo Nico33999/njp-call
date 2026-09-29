@@ -228,7 +228,7 @@ const propose = (
             newSlot: c.chosenSlot,
           },
         },
-        text: `Je récapitule : déplacer le rendez-vous du ${speakInstant(c.currentStart!)} au ${speakInstant(c.chosenSlot.start)}. L'ancien rendez-vous ne sera libéré qu'une fois le nouveau réservé. Je fais ce changement ?`,
+        text: `Je récapitule : déplacer le rendez-vous du ${speakInstant(c.currentStart!)} au ${speakInstant(c.chosenSlot.start)}. C'est une demande : le cabinet la validera, et votre rendez-vous actuel reste en place d'ici là. Je la transmets ?`,
       };
     case "appointment_cancel":
       return {
@@ -242,7 +242,7 @@ const propose = (
             },
           },
         },
-        text: `Je récapitule : annuler le rendez-vous du ${speakInstant(c.currentStart!)}, au nom de ${who(c)}. Je confirme l'annulation ?`,
+        text: `Je récapitule : annuler le rendez-vous du ${speakInstant(c.currentStart!)}, au nom de ${who(c)}. C'est une demande : le cabinet la validera, et le rendez-vous reste en place d'ici là. Je la transmets ?`,
       };
     default:
       return null;
@@ -690,7 +690,9 @@ export const onResult = (
           type === "callback.request" ||
           type === "appointment.request"
           ? "Votre demande est transmise. Le cabinet la recevra dès que son logiciel sera disponible."
-          : "Votre demande est transmise au cabinet ; elle n'est pas encore confirmée."
+          : type === "appointment.reschedule" || type === "appointment.cancel"
+            ? "Votre demande est transmise au cabinet. Votre rendez-vous n'est pas modifié tant que le cabinet ne l'a pas validée."
+            : "Votre demande est transmise au cabinet ; elle n'est pas encore confirmée."
       );
       finish();
       break;

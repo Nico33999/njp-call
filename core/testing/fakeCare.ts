@@ -4,8 +4,11 @@
  * Elle applique les MÊMES règles que le moteur Rust
  * (`njp-care/desktop/crates/vault-engine/src/secretariat.rs`) : portes
  * d'installation, d'activation et d'accès ; cabinet ; idempotence avec
- * contrôle d'empreinte ; créneau pris ⇒ refus ; déplacement qui réserve le
- * nouveau AVANT de libérer l'ancien ; annulation après vérification.
+ * contrôle d'empreinte ; créneau pris ⇒ refus ; réservation confirmée
+ * seulement par l'AUTORITÉ des créneaux (le cloud NJP CARE), sinon demande ;
+ * réservation trop ancienne (> 2 min) jamais appliquée ; déplacement et
+ * annulation ENREGISTRÉS comme demandes (identité de l'appelant non prouvée),
+ * même réponse que le rendez-vous existe ou non.
  *
  * Elle ne remplace pas la preuve Rust : elle permet d'exercer le moteur de
  * conversation sans poste. Aucune donnée réelle, aucun envoi.
@@ -46,10 +49,20 @@ export class FakeCare implements CareTransport, AvailabilityReader {
   );
   /** Échec simulé APRÈS écriture, avant réponse (coupure pendant une réservation). */
   dropResponseOnce = false;
+  /**
+   * L'autorité des créneaux (cloud NJP CARE) : `up` confirme, `down` ⇒ la
+   * réservation devient une demande (`requested/authority_unreachable`),
+   * `unknown` ⇒ `pending/outcome_unknown`.
+   */
+  authority: "up" | "down" | "unknown" = "up";
+  /** Horloge du poste : si posée, une réservation de plus de 2 min est refusée. */
+  now?: () => number;
   readonly records = new Map<string, { hash: string; result: CommandResult }>();
   readonly messages: { ref: string; envelope: CommandEnvelope }[] = [];
   readonly requests: { ref: string; envelope: CommandEnvelope }[] = [];
   readonly appointments: FakeAppointment[] = [];
+  /** Demande → rendez-vous correspondant (indice pour le cabinet seulement). */
+  readonly hints = new Map<string, string | null>();
   readonly audit: { key: string; type: string; status: string }[] = [];
   private n = 0;
 
@@ -163,12 +176,28 @@ export class FakeCare implements CareTransport, AvailabilityReader {
         break;
       case "appointment.book": {
         const s = c.payload.slot;
+        if (
+          this.now &&
+          Math.abs(this.now() - Date.parse(env.issuedAt)) > 120_000
+        )
+          return this.store(key, hash, refuse("command_expired"));
         const offered = this.freeSlots.some(
           f => f.slotRef === s.slotRef && f.start === s.start && f.end === s.end
         );
         if (!offered) return this.store(key, hash, refuse("slot_not_offered"));
         if (this.overlaps(s))
           return this.store(key, hash, refuse("slot_unavailable"));
+        if (this.authority === "down") {
+          const ref = this.ref("areq");
+          this.requests.push({ ref, envelope: env });
+          result = {
+            idempotencyKey: key,
+            status: "requested",
+            reference: ref,
+            reason: "authority_unreachable",
+          };
+          break;
+        }
         const ref = this.ref("appt");
         this.appointments.push({
           ref,
@@ -180,34 +209,29 @@ export class FakeCare implements CareTransport, AvailabilityReader {
           status: "confirmed",
           version: 1,
         });
-        result = { idempotencyKey: key, status: "confirmed", reference: ref };
+        result =
+          this.authority === "unknown"
+            ? {
+                idempotencyKey: key,
+                status: "pending",
+                reference: ref,
+                reason: "outcome_unknown",
+              }
+            : { idempotencyKey: key, status: "confirmed", reference: ref };
         break;
       }
-      case "appointment.reschedule": {
-        const found = this.verify(c.payload.verification);
-        if (!found) return this.store(key, hash, refuse("verification_failed"));
-        const s = c.payload.newSlot;
-        if (this.overlaps(s, found.ref))
-          return this.store(key, hash, refuse("slot_unavailable"));
-        // Le nouveau d'abord, dans la même opération atomique ; l'ancien ensuite.
-        found.start = s.start;
-        found.end = s.end;
-        found.version += 1;
-        result = {
-          idempotencyKey: key,
-          status: "confirmed",
-          reference: found.ref,
-        };
-        break;
-      }
+      case "appointment.reschedule":
       case "appointment.cancel": {
-        const found = this.verify(c.payload.verification);
-        if (!found) return this.store(key, hash, refuse("verification_failed"));
-        found.status = "cancelled";
+        // Une demande, jamais une modification ; l'indice de correspondance
+        // n'est visible que du cabinet, la réponse ne le trahit pas.
+        const ref = this.ref("areq");
+        this.requests.push({ ref, envelope: env });
+        this.hints.set(ref, this.verify(c.payload.verification)?.ref ?? null);
         result = {
           idempotencyKey: key,
-          status: "confirmed",
-          reference: found.ref,
+          status: "requested",
+          reference: ref,
+          reason: "recorded_as_request",
         };
         break;
       }
