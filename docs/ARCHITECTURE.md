@@ -59,9 +59,12 @@ fiche patient) sont rendus par NJP CARE, activés par un paquet vérifié.
 |---|---|
 | moteur de conversation, règles, session, idempotence | réel, testé |
 | rappels automatiques (moteur) | réel, testé ; aucun canal SMS/voix branché |
-| service HTTP, webhooks signés, relais, limites | réel, testé en local |
+| service HTTP, webhooks signés, relais à bail, limites | réel, testé en local |
+| stockage durable (SQLite chiffré), reprise après panne | réel ; 11 pannes avec redémarrage réel du processus (`tests/crash.test.ts`) |
+| poste NJP CARE réel contre ce service | recette inter-dépôts en HTTPS de test (`njp-care`, `cargo test … e2e -- --ignored`) |
+| réservation téléphonique | confirmée par l'autorité des créneaux (cloud NJP CARE) seulement ; cloud **doublé** dans les bancs |
 | écriture dans NJP CARE | réelle côté moteur Rust (dépôt njp-care) |
 | fournisseur téléphonique (audio, STT, TTS) | **simulateur** ; choix externe (`TELEPHONIE.md`) |
-| compréhension par IA | désactivée sans fournisseur validé ; lecture de repli |
+| compréhension par IA | désactivée sans configuration APPROUVÉE (empreinte) ; lecture de repli |
 | clé de distribution des paquets | **externe** ; clé d'essai seulement |
 | hébergement du service, HDS, contrats | **externe** (`DONNEES-DE-SANTE.md`) |

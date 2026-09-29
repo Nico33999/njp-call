@@ -1,0 +1,41 @@
+# NJP CALL — unité systemd de référence (Linux). Gabarit : rien n'est déployé.
+# Installation (après validation, voir docs/EXPLOITATION.md) :
+#   /opt/njp-call (dépôt, pnpm install --frozen-lockfile --prod=false)
+#   /etc/njp-call/njp-call.env (depuis deploy/njp-call.env.example, droits 0600)
+[Unit]
+Description=NJP CALL — service téléphonique 24/7
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=njp-call
+Group=njp-call
+WorkingDirectory=/opt/njp-call
+EnvironmentFile=/etc/njp-call/njp-call.env
+ExecStart=/usr/bin/node --no-warnings --import tsx service/main.ts
+# SIGTERM : arrêt propre (plus de nouvelles requêtes, fin des appels en cours, stockage fermé).
+KillSignal=SIGTERM
+TimeoutStopSec=15
+# SIGHUP : relecture des empreintes de jetons (rotation / révocation sans redémarrage).
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=on-failure
+RestartSec=2
+StateDirectory=njp-call
+StateDirectoryMode=0700
+UMask=0077
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+ReadWritePaths=/var/lib/njp-call
+LockPersonality=yes
+MemoryDenyWriteExecute=no
+
+[Install]
+WantedBy=multi-user.target

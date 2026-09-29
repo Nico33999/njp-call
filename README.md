@@ -23,13 +23,14 @@ service NJP CALL 24/7 ◄──── relais authentifié (le poste se connecte)
 | Dossier | Rôle |
 |---|---|
 | `core/` | moteur pur : commandes typées, passerelles, conversation, règles, session, dates Europe/Paris, urgences, rappels, téléphonie abstraite |
-| `service/` | service 24/7 : webhooks signés, relais vers le poste, limites, journaux expurgés, IA optionnelle |
+| `service/` | service 24/7 : stockage durable chiffré, webhooks signés, relais à bail vers le poste, déclaration du poste, limites, journaux expurgés, IA optionnelle (approuvée) |
+| `deploy/` | gabarits d'exploitation (unité systemd, environnement sans valeur) — rien n'est déployé |
 | `client/` | configurateur et **banc de recette** (simulation explicite, rien n'est réel) |
 | `extension/` | manifeste Store (contrat NJP CARE v2) et surfaces déclarées |
 | `scripts/` | construction, signature, vérification du paquet ; détection de secrets ; fixtures de contrat |
 | `contract/fixtures/` | enveloppes réellement émises par des appels simulés, rejouées par les tests Rust de NJP CARE |
 | `keys/` | clé **publique** d'essai. Aucune clé privée. |
-| `docs/` | architecture, paquet, téléphonie, données de santé |
+| `docs/` | architecture, contrat NJP CARE, paquet, téléphonie, exploitation, flux de données, données de santé |
 
 ## Commandes
 
@@ -42,6 +43,8 @@ pnpm package:build    # dist/package/njp.call-<version>.njpx (+ .minisig si NJP_
 pnpm package:verify
 pnpm check:secrets
 pnpm ci               # tout ce qui précède
+pnpm store:backup <fichier>   # sauvegarde à chaud du stockage (NJP_CALL_DB_PATH)
+pnpm store:verify <fichier>   # vérifie une sauvegarde (NJP_CALL_STORAGE_KEY)
 ```
 
 ## Ce qui est réel, ce qui est simulé

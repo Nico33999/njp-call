@@ -1,5 +1,8 @@
 # Données personnelles et de santé — cartographie et points à valider
 
+> Voir aussi `FLUX-DE-DONNEES.md` (flux détaillés, conservation, sous-traitants,
+> projet d'information des appelants).
+
 > Document de travail. **Aucune conformité (RGPD, HDS, AI Act) n'est déclarée.**
 > Chaque point « à valider » exige une preuve et une validation humaine
 > (DPO, juriste, éditeur).
@@ -15,7 +18,7 @@ service ─commande typée─► relais ─► poste NJP CARE (coffre chiffré S
 | Donnée | Où | Durée proposée |
 |---|---|---|
 | audio | fournisseur téléphonique, transitoire | **aucune conservation** |
-| texte des répliques | mémoire du service, journal de session | durée de l'appel + reprise ; purge à la clôture (à implémenter en stockage durable) |
+| texte des répliques | journal de session, stockage durable chiffré | durée de l'appel + reprise ; compacté à la clôture (pierre tombale sans propos) ; abandonné : purgé après 30 j |
 | message, demande de rappel, compte rendu | coffre NJP CARE | réglage `retention.callRecordDays` (défaut 90 j) — à valider |
 | journaux techniques | service | identifiants et statuts seulement, expurgés |
 

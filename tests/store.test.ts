@@ -149,6 +149,25 @@ describe("stockage durable du service", () => {
     restored.close();
   });
 
+  it("vérification d'une sauvegarde : tout se déchiffre ; un contenu altéré est compté, jamais lu", async () => {
+    const d = tmp();
+    const s = new ServiceStore({ path: path.join(d, "svc.db"), key: KEY });
+    await s
+      .journal()
+      .append({ cabinetId: "cab_aaaa", callId: "call_1" }, ev("e1", "x"));
+    s.setCabinetStatus("cab_aaaa", { v: 1 }, s.now() + 1000);
+    expect(s.verifyAll()).toEqual({
+      schema: STORE_SCHEMA,
+      checked: 2,
+      unreadable: 0,
+    });
+    s.db.exec(
+      "UPDATE journal SET entry = substr(entry, 1, length(entry) - 1) || x'00'"
+    );
+    expect(s.verifyAll().unreadable).toBe(1);
+    s.close();
+  });
+
   it("purge : appels clos et éléments terminés anciens supprimés, travail en cours gardé", async () => {
     let now = Date.parse("2026-09-01T00:00:00Z");
     const s = new ServiceStore({ path: ":memory:", key: KEY, now: () => now });

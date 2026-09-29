@@ -481,6 +481,48 @@ export class ServiceStore {
     this.db.prepare("VACUUM INTO ?").run(destination);
   }
 
+  /**
+   * Relit et DÉCHIFFRE chaque contenu (vérification d'une sauvegarde ou
+   * d'une restauration). Ne rend que des comptes.
+   */
+  verifyAll(): { schema: number; checked: number; unreadable: number } {
+    let checked = 0;
+    let unreadable = 0;
+    const tryOpen = (aad: string, blob: Uint8Array) => {
+      checked++;
+      try {
+        this.open(aad, blob);
+      } catch {
+        unreadable++;
+      }
+    };
+    for (const r of this.db
+      .prepare("SELECT cabinet_id, call_id, entry FROM journal")
+      .all() as { cabinet_id: string; call_id: string; entry: Uint8Array }[])
+      tryOpen(`journal|${r.cabinet_id}|${r.call_id}`, r.entry);
+    for (const r of this.db
+      .prepare("SELECT cabinet_id, item_id, payload, result FROM relay_items")
+      .all() as {
+      cabinet_id: string;
+      item_id: string;
+      payload: Uint8Array;
+      result: Uint8Array | null;
+    }[]) {
+      tryOpen(`relay|payload|${r.cabinet_id}|${r.item_id}`, r.payload);
+      if (r.result)
+        tryOpen(`relay|result|${r.cabinet_id}|${r.item_id}`, r.result);
+    }
+    for (const r of this.db
+      .prepare("SELECT cabinet_id, status FROM cabinet_status")
+      .all() as { cabinet_id: string; status: Uint8Array }[])
+      tryOpen(`status|${r.cabinet_id}`, r.status);
+    for (const r of this.db
+      .prepare("SELECT cabinet_id, id, data FROM reminders")
+      .all() as { cabinet_id: string; id: string; data: Uint8Array }[])
+      tryOpen(`reminder|${r.cabinet_id}|${r.id}`, r.data);
+    return { schema: this.schema(), checked, unreadable };
+  }
+
   /** Comptes sans contenu, pour la supervision. */
   health(): Record<string, number> {
     const n = (sql: string) => (this.db.prepare(sql).get() as { n: number }).n;

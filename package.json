@@ -18,7 +18,9 @@
     "package:build": "tsx scripts/build-package.ts",
     "package:verify": "tsx scripts/verify-package.ts",
     "check:secrets": "tsx scripts/check-secrets.ts",
-    "ci": "pnpm typecheck && pnpm test && pnpm build && pnpm package:build && pnpm package:verify && pnpm check:secrets"
+    "ci": "pnpm typecheck && pnpm test && pnpm build && pnpm package:build && pnpm package:verify && pnpm check:secrets",
+    "store:backup": "tsx scripts/store-backup.ts",
+    "store:verify": "tsx scripts/store-verify.ts"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.3",
