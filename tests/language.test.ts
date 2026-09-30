@@ -189,3 +189,13 @@ describe("intention, telle que transcrite par un moteur local", () => {
     expect(fallbackUnderstand("rendezvous demain", s).intent).toBe("appointment_new");
   });
 });
+
+describe("noms à particule", () => {
+  const asking = { ...initialState(), asking: "callerName" as const };
+  it("Le Goff, Le Fèvre, de la Tour sont des noms ; « le docteur » n'en est pas un", () => {
+    for (const [t, n] of [["Yann Le Goff", "Yann Le Goff"], ["Paul Le Febre.", "Paul Le Febre"], ["Marie de la Tour", "Marie De La Tour"], ["Le Goff", "Le Goff"]])
+      expect(fallbackUnderstand(t, asking).entities.callerName).toBe(n);
+    for (const t of ["le docteur", "pour le docteur", "la secrétaire", "le numéro", "le", "je suis le patient", "les enfants"])
+      expect(fallbackUnderstand(t, asking).entities.callerName).toBeUndefined();
+  });
+});

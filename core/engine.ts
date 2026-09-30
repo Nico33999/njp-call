@@ -323,7 +323,8 @@ const merge = (
       const w = windowsFrom(reading, ctx.nowMs);
       if (w && (reading.date || reading.time || reading.period)) {
         c.windows = w;
-        c.preferenceText = e.dateTimeText.slice(0, 120);
+        // Relu dans une phrase qui a son propre point : pas de ponctuation finale.
+        c.preferenceText = e.dateTimeText.slice(0, 120).replace(/[\s.!?,;:]+$/, "");
       }
     } else if (wantsCurrent) {
       return "Pouvez-vous me préciser la date et l'heure exactes du rendez-vous actuel ?";

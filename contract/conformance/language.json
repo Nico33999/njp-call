@@ -1395,7 +1395,9 @@
    "utterance": "le nom",
    "asking": "callerName",
    "u": {
-    "entities": {}
+    "entities": {
+     "callerName": "Le Nom"
+    }
    }
   },
   {
@@ -1589,7 +1591,9 @@
    "utterance": "la date",
    "asking": "callerName",
    "u": {
-    "entities": {}
+    "entities": {
+     "callerName": "La Date"
+    }
    }
   },
   {
@@ -2838,7 +2842,9 @@
    "utterance": "le premier",
    "asking": "callerName",
    "u": {
-    "entities": {}
+    "entities": {
+     "callerName": "Le Premier"
+    }
    }
   },
   {
@@ -2936,7 +2942,9 @@
    "utterance": "la deuxième",
    "asking": "callerName",
    "u": {
-    "entities": {}
+    "entities": {
+     "callerName": "La Deuxième"
+    }
    }
   },
   {
@@ -3037,6 +3045,7 @@
    "asking": "callerName",
    "u": {
     "entities": {
+     "callerName": "Le 3",
      "dateTimeText": "le 3"
     }
    }
@@ -3155,7 +3164,9 @@
    "utterance": "le dernier",
    "asking": "callerName",
    "u": {
-    "entities": {}
+    "entities": {
+     "callerName": "Le Dernier"
+    }
    }
   },
   {
@@ -4583,7 +4594,8 @@
    "asking": "callerName",
    "u": {
     "entities": {
-     "newPatient": true
+     "newPatient": true,
+     "callerName": "La Première Fois"
     }
    }
   },
@@ -6140,6 +6152,7 @@
    "asking": "callerName",
    "u": {
     "entities": {
+     "callerName": "Le 1er Décembre",
      "dateTimeText": "le 1er décembre"
     }
    }
@@ -7496,6 +7509,616 @@
    }
   },
   {
+   "utterance": "Paul Le Febre.",
+   "asking": null,
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "Paul Le Febre.",
+   "asking": "callerName",
+   "u": {
+    "entities": {
+     "callerName": "Paul Le Febre"
+    }
+   }
+  },
+  {
+   "utterance": "Paul Le Febre.",
+   "asking": "concernedName",
+   "u": {
+    "entities": {
+     "concernedName": "Paul Le Febre"
+    }
+   }
+  },
+  {
+   "utterance": "Paul Le Febre.",
+   "asking": "phone",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "Paul Le Febre.",
+   "asking": "newPatient",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "Paul Le Febre.",
+   "asking": "messageText",
+   "u": {
+    "entities": {
+     "messageText": "Paul Le Febre."
+    }
+   }
+  },
+  {
+   "utterance": "Paul Le Febre.",
+   "asking": "reason",
+   "u": {
+    "entities": {
+     "reason": "Paul Le Febre."
+    }
+   }
+  },
+  {
+   "utterance": "Paul Le Febre.",
+   "asking": "confirmation",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "Paul Le Febre.",
+   "asking": "slot",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "Paul Le Febre.",
+   "asking": "anything_else",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "Paul Le Febre.",
+   "asking": "currentStart",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "Paul Le Febre.",
+   "asking": "preference",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "Paul Le Febre.",
+   "asking": "what_to_correct",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "Yann Le Goff",
+   "asking": null,
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "Yann Le Goff",
+   "asking": "callerName",
+   "u": {
+    "entities": {
+     "callerName": "Yann Le Goff"
+    }
+   }
+  },
+  {
+   "utterance": "Yann Le Goff",
+   "asking": "concernedName",
+   "u": {
+    "entities": {
+     "concernedName": "Yann Le Goff"
+    }
+   }
+  },
+  {
+   "utterance": "Yann Le Goff",
+   "asking": "phone",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "Yann Le Goff",
+   "asking": "newPatient",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "Yann Le Goff",
+   "asking": "messageText",
+   "u": {
+    "entities": {
+     "messageText": "Yann Le Goff"
+    }
+   }
+  },
+  {
+   "utterance": "Yann Le Goff",
+   "asking": "reason",
+   "u": {
+    "entities": {
+     "reason": "Yann Le Goff"
+    }
+   }
+  },
+  {
+   "utterance": "Yann Le Goff",
+   "asking": "confirmation",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "Yann Le Goff",
+   "asking": "slot",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "Yann Le Goff",
+   "asking": "anything_else",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "Yann Le Goff",
+   "asking": "currentStart",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "Yann Le Goff",
+   "asking": "preference",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "Yann Le Goff",
+   "asking": "what_to_correct",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "Marie de la Tour",
+   "asking": null,
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "Marie de la Tour",
+   "asking": "callerName",
+   "u": {
+    "entities": {
+     "callerName": "Marie De La Tour"
+    }
+   }
+  },
+  {
+   "utterance": "Marie de la Tour",
+   "asking": "concernedName",
+   "u": {
+    "entities": {
+     "concernedName": "Marie De La Tour"
+    }
+   }
+  },
+  {
+   "utterance": "Marie de la Tour",
+   "asking": "phone",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "Marie de la Tour",
+   "asking": "newPatient",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "Marie de la Tour",
+   "asking": "messageText",
+   "u": {
+    "entities": {
+     "messageText": "Marie de la Tour"
+    }
+   }
+  },
+  {
+   "utterance": "Marie de la Tour",
+   "asking": "reason",
+   "u": {
+    "entities": {
+     "reason": "Marie de la Tour"
+    }
+   }
+  },
+  {
+   "utterance": "Marie de la Tour",
+   "asking": "confirmation",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "Marie de la Tour",
+   "asking": "slot",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "Marie de la Tour",
+   "asking": "anything_else",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "Marie de la Tour",
+   "asking": "currentStart",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "Marie de la Tour",
+   "asking": "preference",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "Marie de la Tour",
+   "asking": "what_to_correct",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "le docteur",
+   "asking": null,
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "le docteur",
+   "asking": "callerName",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "le docteur",
+   "asking": "concernedName",
+   "u": {
+    "entities": {
+     "concernedName": "Le Docteur"
+    }
+   }
+  },
+  {
+   "utterance": "le docteur",
+   "asking": "phone",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "le docteur",
+   "asking": "newPatient",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "le docteur",
+   "asking": "messageText",
+   "u": {
+    "entities": {
+     "messageText": "le docteur"
+    }
+   }
+  },
+  {
+   "utterance": "le docteur",
+   "asking": "reason",
+   "u": {
+    "entities": {
+     "reason": "le docteur"
+    }
+   }
+  },
+  {
+   "utterance": "le docteur",
+   "asking": "confirmation",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "le docteur",
+   "asking": "slot",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "le docteur",
+   "asking": "anything_else",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "le docteur",
+   "asking": "currentStart",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "le docteur",
+   "asking": "preference",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "le docteur",
+   "asking": "what_to_correct",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "les enfants",
+   "asking": null,
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "les enfants",
+   "asking": "callerName",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "les enfants",
+   "asking": "concernedName",
+   "u": {
+    "entities": {
+     "concernedName": "Les Enfants"
+    }
+   }
+  },
+  {
+   "utterance": "les enfants",
+   "asking": "phone",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "les enfants",
+   "asking": "newPatient",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "les enfants",
+   "asking": "messageText",
+   "u": {
+    "entities": {
+     "messageText": "les enfants"
+    }
+   }
+  },
+  {
+   "utterance": "les enfants",
+   "asking": "reason",
+   "u": {
+    "entities": {
+     "reason": "les enfants"
+    }
+   }
+  },
+  {
+   "utterance": "les enfants",
+   "asking": "confirmation",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "les enfants",
+   "asking": "slot",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "les enfants",
+   "asking": "anything_else",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "les enfants",
+   "asking": "currentStart",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "les enfants",
+   "asking": "preference",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "les enfants",
+   "asking": "what_to_correct",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "Mardi prochain, en fin de matinée.",
+   "asking": null,
+   "u": {
+    "entities": {
+     "dateTimeText": "Mardi prochain, en fin de matinée."
+    }
+   }
+  },
+  {
+   "utterance": "Mardi prochain, en fin de matinée.",
+   "asking": "callerName",
+   "u": {
+    "entities": {
+     "dateTimeText": "Mardi prochain, en fin de matinée."
+    }
+   }
+  },
+  {
+   "utterance": "Mardi prochain, en fin de matinée.",
+   "asking": "concernedName",
+   "u": {
+    "entities": {
+     "dateTimeText": "Mardi prochain, en fin de matinée."
+    }
+   }
+  },
+  {
+   "utterance": "Mardi prochain, en fin de matinée.",
+   "asking": "phone",
+   "u": {
+    "entities": {
+     "dateTimeText": "Mardi prochain, en fin de matinée."
+    }
+   }
+  },
+  {
+   "utterance": "Mardi prochain, en fin de matinée.",
+   "asking": "newPatient",
+   "u": {
+    "entities": {
+     "dateTimeText": "Mardi prochain, en fin de matinée."
+    }
+   }
+  },
+  {
+   "utterance": "Mardi prochain, en fin de matinée.",
+   "asking": "messageText",
+   "u": {
+    "entities": {
+     "dateTimeText": "Mardi prochain, en fin de matinée.",
+     "messageText": "Mardi prochain, en fin de matinée."
+    }
+   }
+  },
+  {
+   "utterance": "Mardi prochain, en fin de matinée.",
+   "asking": "reason",
+   "u": {
+    "entities": {
+     "dateTimeText": "Mardi prochain, en fin de matinée.",
+     "reason": "Mardi prochain, en fin de matinée."
+    }
+   }
+  },
+  {
+   "utterance": "Mardi prochain, en fin de matinée.",
+   "asking": "confirmation",
+   "u": {
+    "entities": {
+     "dateTimeText": "Mardi prochain, en fin de matinée."
+    }
+   }
+  },
+  {
+   "utterance": "Mardi prochain, en fin de matinée.",
+   "asking": "slot",
+   "u": {
+    "entities": {
+     "dateTimeText": "Mardi prochain, en fin de matinée."
+    }
+   }
+  },
+  {
+   "utterance": "Mardi prochain, en fin de matinée.",
+   "asking": "anything_else",
+   "u": {
+    "entities": {
+     "dateTimeText": "Mardi prochain, en fin de matinée."
+    }
+   }
+  },
+  {
+   "utterance": "Mardi prochain, en fin de matinée.",
+   "asking": "currentStart",
+   "u": {
+    "entities": {
+     "dateTimeText": "Mardi prochain, en fin de matinée."
+    }
+   }
+  },
+  {
+   "utterance": "Mardi prochain, en fin de matinée.",
+   "asking": "preference",
+   "u": {
+    "entities": {
+     "dateTimeText": "Mardi prochain, en fin de matinée."
+    }
+   }
+  },
+  {
+   "utterance": "Mardi prochain, en fin de matinée.",
+   "asking": "what_to_correct",
+   "u": {
+    "entities": {
+     "dateTimeText": "Mardi prochain, en fin de matinée."
+    }
+   }
+  },
+  {
    "utterance": "vous êtes ouverts le samedi ?",
    "asking": null,
    "u": {
@@ -8636,7 +9259,9 @@
    "utterance": "appelez le samu",
    "asking": "callerName",
    "u": {
-    "entities": {}
+    "entities": {
+     "callerName": "Appelez Le Samu"
+    }
    }
   },
   {
@@ -12490,7 +13115,9 @@
    "utterance": "le deuxième",
    "asking": "callerName",
    "u": {
-    "entities": {}
+    "entities": {
+     "callerName": "Le Deuxième"
+    }
    }
   },
   {
@@ -13163,6 +13790,345 @@
     "entities": {
      "dateTimeText": "de l'après-midi, jeudi"
     }
+   }
+  },
+  {
+   "utterance": "zéro six zéro zéro zéro zéro zéro zéro zéro deux",
+   "asking": null,
+   "u": {
+    "entities": {
+     "phone": "+33600000002"
+    }
+   }
+  },
+  {
+   "utterance": "zéro six zéro zéro zéro zéro zéro zéro zéro deux",
+   "asking": "callerName",
+   "u": {
+    "entities": {
+     "phone": "+33600000002"
+    }
+   }
+  },
+  {
+   "utterance": "zéro six zéro zéro zéro zéro zéro zéro zéro deux",
+   "asking": "concernedName",
+   "u": {
+    "entities": {
+     "phone": "+33600000002"
+    }
+   }
+  },
+  {
+   "utterance": "zéro six zéro zéro zéro zéro zéro zéro zéro deux",
+   "asking": "phone",
+   "u": {
+    "entities": {
+     "phone": "+33600000002"
+    }
+   }
+  },
+  {
+   "utterance": "zéro six zéro zéro zéro zéro zéro zéro zéro deux",
+   "asking": "newPatient",
+   "u": {
+    "entities": {
+     "phone": "+33600000002"
+    }
+   }
+  },
+  {
+   "utterance": "zéro six zéro zéro zéro zéro zéro zéro zéro deux",
+   "asking": "messageText",
+   "u": {
+    "entities": {
+     "phone": "+33600000002",
+     "messageText": "zéro six zéro zéro zéro zéro zéro zéro zéro deux"
+    }
+   }
+  },
+  {
+   "utterance": "zéro six zéro zéro zéro zéro zéro zéro zéro deux",
+   "asking": "reason",
+   "u": {
+    "entities": {
+     "phone": "+33600000002",
+     "reason": "zéro six zéro zéro zéro zéro zéro zéro zéro deux"
+    }
+   }
+  },
+  {
+   "utterance": "zéro six zéro zéro zéro zéro zéro zéro zéro deux",
+   "asking": "confirmation",
+   "u": {
+    "entities": {
+     "phone": "+33600000002"
+    }
+   }
+  },
+  {
+   "utterance": "zéro six zéro zéro zéro zéro zéro zéro zéro deux",
+   "asking": "slot",
+   "u": {
+    "entities": {
+     "phone": "+33600000002"
+    }
+   }
+  },
+  {
+   "utterance": "zéro six zéro zéro zéro zéro zéro zéro zéro deux",
+   "asking": "anything_else",
+   "u": {
+    "entities": {
+     "phone": "+33600000002"
+    }
+   }
+  },
+  {
+   "utterance": "zéro six zéro zéro zéro zéro zéro zéro zéro deux",
+   "asking": "currentStart",
+   "u": {
+    "entities": {
+     "phone": "+33600000002"
+    }
+   }
+  },
+  {
+   "utterance": "zéro six zéro zéro zéro zéro zéro zéro zéro deux",
+   "asking": "preference",
+   "u": {
+    "entities": {
+     "phone": "+33600000002"
+    }
+   }
+  },
+  {
+   "utterance": "zéro six zéro zéro zéro zéro zéro zéro zéro deux",
+   "asking": "what_to_correct",
+   "u": {
+    "entities": {
+     "phone": "+33600000002"
+    }
+   }
+  },
+  {
+   "utterance": "Oui, je suis déjà venue.",
+   "asking": null,
+   "u": {
+    "entities": {
+     "newPatient": false
+    }
+   }
+  },
+  {
+   "utterance": "Oui, je suis déjà venue.",
+   "asking": "callerName",
+   "u": {
+    "entities": {
+     "newPatient": false
+    }
+   }
+  },
+  {
+   "utterance": "Oui, je suis déjà venue.",
+   "asking": "concernedName",
+   "u": {
+    "entities": {
+     "newPatient": false
+    }
+   }
+  },
+  {
+   "utterance": "Oui, je suis déjà venue.",
+   "asking": "phone",
+   "u": {
+    "entities": {
+     "newPatient": false
+    }
+   }
+  },
+  {
+   "utterance": "Oui, je suis déjà venue.",
+   "asking": "newPatient",
+   "u": {
+    "entities": {
+     "newPatient": false
+    }
+   }
+  },
+  {
+   "utterance": "Oui, je suis déjà venue.",
+   "asking": "messageText",
+   "u": {
+    "entities": {
+     "newPatient": false,
+     "messageText": "Oui, je suis déjà venue."
+    }
+   }
+  },
+  {
+   "utterance": "Oui, je suis déjà venue.",
+   "asking": "reason",
+   "u": {
+    "entities": {
+     "newPatient": false,
+     "reason": "Oui, je suis déjà venue."
+    }
+   }
+  },
+  {
+   "utterance": "Oui, je suis déjà venue.",
+   "asking": "confirmation",
+   "u": {
+    "entities": {
+     "newPatient": false
+    },
+    "confirmation": "yes"
+   }
+  },
+  {
+   "utterance": "Oui, je suis déjà venue.",
+   "asking": "slot",
+   "u": {
+    "entities": {
+     "newPatient": false
+    }
+   }
+  },
+  {
+   "utterance": "Oui, je suis déjà venue.",
+   "asking": "anything_else",
+   "u": {
+    "entities": {
+     "newPatient": false
+    },
+    "confirmation": "yes"
+   }
+  },
+  {
+   "utterance": "Oui, je suis déjà venue.",
+   "asking": "currentStart",
+   "u": {
+    "entities": {
+     "newPatient": false
+    }
+   }
+  },
+  {
+   "utterance": "Oui, je suis déjà venue.",
+   "asking": "preference",
+   "u": {
+    "entities": {
+     "newPatient": false
+    }
+   }
+  },
+  {
+   "utterance": "Oui, je suis déjà venue.",
+   "asking": "what_to_correct",
+   "u": {
+    "entities": {
+     "newPatient": false
+    }
+   }
+  },
+  {
+   "utterance": "Non merci, au revoir.",
+   "asking": null,
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "Non merci, au revoir.",
+   "asking": "callerName",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "Non merci, au revoir.",
+   "asking": "concernedName",
+   "u": {
+    "entities": {
+     "concernedName": "Non Merci Au Revoir"
+    }
+   }
+  },
+  {
+   "utterance": "Non merci, au revoir.",
+   "asking": "phone",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "Non merci, au revoir.",
+   "asking": "newPatient",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "Non merci, au revoir.",
+   "asking": "messageText",
+   "u": {
+    "entities": {
+     "messageText": "Non merci, au revoir."
+    }
+   }
+  },
+  {
+   "utterance": "Non merci, au revoir.",
+   "asking": "reason",
+   "u": {
+    "entities": {
+     "reason": "Non merci, au revoir."
+    }
+   }
+  },
+  {
+   "utterance": "Non merci, au revoir.",
+   "asking": "confirmation",
+   "u": {
+    "entities": {},
+    "confirmation": "correction"
+   }
+  },
+  {
+   "utterance": "Non merci, au revoir.",
+   "asking": "slot",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "Non merci, au revoir.",
+   "asking": "anything_else",
+   "u": {
+    "entities": {},
+    "confirmation": "correction"
+   }
+  },
+  {
+   "utterance": "Non merci, au revoir.",
+   "asking": "currentStart",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "Non merci, au revoir.",
+   "asking": "preference",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "Non merci, au revoir.",
+   "asking": "what_to_correct",
+   "u": {
+    "entities": {}
    }
   },
   {
@@ -18757,6 +19723,30 @@
    "e164": null
   },
   {
+   "spoken": "Paul Le Febre.",
+   "e164": null
+  },
+  {
+   "spoken": "Yann Le Goff",
+   "e164": null
+  },
+  {
+   "spoken": "Marie de la Tour",
+   "e164": null
+  },
+  {
+   "spoken": "le docteur",
+   "e164": null
+  },
+  {
+   "spoken": "les enfants",
+   "e164": null
+  },
+  {
+   "spoken": "Mardi prochain, en fin de matinée.",
+   "e164": null
+  },
+  {
    "spoken": "vous êtes ouverts le samedi ?",
    "e164": null
   },
@@ -18966,6 +19956,18 @@
   },
   {
    "spoken": "de l'après-midi, jeudi",
+   "e164": null
+  },
+  {
+   "spoken": "zéro six zéro zéro zéro zéro zéro zéro zéro deux",
+   "e164": "+33600000002"
+  },
+  {
+   "spoken": "Oui, je suis déjà venue.",
+   "e164": null
+  },
+  {
+   "spoken": "Non merci, au revoir.",
    "e164": null
   },
   {
@@ -19594,6 +20596,36 @@
    "matched": []
   },
   {
+   "utterance": "Paul Le Febre.",
+   "handOff": false,
+   "matched": []
+  },
+  {
+   "utterance": "Yann Le Goff",
+   "handOff": false,
+   "matched": []
+  },
+  {
+   "utterance": "Marie de la Tour",
+   "handOff": false,
+   "matched": []
+  },
+  {
+   "utterance": "le docteur",
+   "handOff": false,
+   "matched": []
+  },
+  {
+   "utterance": "les enfants",
+   "handOff": false,
+   "matched": []
+  },
+  {
+   "utterance": "Mardi prochain, en fin de matinée.",
+   "handOff": false,
+   "matched": []
+  },
+  {
    "utterance": "vous êtes ouverts le samedi ?",
    "handOff": false,
    "matched": []
@@ -19865,6 +20897,21 @@
   },
   {
    "utterance": "de l'après-midi, jeudi",
+   "handOff": false,
+   "matched": []
+  },
+  {
+   "utterance": "zéro six zéro zéro zéro zéro zéro zéro zéro deux",
+   "handOff": false,
+   "matched": []
+  },
+  {
+   "utterance": "Oui, je suis déjà venue.",
+   "handOff": false,
+   "matched": []
+  },
+  {
+   "utterance": "Non merci, au revoir.",
    "handOff": false,
    "matched": []
   },
@@ -20296,6 +21343,30 @@
    "injection": false
   },
   {
+   "utterance": "Paul Le Febre.",
+   "injection": false
+  },
+  {
+   "utterance": "Yann Le Goff",
+   "injection": false
+  },
+  {
+   "utterance": "Marie de la Tour",
+   "injection": false
+  },
+  {
+   "utterance": "le docteur",
+   "injection": false
+  },
+  {
+   "utterance": "les enfants",
+   "injection": false
+  },
+  {
+   "utterance": "Mardi prochain, en fin de matinée.",
+   "injection": false
+  },
+  {
    "utterance": "vous êtes ouverts le samedi ?",
    "injection": false
   },
@@ -20505,6 +21576,18 @@
   },
   {
    "utterance": "de l'après-midi, jeudi",
+   "injection": false
+  },
+  {
+   "utterance": "zéro six zéro zéro zéro zéro zéro zéro zéro deux",
+   "injection": false
+  },
+  {
+   "utterance": "Oui, je suis déjà venue.",
+   "injection": false
+  },
+  {
+   "utterance": "Non merci, au revoir.",
    "injection": false
   },
   {
@@ -20977,6 +22060,36 @@
    "tail": null
   },
   {
+   "utterance": "Paul Le Febre.",
+   "letters": null,
+   "tail": null
+  },
+  {
+   "utterance": "Yann Le Goff",
+   "letters": null,
+   "tail": null
+  },
+  {
+   "utterance": "Marie de la Tour",
+   "letters": null,
+   "tail": null
+  },
+  {
+   "utterance": "le docteur",
+   "letters": null,
+   "tail": null
+  },
+  {
+   "utterance": "les enfants",
+   "letters": null,
+   "tail": null
+  },
+  {
+   "utterance": "Mardi prochain, en fin de matinée.",
+   "letters": null,
+   "tail": null
+  },
+  {
    "utterance": "vous êtes ouverts le samedi ?",
    "letters": null,
    "tail": null
@@ -21238,6 +22351,21 @@
   },
   {
    "utterance": "de l'après-midi, jeudi",
+   "letters": null,
+   "tail": null
+  },
+  {
+   "utterance": "zéro six zéro zéro zéro zéro zéro zéro zéro deux",
+   "letters": null,
+   "tail": null
+  },
+  {
+   "utterance": "Oui, je suis déjà venue.",
+   "letters": null,
+   "tail": null
+  },
+  {
+   "utterance": "Non merci, au revoir.",
    "letters": null,
    "tail": null
   },
@@ -21665,6 +22793,30 @@
    "target": null
   },
   {
+   "utterance": "Paul Le Febre.",
+   "target": null
+  },
+  {
+   "utterance": "Yann Le Goff",
+   "target": null
+  },
+  {
+   "utterance": "Marie de la Tour",
+   "target": null
+  },
+  {
+   "utterance": "le docteur",
+   "target": null
+  },
+  {
+   "utterance": "les enfants",
+   "target": null
+  },
+  {
+   "utterance": "Mardi prochain, en fin de matinée.",
+   "target": null
+  },
+  {
    "utterance": "vous êtes ouverts le samedi ?",
    "target": null
   },
@@ -21874,6 +23026,18 @@
   },
   {
    "utterance": "de l'après-midi, jeudi",
+   "target": null
+  },
+  {
+   "utterance": "zéro six zéro zéro zéro zéro zéro zéro zéro deux",
+   "target": null
+  },
+  {
+   "utterance": "Oui, je suis déjà venue.",
+   "target": null
+  },
+  {
+   "utterance": "Non merci, au revoir.",
    "target": null
   },
   {

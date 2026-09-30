@@ -408,9 +408,24 @@ const NAME_WHEN_ASKED =
   /(?:je suis|c'est|ici|moi c'est)\s+((?:m(?:adame|onsieur)\s+)?[a-zà-ÿ][a-zà-ÿ'-]+(?:\s+[a-zà-ÿ][a-zà-ÿ'-]+){0,2})/i;
 const STOP_NAME =
   /^(pour|au|a|le|la|les|un|une|pas|bien|tres|urgent|possible|moi|madame|monsieur|deja|venu|venue|disponible|nouveau|nouvelle|patient|patiente|en|malade|suivi|suivie|oui|non|d'accord|desole|desolee|la|ici)$/i;
+// « le », « la », « les » : particules de nom (Le Goff, de la Tour) quand
+// elles précèdent un mot qui peut être un nom ; jamais devant un nom commun
+// du cabinet (« le docteur », « le numéro »).
+const NAME_PARTICLE = /^(le|la|les)$/;
+const NOT_A_NAME_AFTER_PARTICLE =
+  /^(docteur|docteure|medecin|cabinet|secretaire|numero|message|rendez-vous|rendez|rdv|telephone|standard|patient|patiente|matin|soir|midi|mardi|lundi|mercredi|jeudi|vendredi|samedi|dimanche|prochain|prochaine|meme|enfant|enfants)$/;
 const acceptName = (raw: string) => {
   const words = fold(raw).split(/\s+/);
-  return !words.some(w => STOP_NAME.test(w));
+  return words.every((w, i) => {
+    if (!STOP_NAME.test(w)) return true;
+    const next = words[i + 1];
+    return (
+      NAME_PARTICLE.test(w) &&
+      next !== undefined &&
+      !STOP_NAME.test(next) &&
+      !NOT_A_NAME_AFTER_PARTICLE.test(next)
+    );
+  });
 };
 
 const titleCase = (s: string) =>

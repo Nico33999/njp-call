@@ -325,6 +325,23 @@ export const SCENARIOS: Scenario[] = [
     ],
   },
   {
+    // Transcriptions réelles du banc d'appel (Parakeet) : « rendez vous »
+    // sans trait d'union, nom à particule, préférence suivie d'un point, oui
+    // isolé non compris (réplique vide) puis touche 1.
+    name: "demande_transcriptions_reelles_particule_et_clavier",
+    config: { offerSlots: false },
+    steps: [
+      { caller: "Bonjour, je voudrais prendre un rendez vous." },
+      { caller: "Paul Le Febre." },
+      { caller: "zéro six zéro zéro zéro zéro zéro zéro zéro deux" },
+      { caller: "Oui, je suis déjà venue." },
+      { caller: "Mardi prochain, en fin de matinée." },
+      { caller: "" },
+      { dtmf: "1" },
+      { caller: "Non merci, au revoir." },
+    ],
+  },
+  {
     name: "reservation_deja_venue_n_est_pas_un_nom",
     steps: [
       { caller: "je voudrais un rendez-vous" },
@@ -724,6 +741,12 @@ const EXTRA_UTTERANCES = [
   "Bonjour, je voudrais prendre un rendez vous.",
   "je voudrais annuler mon rendez vous",
   "je voudrais déplacer mon rendez vous",
+  "Paul Le Febre.",
+  "Yann Le Goff",
+  "Marie de la Tour",
+  "le docteur",
+  "les enfants",
+  "Mardi prochain, en fin de matinée.",
   "vous êtes ouverts le samedi ?",
   "où est-ce que je peux me garer ?",
   "qu'on me rappelle s'il vous plaît",
