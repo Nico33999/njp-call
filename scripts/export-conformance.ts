@@ -720,6 +720,10 @@ const EXTRA_UTTERANCES = [
   "je voudrais changer mon rendez-vous",
   "je souhaite annuler ma consultation",
   "je voudrais prendre rendez-vous",
+  // Transcription réelle (Parakeet) : « rendez vous » sans trait d'union.
+  "Bonjour, je voudrais prendre un rendez vous.",
+  "je voudrais annuler mon rendez vous",
+  "je voudrais déplacer mon rendez vous",
   "vous êtes ouverts le samedi ?",
   "où est-ce que je peux me garer ?",
   "qu'on me rappelle s'il vous plaît",

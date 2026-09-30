@@ -278,6 +278,11 @@ export const correctionTarget = (s: string): CorrectionTarget | undefined => {
  * « D comme Denis, U comme Ursule… »). Rend les lettres, ou rien si la
  * réplique n'est pas une épellation.
  */
+// Classes Unicode construites à l'exécution : le typage du client (cible
+// ES5) refuse le drapeau « u » dans un littéral ; le sens est identique.
+const LETTER_COMME = new RegExp("(\\p{L})\\s+comme\\s+\\p{L}+", "gu");
+const ONE_LETTER = new RegExp("^\\p{L}$", "u");
+
 const LETTER_NAMES: Record<string, string> = {
   a: "a", ah: "a", be: "b", bé: "b", ce: "c", cé: "c", se: "c", de: "d", dé: "d",
   e: "e", eu: "e", effe: "f", ef: "f", ge: "g", gé: "g", ache: "h", hache: "h",
@@ -291,13 +296,13 @@ const spellWords = (utterance: string): string[] =>
     .toLowerCase()
     .replace(/double\s+v[ée]?/g, " w ")
     .replace(/i\s+grec/g, " y ")
-    .replace(/(\p{L})\s+comme\s+\p{L}+/gu, "$1")
+    .replace(LETTER_COMME, "$1")
     .replace(/[.,;:!?'"«»()-]/g, " ")
     .split(/\s+/)
     .filter(Boolean);
 
 const letterOf = (w: string): string | null =>
-  /^\p{L}$/u.test(w) ? w : (LETTER_NAMES[w] ?? null);
+  ONE_LETTER.test(w) ? w : (LETTER_NAMES[w] ?? null);
 
 /**
  * « Mon nom, c'est Durant. D U R A N D. » : une épellation EN FIN de
@@ -326,14 +331,14 @@ export const spelledLetters = (utterance: string): string | null => {
     .toLowerCase()
     .replace(/double\s+v[ée]?/g, " w ")
     .replace(/i\s+grec/g, " y ")
-    .replace(/(\p{L})\s+comme\s+\p{L}+/gu, "$1")
+    .replace(LETTER_COMME, "$1")
     .replace(/[.,;:!?'"«»()-]/g, " ");
   const words = raw.split(/\s+/).filter(Boolean);
   if (words.length < 3) return null;
   let letters = "";
   let hits = 0;
   for (const w of words) {
-    if (/^\p{L}$/u.test(w)) {
+    if (ONE_LETTER.test(w)) {
       letters += w;
       hits += 1;
     } else if (LETTER_NAMES[w]) {
@@ -357,16 +362,16 @@ const intentOf = (s: string): Intent | undefined => {
   if (/\b(renouvel|ordonnance)/.test(s)) return "renewal";
   if (
     /\b(annuler|annulation)\b/.test(s) &&
-    /\b(rendez-vous|rdv|consultation|seance)\b/.test(s)
+    /\b(rendez[- ]?vous|rdv|consultation|seance)\b/.test(s)
   )
     return "appointment_cancel";
   if (
-    /\b(deplacer|decaler|reporter|changer|modifier) (mon|le|un|son|sa) (rendez-vous|rdv|seance|consultation)/.test(
+    /\b(deplacer|decaler|reporter|changer|modifier) (mon|le|un|son|sa) (rendez[- ]?vous|rdv|seance|consultation)/.test(
       s
     )
   )
     return "appointment_reschedule";
-  if (/\b(rendez-vous|rdv|consultation|prendre un creneau|seance)\b/.test(s))
+  if (/\b(rendez[- ]?vous|rdv|consultation|prendre un creneau|seance)\b/.test(s))
     return "appointment_new";
   if (
     /\b(me rappeler|qu'on me rappelle|me recontacter|etre rappele|rappelle-moi)/.test(

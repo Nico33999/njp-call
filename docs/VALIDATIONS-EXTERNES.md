@@ -170,8 +170,10 @@ recette (étape 2). Un appel simulé n'est jamais présenté comme réel.
 - njp-care : https://github.com/Nico33999/njp-care/actions/runs/36601727834
   — `startup_failure`, pseudo-workflow « BuildFailed » ; aussi sur la base
   depuis l'exécution 23.
-- `actionlint` 1.7.7 : aucune erreur. **Cause indéterminée** sans message
-  GitHub explicite. Captures demandées : bannière de chaque exécution,
+- `actionlint` 1.7.7 : aucune erreur. **Cause indéterminée ; tests locaux
+  réussis.** Un échec avant toute étape et des journaux absents ne prouvent
+  pas que l'exécuteur (runner) en soit la cause : ni lui, ni le workflow,
+  ni un réglage du compte n'est désigné sans message GitHub explicite. Captures demandées : bannière de chaque exécution,
   Settings → Actions → General, Settings → Billing and plans.
 
 ## 5. Validations natives Windows et macOS

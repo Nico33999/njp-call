@@ -7174,6 +7174,328 @@
    }
   },
   {
+   "utterance": "Bonjour, je voudrais prendre un rendez vous.",
+   "asking": null,
+   "u": {
+    "entities": {},
+    "intent": "appointment_new"
+   }
+  },
+  {
+   "utterance": "Bonjour, je voudrais prendre un rendez vous.",
+   "asking": "callerName",
+   "u": {
+    "entities": {},
+    "intent": "appointment_new"
+   }
+  },
+  {
+   "utterance": "Bonjour, je voudrais prendre un rendez vous.",
+   "asking": "concernedName",
+   "u": {
+    "entities": {},
+    "intent": "appointment_new"
+   }
+  },
+  {
+   "utterance": "Bonjour, je voudrais prendre un rendez vous.",
+   "asking": "phone",
+   "u": {
+    "entities": {},
+    "intent": "appointment_new"
+   }
+  },
+  {
+   "utterance": "Bonjour, je voudrais prendre un rendez vous.",
+   "asking": "newPatient",
+   "u": {
+    "entities": {},
+    "intent": "appointment_new"
+   }
+  },
+  {
+   "utterance": "Bonjour, je voudrais prendre un rendez vous.",
+   "asking": "messageText",
+   "u": {
+    "entities": {
+     "messageText": "Bonjour, je voudrais prendre un rendez vous."
+    }
+   }
+  },
+  {
+   "utterance": "Bonjour, je voudrais prendre un rendez vous.",
+   "asking": "reason",
+   "u": {
+    "entities": {
+     "reason": "Bonjour, je voudrais prendre un rendez vous."
+    },
+    "intent": "appointment_new"
+   }
+  },
+  {
+   "utterance": "Bonjour, je voudrais prendre un rendez vous.",
+   "asking": "confirmation",
+   "u": {
+    "entities": {},
+    "intent": "appointment_new"
+   }
+  },
+  {
+   "utterance": "Bonjour, je voudrais prendre un rendez vous.",
+   "asking": "slot",
+   "u": {
+    "entities": {},
+    "intent": "appointment_new",
+    "slotChoice": 1
+   }
+  },
+  {
+   "utterance": "Bonjour, je voudrais prendre un rendez vous.",
+   "asking": "anything_else",
+   "u": {
+    "entities": {},
+    "intent": "appointment_new"
+   }
+  },
+  {
+   "utterance": "Bonjour, je voudrais prendre un rendez vous.",
+   "asking": "currentStart",
+   "u": {
+    "entities": {},
+    "intent": "appointment_new"
+   }
+  },
+  {
+   "utterance": "Bonjour, je voudrais prendre un rendez vous.",
+   "asking": "preference",
+   "u": {
+    "entities": {},
+    "intent": "appointment_new"
+   }
+  },
+  {
+   "utterance": "Bonjour, je voudrais prendre un rendez vous.",
+   "asking": "what_to_correct",
+   "u": {
+    "entities": {},
+    "intent": "appointment_new"
+   }
+  },
+  {
+   "utterance": "je voudrais annuler mon rendez vous",
+   "asking": null,
+   "u": {
+    "entities": {},
+    "intent": "appointment_cancel"
+   }
+  },
+  {
+   "utterance": "je voudrais annuler mon rendez vous",
+   "asking": "callerName",
+   "u": {
+    "entities": {},
+    "intent": "appointment_cancel"
+   }
+  },
+  {
+   "utterance": "je voudrais annuler mon rendez vous",
+   "asking": "concernedName",
+   "u": {
+    "entities": {},
+    "intent": "appointment_cancel"
+   }
+  },
+  {
+   "utterance": "je voudrais annuler mon rendez vous",
+   "asking": "phone",
+   "u": {
+    "entities": {},
+    "intent": "appointment_cancel"
+   }
+  },
+  {
+   "utterance": "je voudrais annuler mon rendez vous",
+   "asking": "newPatient",
+   "u": {
+    "entities": {},
+    "intent": "appointment_cancel"
+   }
+  },
+  {
+   "utterance": "je voudrais annuler mon rendez vous",
+   "asking": "messageText",
+   "u": {
+    "entities": {
+     "messageText": "je voudrais annuler mon rendez vous"
+    }
+   }
+  },
+  {
+   "utterance": "je voudrais annuler mon rendez vous",
+   "asking": "reason",
+   "u": {
+    "entities": {
+     "reason": "je voudrais annuler mon rendez vous"
+    },
+    "intent": "appointment_cancel"
+   }
+  },
+  {
+   "utterance": "je voudrais annuler mon rendez vous",
+   "asking": "confirmation",
+   "u": {
+    "entities": {},
+    "intent": "appointment_cancel"
+   }
+  },
+  {
+   "utterance": "je voudrais annuler mon rendez vous",
+   "asking": "slot",
+   "u": {
+    "entities": {},
+    "intent": "appointment_cancel"
+   }
+  },
+  {
+   "utterance": "je voudrais annuler mon rendez vous",
+   "asking": "anything_else",
+   "u": {
+    "entities": {},
+    "intent": "appointment_cancel"
+   }
+  },
+  {
+   "utterance": "je voudrais annuler mon rendez vous",
+   "asking": "currentStart",
+   "u": {
+    "entities": {},
+    "intent": "appointment_cancel"
+   }
+  },
+  {
+   "utterance": "je voudrais annuler mon rendez vous",
+   "asking": "preference",
+   "u": {
+    "entities": {},
+    "intent": "appointment_cancel"
+   }
+  },
+  {
+   "utterance": "je voudrais annuler mon rendez vous",
+   "asking": "what_to_correct",
+   "u": {
+    "entities": {},
+    "intent": "appointment_cancel"
+   }
+  },
+  {
+   "utterance": "je voudrais déplacer mon rendez vous",
+   "asking": null,
+   "u": {
+    "entities": {},
+    "intent": "appointment_reschedule"
+   }
+  },
+  {
+   "utterance": "je voudrais déplacer mon rendez vous",
+   "asking": "callerName",
+   "u": {
+    "entities": {},
+    "intent": "appointment_reschedule"
+   }
+  },
+  {
+   "utterance": "je voudrais déplacer mon rendez vous",
+   "asking": "concernedName",
+   "u": {
+    "entities": {},
+    "intent": "appointment_reschedule"
+   }
+  },
+  {
+   "utterance": "je voudrais déplacer mon rendez vous",
+   "asking": "phone",
+   "u": {
+    "entities": {},
+    "intent": "appointment_reschedule"
+   }
+  },
+  {
+   "utterance": "je voudrais déplacer mon rendez vous",
+   "asking": "newPatient",
+   "u": {
+    "entities": {},
+    "intent": "appointment_reschedule"
+   }
+  },
+  {
+   "utterance": "je voudrais déplacer mon rendez vous",
+   "asking": "messageText",
+   "u": {
+    "entities": {
+     "messageText": "je voudrais déplacer mon rendez vous"
+    }
+   }
+  },
+  {
+   "utterance": "je voudrais déplacer mon rendez vous",
+   "asking": "reason",
+   "u": {
+    "entities": {
+     "reason": "je voudrais déplacer mon rendez vous"
+    },
+    "intent": "appointment_reschedule"
+   }
+  },
+  {
+   "utterance": "je voudrais déplacer mon rendez vous",
+   "asking": "confirmation",
+   "u": {
+    "entities": {},
+    "intent": "appointment_reschedule"
+   }
+  },
+  {
+   "utterance": "je voudrais déplacer mon rendez vous",
+   "asking": "slot",
+   "u": {
+    "entities": {},
+    "intent": "appointment_reschedule"
+   }
+  },
+  {
+   "utterance": "je voudrais déplacer mon rendez vous",
+   "asking": "anything_else",
+   "u": {
+    "entities": {},
+    "intent": "appointment_reschedule"
+   }
+  },
+  {
+   "utterance": "je voudrais déplacer mon rendez vous",
+   "asking": "currentStart",
+   "u": {
+    "entities": {},
+    "intent": "appointment_reschedule"
+   }
+  },
+  {
+   "utterance": "je voudrais déplacer mon rendez vous",
+   "asking": "preference",
+   "u": {
+    "entities": {},
+    "intent": "appointment_reschedule"
+   }
+  },
+  {
+   "utterance": "je voudrais déplacer mon rendez vous",
+   "asking": "what_to_correct",
+   "u": {
+    "entities": {},
+    "intent": "appointment_reschedule"
+   }
+  },
+  {
    "utterance": "vous êtes ouverts le samedi ?",
    "asking": null,
    "u": {
@@ -18423,6 +18745,18 @@
    "e164": null
   },
   {
+   "spoken": "Bonjour, je voudrais prendre un rendez vous.",
+   "e164": null
+  },
+  {
+   "spoken": "je voudrais annuler mon rendez vous",
+   "e164": null
+  },
+  {
+   "spoken": "je voudrais déplacer mon rendez vous",
+   "e164": null
+  },
+  {
    "spoken": "vous êtes ouverts le samedi ?",
    "e164": null
   },
@@ -19245,6 +19579,21 @@
    "matched": []
   },
   {
+   "utterance": "Bonjour, je voudrais prendre un rendez vous.",
+   "handOff": false,
+   "matched": []
+  },
+  {
+   "utterance": "je voudrais annuler mon rendez vous",
+   "handOff": false,
+   "matched": []
+  },
+  {
+   "utterance": "je voudrais déplacer mon rendez vous",
+   "handOff": false,
+   "matched": []
+  },
+  {
    "utterance": "vous êtes ouverts le samedi ?",
    "handOff": false,
    "matched": []
@@ -19935,6 +20284,18 @@
    "injection": false
   },
   {
+   "utterance": "Bonjour, je voudrais prendre un rendez vous.",
+   "injection": false
+  },
+  {
+   "utterance": "je voudrais annuler mon rendez vous",
+   "injection": false
+  },
+  {
+   "utterance": "je voudrais déplacer mon rendez vous",
+   "injection": false
+  },
+  {
    "utterance": "vous êtes ouverts le samedi ?",
    "injection": false
   },
@@ -20597,6 +20958,21 @@
   },
   {
    "utterance": "je voudrais prendre rendez-vous",
+   "letters": null,
+   "tail": null
+  },
+  {
+   "utterance": "Bonjour, je voudrais prendre un rendez vous.",
+   "letters": null,
+   "tail": null
+  },
+  {
+   "utterance": "je voudrais annuler mon rendez vous",
+   "letters": null,
+   "tail": null
+  },
+  {
+   "utterance": "je voudrais déplacer mon rendez vous",
    "letters": null,
    "tail": null
   },
@@ -21274,6 +21650,18 @@
   },
   {
    "utterance": "je voudrais prendre rendez-vous",
+   "target": null
+  },
+  {
+   "utterance": "Bonjour, je voudrais prendre un rendez vous.",
+   "target": null
+  },
+  {
+   "utterance": "je voudrais annuler mon rendez vous",
+   "target": null
+  },
+  {
+   "utterance": "je voudrais déplacer mon rendez vous",
    "target": null
   },
   {

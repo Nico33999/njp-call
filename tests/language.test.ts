@@ -13,7 +13,7 @@ import {
   looksLikeInjection,
   MANDATORY_RULES,
 } from "../core/rules";
-import { initialState } from "../core/conversation";
+import { fallbackUnderstand, initialState } from "../core/conversation";
 
 // Mardi 29 septembre 2026, 10 h à Paris.
 const NOW = Date.parse("2026-09-29T08:00:00Z");
@@ -177,5 +177,15 @@ describe("règles de l'IA", () => {
       guardFreeReply("C'est confirmé, votre rendez-vous est pris.")
     ).toBeNull();
     expect(guardFreeReply("Prenez un comprimé de paracétamol.")).toBeNull();
+  });
+});
+
+describe("intention, telle que transcrite par un moteur local", () => {
+  it("« rendez vous » sans trait d'union (sortie réelle de Parakeet) est compris", () => {
+    const s = initialState();
+    expect(fallbackUnderstand("Bonjour, je voudrais prendre un rendez vous.", s).intent).toBe("appointment_new");
+    expect(fallbackUnderstand("je voudrais annuler mon rendez vous", s).intent).toBe("appointment_cancel");
+    expect(fallbackUnderstand("je voudrais déplacer mon rendez vous", s).intent).toBe("appointment_reschedule");
+    expect(fallbackUnderstand("rendezvous demain", s).intent).toBe("appointment_new");
   });
 });
