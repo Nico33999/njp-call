@@ -944,6 +944,30 @@ describe("humain, urgences, détournement, silences", () => {
     expect(care.messages.filter(m => m.envelope.command.type === "message.create")).toHaveLength(1);
   });
 
+  it("quoi corriger au CLAVIER (réponse courte non comprise) : 2 → le numéro, tapé ; « eau » est la lettre O", async () => {
+    const { session, callId, care } = setup();
+    const { said } = await run(
+      session,
+      events(callId, [
+        { caller: "je voudrais laisser un message" },
+        { caller: "Yann Le Goff, G, eau, F, F" },
+        { caller: "06 12 34 56 70" },
+        { caller: "Merci de me rappeler pour mon ordonnance." },
+        { dtmf: "2" },
+        { caller: "" },
+        { dtmf: "2" },
+        { dtmf: "0612345678" },
+        { dtmf: "1" },
+      ])
+    );
+    expect(said).toContain("taper 1 pour le nom, 2 pour le numéro, 3 pour le message");
+    expect(said).toContain("Tapez 1 pour le nom, 2 pour le numéro, 3 pour le message.");
+    expect(said).toContain("Quel est le bon numéro ?");
+    const created = care.messages.filter(m => m.envelope.command.type === "message.create");
+    expect(created).toHaveLength(1);
+    expect(created[0].envelope.command.payload).toMatchObject({ caller: { declaredName: "Yann Le Goff", phone: "+33612345678" } });
+  });
+
   it("épellation par noms de lettres et « comme » : lue ; une phrase ordinaire n'en est pas une", () => {
     expect(spelledLetters("dé u erre a enne dé")).toBe("durand");
     expect(spelledLetters("D comme Denis, U comme Ursule, P comme Pierre, O, N, T")).toBe("dupont");

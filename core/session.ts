@@ -416,10 +416,17 @@ export class CallSession {
           this.state.asking === "confirmation" ||
           this.state.asking === "anything_else" ||
           this.state.asking === "newPatient";
+        // Ce qui doit être corrigé : 1 le nom, 2 le numéro, 3 le message.
+        const correction =
+          this.state.asking === "what_to_correct"
+            ? ({ "1": "le nom", "2": "le numéro", "3": "le message" } as Record<string, string>)[event.digits]
+            : undefined;
         const text =
           event.digits === "0"
             ? "je veux parler à quelqu'un"
-            : yesNo && event.digits === "1"
+            : correction
+              ? correction
+              : yesNo && event.digits === "1"
               ? "oui"
               : yesNo && event.digits === "2"
                 ? "non"

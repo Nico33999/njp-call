@@ -325,6 +325,24 @@ export const SCENARIOS: Scenario[] = [
     ],
   },
   {
+    // Appelant réactif du banc intégré : « non » et « le nom » isolés mal
+    // reconnus ; correction choisie au CLAVIER, numéro tapé, nom dit puis
+    // épelé (« eau » = O).
+    name: "correction_au_clavier_nom_epele",
+    steps: [
+      { caller: "je voudrais laisser un message" },
+      { caller: "Yann Le Goff, G, eau, F, F" },
+      { caller: "06 12 34 56 70" },
+      { caller: "Merci de me rappeler pour mon ordonnance." },
+      { dtmf: "2" },
+      { caller: "" },
+      { dtmf: "2" },
+      { dtmf: "0612345678" },
+      { dtmf: "1" },
+      { caller: "Non merci, au revoir." },
+    ],
+  },
+  {
     // Transcriptions réelles du banc d'appel (Parakeet) : « rendez vous »
     // sans trait d'union, nom à particule, préférence suivie d'un point, oui
     // isolé non compris (réplique vide) puis touche 1.
@@ -742,6 +760,8 @@ const EXTRA_UTTERANCES = [
   "je voudrais annuler mon rendez vous",
   "je voudrais déplacer mon rendez vous",
   "Paul Le Febre.",
+  "Yann Le Goff, G, eau, F, F",
+  "G, O, F, F.",
   "Yann Le Goff",
   "Marie de la Tour",
   "le docteur",

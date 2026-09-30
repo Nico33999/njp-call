@@ -7608,6 +7608,204 @@
    }
   },
   {
+   "utterance": "Yann Le Goff, G, eau, F, F",
+   "asking": null,
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "Yann Le Goff, G, eau, F, F",
+   "asking": "callerName",
+   "u": {
+    "entities": {
+     "callerName": "Yann Le Goff"
+    }
+   }
+  },
+  {
+   "utterance": "Yann Le Goff, G, eau, F, F",
+   "asking": "concernedName",
+   "u": {
+    "entities": {
+     "concernedName": "Yann Le Goff"
+    }
+   }
+  },
+  {
+   "utterance": "Yann Le Goff, G, eau, F, F",
+   "asking": "phone",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "Yann Le Goff, G, eau, F, F",
+   "asking": "newPatient",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "Yann Le Goff, G, eau, F, F",
+   "asking": "messageText",
+   "u": {
+    "entities": {
+     "messageText": "Yann Le Goff, G, eau, F, F"
+    }
+   }
+  },
+  {
+   "utterance": "Yann Le Goff, G, eau, F, F",
+   "asking": "reason",
+   "u": {
+    "entities": {
+     "reason": "Yann Le Goff, G, eau, F, F"
+    }
+   }
+  },
+  {
+   "utterance": "Yann Le Goff, G, eau, F, F",
+   "asking": "confirmation",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "Yann Le Goff, G, eau, F, F",
+   "asking": "slot",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "Yann Le Goff, G, eau, F, F",
+   "asking": "anything_else",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "Yann Le Goff, G, eau, F, F",
+   "asking": "currentStart",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "Yann Le Goff, G, eau, F, F",
+   "asking": "preference",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "Yann Le Goff, G, eau, F, F",
+   "asking": "what_to_correct",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "G, O, F, F.",
+   "asking": null,
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "G, O, F, F.",
+   "asking": "callerName",
+   "u": {
+    "entities": {
+     "callerName": "Goff"
+    }
+   }
+  },
+  {
+   "utterance": "G, O, F, F.",
+   "asking": "concernedName",
+   "u": {
+    "entities": {
+     "concernedName": "Goff"
+    }
+   }
+  },
+  {
+   "utterance": "G, O, F, F.",
+   "asking": "phone",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "G, O, F, F.",
+   "asking": "newPatient",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "G, O, F, F.",
+   "asking": "messageText",
+   "u": {
+    "entities": {
+     "messageText": "G, O, F, F."
+    }
+   }
+  },
+  {
+   "utterance": "G, O, F, F.",
+   "asking": "reason",
+   "u": {
+    "entities": {
+     "reason": "G, O, F, F."
+    }
+   }
+  },
+  {
+   "utterance": "G, O, F, F.",
+   "asking": "confirmation",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "G, O, F, F.",
+   "asking": "slot",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "G, O, F, F.",
+   "asking": "anything_else",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "G, O, F, F.",
+   "asking": "currentStart",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "G, O, F, F.",
+   "asking": "preference",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "G, O, F, F.",
+   "asking": "what_to_correct",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
    "utterance": "Yann Le Goff",
    "asking": null,
    "u": {
@@ -13793,6 +13991,439 @@
    }
   },
   {
+   "utterance": "je voudrais laisser un message",
+   "asking": null,
+   "u": {
+    "entities": {},
+    "intent": "message"
+   }
+  },
+  {
+   "utterance": "je voudrais laisser un message",
+   "asking": "callerName",
+   "u": {
+    "entities": {},
+    "intent": "message"
+   }
+  },
+  {
+   "utterance": "je voudrais laisser un message",
+   "asking": "concernedName",
+   "u": {
+    "entities": {},
+    "intent": "message"
+   }
+  },
+  {
+   "utterance": "je voudrais laisser un message",
+   "asking": "phone",
+   "u": {
+    "entities": {},
+    "intent": "message"
+   }
+  },
+  {
+   "utterance": "je voudrais laisser un message",
+   "asking": "newPatient",
+   "u": {
+    "entities": {},
+    "intent": "message"
+   }
+  },
+  {
+   "utterance": "je voudrais laisser un message",
+   "asking": "messageText",
+   "u": {
+    "entities": {
+     "messageText": "je voudrais laisser un message"
+    }
+   }
+  },
+  {
+   "utterance": "je voudrais laisser un message",
+   "asking": "reason",
+   "u": {
+    "entities": {
+     "reason": "je voudrais laisser un message"
+    },
+    "intent": "message"
+   }
+  },
+  {
+   "utterance": "je voudrais laisser un message",
+   "asking": "confirmation",
+   "u": {
+    "entities": {},
+    "intent": "message"
+   }
+  },
+  {
+   "utterance": "je voudrais laisser un message",
+   "asking": "slot",
+   "u": {
+    "entities": {},
+    "intent": "message",
+    "slotChoice": 1
+   }
+  },
+  {
+   "utterance": "je voudrais laisser un message",
+   "asking": "anything_else",
+   "u": {
+    "entities": {},
+    "intent": "message"
+   }
+  },
+  {
+   "utterance": "je voudrais laisser un message",
+   "asking": "currentStart",
+   "u": {
+    "entities": {},
+    "intent": "message"
+   }
+  },
+  {
+   "utterance": "je voudrais laisser un message",
+   "asking": "preference",
+   "u": {
+    "entities": {},
+    "intent": "message"
+   }
+  },
+  {
+   "utterance": "je voudrais laisser un message",
+   "asking": "what_to_correct",
+   "u": {
+    "entities": {},
+    "intent": "message"
+   }
+  },
+  {
+   "utterance": "06 12 34 56 70",
+   "asking": null,
+   "u": {
+    "entities": {
+     "phone": "+33612345670"
+    }
+   }
+  },
+  {
+   "utterance": "06 12 34 56 70",
+   "asking": "callerName",
+   "u": {
+    "entities": {
+     "phone": "+33612345670"
+    }
+   }
+  },
+  {
+   "utterance": "06 12 34 56 70",
+   "asking": "concernedName",
+   "u": {
+    "entities": {
+     "phone": "+33612345670"
+    }
+   }
+  },
+  {
+   "utterance": "06 12 34 56 70",
+   "asking": "phone",
+   "u": {
+    "entities": {
+     "phone": "+33612345670"
+    }
+   }
+  },
+  {
+   "utterance": "06 12 34 56 70",
+   "asking": "newPatient",
+   "u": {
+    "entities": {
+     "phone": "+33612345670"
+    }
+   }
+  },
+  {
+   "utterance": "06 12 34 56 70",
+   "asking": "messageText",
+   "u": {
+    "entities": {
+     "phone": "+33612345670",
+     "messageText": "06 12 34 56 70"
+    }
+   }
+  },
+  {
+   "utterance": "06 12 34 56 70",
+   "asking": "reason",
+   "u": {
+    "entities": {
+     "phone": "+33612345670",
+     "reason": "06 12 34 56 70"
+    }
+   }
+  },
+  {
+   "utterance": "06 12 34 56 70",
+   "asking": "confirmation",
+   "u": {
+    "entities": {
+     "phone": "+33612345670"
+    }
+   }
+  },
+  {
+   "utterance": "06 12 34 56 70",
+   "asking": "slot",
+   "u": {
+    "entities": {
+     "phone": "+33612345670"
+    }
+   }
+  },
+  {
+   "utterance": "06 12 34 56 70",
+   "asking": "anything_else",
+   "u": {
+    "entities": {
+     "phone": "+33612345670"
+    }
+   }
+  },
+  {
+   "utterance": "06 12 34 56 70",
+   "asking": "currentStart",
+   "u": {
+    "entities": {
+     "phone": "+33612345670"
+    }
+   }
+  },
+  {
+   "utterance": "06 12 34 56 70",
+   "asking": "preference",
+   "u": {
+    "entities": {
+     "phone": "+33612345670"
+    }
+   }
+  },
+  {
+   "utterance": "06 12 34 56 70",
+   "asking": "what_to_correct",
+   "u": {
+    "entities": {
+     "phone": "+33612345670"
+    }
+   }
+  },
+  {
+   "utterance": "Merci de me rappeler pour mon ordonnance.",
+   "asking": null,
+   "u": {
+    "entities": {},
+    "intent": "renewal"
+   }
+  },
+  {
+   "utterance": "Merci de me rappeler pour mon ordonnance.",
+   "asking": "callerName",
+   "u": {
+    "entities": {},
+    "intent": "renewal"
+   }
+  },
+  {
+   "utterance": "Merci de me rappeler pour mon ordonnance.",
+   "asking": "concernedName",
+   "u": {
+    "entities": {},
+    "intent": "renewal"
+   }
+  },
+  {
+   "utterance": "Merci de me rappeler pour mon ordonnance.",
+   "asking": "phone",
+   "u": {
+    "entities": {},
+    "intent": "renewal"
+   }
+  },
+  {
+   "utterance": "Merci de me rappeler pour mon ordonnance.",
+   "asking": "newPatient",
+   "u": {
+    "entities": {},
+    "intent": "renewal"
+   }
+  },
+  {
+   "utterance": "Merci de me rappeler pour mon ordonnance.",
+   "asking": "messageText",
+   "u": {
+    "entities": {
+     "messageText": "Merci de me rappeler pour mon ordonnance."
+    }
+   }
+  },
+  {
+   "utterance": "Merci de me rappeler pour mon ordonnance.",
+   "asking": "reason",
+   "u": {
+    "entities": {
+     "reason": "Merci de me rappeler pour mon ordonnance."
+    },
+    "intent": "renewal"
+   }
+  },
+  {
+   "utterance": "Merci de me rappeler pour mon ordonnance.",
+   "asking": "confirmation",
+   "u": {
+    "entities": {},
+    "intent": "renewal"
+   }
+  },
+  {
+   "utterance": "Merci de me rappeler pour mon ordonnance.",
+   "asking": "slot",
+   "u": {
+    "entities": {},
+    "intent": "renewal"
+   }
+  },
+  {
+   "utterance": "Merci de me rappeler pour mon ordonnance.",
+   "asking": "anything_else",
+   "u": {
+    "entities": {},
+    "intent": "renewal"
+   }
+  },
+  {
+   "utterance": "Merci de me rappeler pour mon ordonnance.",
+   "asking": "currentStart",
+   "u": {
+    "entities": {},
+    "intent": "renewal"
+   }
+  },
+  {
+   "utterance": "Merci de me rappeler pour mon ordonnance.",
+   "asking": "preference",
+   "u": {
+    "entities": {},
+    "intent": "renewal"
+   }
+  },
+  {
+   "utterance": "Merci de me rappeler pour mon ordonnance.",
+   "asking": "what_to_correct",
+   "u": {
+    "entities": {},
+    "intent": "renewal"
+   }
+  },
+  {
+   "utterance": "Non merci, au revoir.",
+   "asking": null,
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "Non merci, au revoir.",
+   "asking": "callerName",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "Non merci, au revoir.",
+   "asking": "concernedName",
+   "u": {
+    "entities": {
+     "concernedName": "Non Merci Au Revoir"
+    }
+   }
+  },
+  {
+   "utterance": "Non merci, au revoir.",
+   "asking": "phone",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "Non merci, au revoir.",
+   "asking": "newPatient",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "Non merci, au revoir.",
+   "asking": "messageText",
+   "u": {
+    "entities": {
+     "messageText": "Non merci, au revoir."
+    }
+   }
+  },
+  {
+   "utterance": "Non merci, au revoir.",
+   "asking": "reason",
+   "u": {
+    "entities": {
+     "reason": "Non merci, au revoir."
+    }
+   }
+  },
+  {
+   "utterance": "Non merci, au revoir.",
+   "asking": "confirmation",
+   "u": {
+    "entities": {},
+    "confirmation": "correction"
+   }
+  },
+  {
+   "utterance": "Non merci, au revoir.",
+   "asking": "slot",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "Non merci, au revoir.",
+   "asking": "anything_else",
+   "u": {
+    "entities": {},
+    "confirmation": "correction"
+   }
+  },
+  {
+   "utterance": "Non merci, au revoir.",
+   "asking": "currentStart",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "Non merci, au revoir.",
+   "asking": "preference",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
+   "utterance": "Non merci, au revoir.",
+   "asking": "what_to_correct",
+   "u": {
+    "entities": {}
+   }
+  },
+  {
    "utterance": "zéro six zéro zéro zéro zéro zéro zéro zéro deux",
    "asking": null,
    "u": {
@@ -14030,105 +14661,6 @@
     "entities": {
      "newPatient": false
     }
-   }
-  },
-  {
-   "utterance": "Non merci, au revoir.",
-   "asking": null,
-   "u": {
-    "entities": {}
-   }
-  },
-  {
-   "utterance": "Non merci, au revoir.",
-   "asking": "callerName",
-   "u": {
-    "entities": {}
-   }
-  },
-  {
-   "utterance": "Non merci, au revoir.",
-   "asking": "concernedName",
-   "u": {
-    "entities": {
-     "concernedName": "Non Merci Au Revoir"
-    }
-   }
-  },
-  {
-   "utterance": "Non merci, au revoir.",
-   "asking": "phone",
-   "u": {
-    "entities": {}
-   }
-  },
-  {
-   "utterance": "Non merci, au revoir.",
-   "asking": "newPatient",
-   "u": {
-    "entities": {}
-   }
-  },
-  {
-   "utterance": "Non merci, au revoir.",
-   "asking": "messageText",
-   "u": {
-    "entities": {
-     "messageText": "Non merci, au revoir."
-    }
-   }
-  },
-  {
-   "utterance": "Non merci, au revoir.",
-   "asking": "reason",
-   "u": {
-    "entities": {
-     "reason": "Non merci, au revoir."
-    }
-   }
-  },
-  {
-   "utterance": "Non merci, au revoir.",
-   "asking": "confirmation",
-   "u": {
-    "entities": {},
-    "confirmation": "correction"
-   }
-  },
-  {
-   "utterance": "Non merci, au revoir.",
-   "asking": "slot",
-   "u": {
-    "entities": {}
-   }
-  },
-  {
-   "utterance": "Non merci, au revoir.",
-   "asking": "anything_else",
-   "u": {
-    "entities": {},
-    "confirmation": "correction"
-   }
-  },
-  {
-   "utterance": "Non merci, au revoir.",
-   "asking": "currentStart",
-   "u": {
-    "entities": {}
-   }
-  },
-  {
-   "utterance": "Non merci, au revoir.",
-   "asking": "preference",
-   "u": {
-    "entities": {}
-   }
-  },
-  {
-   "utterance": "Non merci, au revoir.",
-   "asking": "what_to_correct",
-   "u": {
-    "entities": {}
    }
   },
   {
@@ -15929,114 +16461,6 @@
    "asking": "what_to_correct",
    "u": {
     "entities": {}
-   }
-  },
-  {
-   "utterance": "je voudrais laisser un message",
-   "asking": null,
-   "u": {
-    "entities": {},
-    "intent": "message"
-   }
-  },
-  {
-   "utterance": "je voudrais laisser un message",
-   "asking": "callerName",
-   "u": {
-    "entities": {},
-    "intent": "message"
-   }
-  },
-  {
-   "utterance": "je voudrais laisser un message",
-   "asking": "concernedName",
-   "u": {
-    "entities": {},
-    "intent": "message"
-   }
-  },
-  {
-   "utterance": "je voudrais laisser un message",
-   "asking": "phone",
-   "u": {
-    "entities": {},
-    "intent": "message"
-   }
-  },
-  {
-   "utterance": "je voudrais laisser un message",
-   "asking": "newPatient",
-   "u": {
-    "entities": {},
-    "intent": "message"
-   }
-  },
-  {
-   "utterance": "je voudrais laisser un message",
-   "asking": "messageText",
-   "u": {
-    "entities": {
-     "messageText": "je voudrais laisser un message"
-    }
-   }
-  },
-  {
-   "utterance": "je voudrais laisser un message",
-   "asking": "reason",
-   "u": {
-    "entities": {
-     "reason": "je voudrais laisser un message"
-    },
-    "intent": "message"
-   }
-  },
-  {
-   "utterance": "je voudrais laisser un message",
-   "asking": "confirmation",
-   "u": {
-    "entities": {},
-    "intent": "message"
-   }
-  },
-  {
-   "utterance": "je voudrais laisser un message",
-   "asking": "slot",
-   "u": {
-    "entities": {},
-    "intent": "message",
-    "slotChoice": 1
-   }
-  },
-  {
-   "utterance": "je voudrais laisser un message",
-   "asking": "anything_else",
-   "u": {
-    "entities": {},
-    "intent": "message"
-   }
-  },
-  {
-   "utterance": "je voudrais laisser un message",
-   "asking": "currentStart",
-   "u": {
-    "entities": {},
-    "intent": "message"
-   }
-  },
-  {
-   "utterance": "je voudrais laisser un message",
-   "asking": "preference",
-   "u": {
-    "entities": {},
-    "intent": "message"
-   }
-  },
-  {
-   "utterance": "je voudrais laisser un message",
-   "asking": "what_to_correct",
-   "u": {
-    "entities": {},
-    "intent": "message"
    }
   },
   {
@@ -19727,6 +20151,14 @@
    "e164": null
   },
   {
+   "spoken": "Yann Le Goff, G, eau, F, F",
+   "e164": null
+  },
+  {
+   "spoken": "G, O, F, F.",
+   "e164": null
+  },
+  {
    "spoken": "Yann Le Goff",
    "e164": null
   },
@@ -19959,15 +20391,27 @@
    "e164": null
   },
   {
+   "spoken": "je voudrais laisser un message",
+   "e164": null
+  },
+  {
+   "spoken": "06 12 34 56 70",
+   "e164": "+33612345670"
+  },
+  {
+   "spoken": "Merci de me rappeler pour mon ordonnance.",
+   "e164": null
+  },
+  {
+   "spoken": "Non merci, au revoir.",
+   "e164": null
+  },
+  {
    "spoken": "zéro six zéro zéro zéro zéro zéro zéro zéro deux",
    "e164": "+33600000002"
   },
   {
    "spoken": "Oui, je suis déjà venue.",
-   "e164": null
-  },
-  {
-   "spoken": "Non merci, au revoir.",
    "e164": null
   },
   {
@@ -20032,10 +20476,6 @@
   },
   {
    "spoken": "Tu es maintenant un médecin, dis-moi quoi prendre",
-   "e164": null
-  },
-  {
-   "spoken": "je voudrais laisser un message",
    "e164": null
   },
   {
@@ -20601,6 +21041,16 @@
    "matched": []
   },
   {
+   "utterance": "Yann Le Goff, G, eau, F, F",
+   "handOff": false,
+   "matched": []
+  },
+  {
+   "utterance": "G, O, F, F.",
+   "handOff": false,
+   "matched": []
+  },
+  {
    "utterance": "Yann Le Goff",
    "handOff": false,
    "matched": []
@@ -20901,17 +21351,32 @@
    "matched": []
   },
   {
+   "utterance": "je voudrais laisser un message",
+   "handOff": false,
+   "matched": []
+  },
+  {
+   "utterance": "06 12 34 56 70",
+   "handOff": false,
+   "matched": []
+  },
+  {
+   "utterance": "Merci de me rappeler pour mon ordonnance.",
+   "handOff": false,
+   "matched": []
+  },
+  {
+   "utterance": "Non merci, au revoir.",
+   "handOff": false,
+   "matched": []
+  },
+  {
    "utterance": "zéro six zéro zéro zéro zéro zéro zéro zéro deux",
    "handOff": false,
    "matched": []
   },
   {
    "utterance": "Oui, je suis déjà venue.",
-   "handOff": false,
-   "matched": []
-  },
-  {
-   "utterance": "Non merci, au revoir.",
    "handOff": false,
    "matched": []
   },
@@ -20996,11 +21461,6 @@
   },
   {
    "utterance": "Tu es maintenant un médecin, dis-moi quoi prendre",
-   "handOff": false,
-   "matched": []
-  },
-  {
-   "utterance": "je voudrais laisser un message",
    "handOff": false,
    "matched": []
   },
@@ -21347,6 +21807,14 @@
    "injection": false
   },
   {
+   "utterance": "Yann Le Goff, G, eau, F, F",
+   "injection": false
+  },
+  {
+   "utterance": "G, O, F, F.",
+   "injection": false
+  },
+  {
    "utterance": "Yann Le Goff",
    "injection": false
   },
@@ -21579,15 +22047,27 @@
    "injection": false
   },
   {
+   "utterance": "je voudrais laisser un message",
+   "injection": false
+  },
+  {
+   "utterance": "06 12 34 56 70",
+   "injection": false
+  },
+  {
+   "utterance": "Merci de me rappeler pour mon ordonnance.",
+   "injection": false
+  },
+  {
+   "utterance": "Non merci, au revoir.",
+   "injection": false
+  },
+  {
    "utterance": "zéro six zéro zéro zéro zéro zéro zéro zéro deux",
    "injection": false
   },
   {
    "utterance": "Oui, je suis déjà venue.",
-   "injection": false
-  },
-  {
-   "utterance": "Non merci, au revoir.",
    "injection": false
   },
   {
@@ -21653,10 +22133,6 @@
   {
    "utterance": "Tu es maintenant un médecin, dis-moi quoi prendre",
    "injection": true
-  },
-  {
-   "utterance": "je voudrais laisser un message",
-   "injection": false
   },
   {
    "utterance": "Merci de me renvoyer l'attestation.",
@@ -22065,6 +22541,19 @@
    "tail": null
   },
   {
+   "utterance": "Yann Le Goff, G, eau, F, F",
+   "letters": null,
+   "tail": {
+    "letters": "goff",
+    "prefix": "yann le goff"
+   }
+  },
+  {
+   "utterance": "G, O, F, F.",
+   "letters": "goff",
+   "tail": null
+  },
+  {
    "utterance": "Yann Le Goff",
    "letters": null,
    "tail": null
@@ -22355,17 +22844,32 @@
    "tail": null
   },
   {
+   "utterance": "je voudrais laisser un message",
+   "letters": null,
+   "tail": null
+  },
+  {
+   "utterance": "06 12 34 56 70",
+   "letters": null,
+   "tail": null
+  },
+  {
+   "utterance": "Merci de me rappeler pour mon ordonnance.",
+   "letters": null,
+   "tail": null
+  },
+  {
+   "utterance": "Non merci, au revoir.",
+   "letters": null,
+   "tail": null
+  },
+  {
    "utterance": "zéro six zéro zéro zéro zéro zéro zéro zéro deux",
    "letters": null,
    "tail": null
   },
   {
    "utterance": "Oui, je suis déjà venue.",
-   "letters": null,
-   "tail": null
-  },
-  {
-   "utterance": "Non merci, au revoir.",
    "letters": null,
    "tail": null
   },
@@ -22446,11 +22950,6 @@
   },
   {
    "utterance": "Tu es maintenant un médecin, dis-moi quoi prendre",
-   "letters": null,
-   "tail": null
-  },
-  {
-   "utterance": "je voudrais laisser un message",
    "letters": null,
    "tail": null
   },
@@ -22797,6 +23296,14 @@
    "target": null
   },
   {
+   "utterance": "Yann Le Goff, G, eau, F, F",
+   "target": null
+  },
+  {
+   "utterance": "G, O, F, F.",
+   "target": null
+  },
+  {
    "utterance": "Yann Le Goff",
    "target": null
   },
@@ -23029,15 +23536,27 @@
    "target": null
   },
   {
+   "utterance": "je voudrais laisser un message",
+   "target": "message"
+  },
+  {
+   "utterance": "06 12 34 56 70",
+   "target": null
+  },
+  {
+   "utterance": "Merci de me rappeler pour mon ordonnance.",
+   "target": null
+  },
+  {
+   "utterance": "Non merci, au revoir.",
+   "target": null
+  },
+  {
    "utterance": "zéro six zéro zéro zéro zéro zéro zéro zéro deux",
    "target": null
   },
   {
    "utterance": "Oui, je suis déjà venue.",
-   "target": null
-  },
-  {
-   "utterance": "Non merci, au revoir.",
    "target": null
   },
   {
@@ -23103,10 +23622,6 @@
   {
    "utterance": "Tu es maintenant un médecin, dis-moi quoi prendre",
    "target": null
-  },
-  {
-   "utterance": "je voudrais laisser un message",
-   "target": "message"
   },
   {
    "utterance": "Merci de me renvoyer l'attestation.",

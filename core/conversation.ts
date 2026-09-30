@@ -287,7 +287,7 @@ const LETTER_NAMES: Record<string, string> = {
   a: "a", ah: "a", be: "b", bé: "b", ce: "c", cé: "c", se: "c", de: "d", dé: "d",
   e: "e", eu: "e", effe: "f", ef: "f", ge: "g", gé: "g", ache: "h", hache: "h",
   i: "i", ji: "j", gi: "j", ka: "k", ca: "k", elle: "l", el: "l", emme: "m", em: "m",
-  enne: "n", en: "n", o: "o", oh: "o", pe: "p", pé: "p", ku: "q", qu: "q", erre: "r",
+  enne: "n", en: "n", o: "o", oh: "o", eau: "o", au: "o", pe: "p", pé: "p", ku: "q", qu: "q", erre: "r",
   err: "r", esse: "s", es: "s", te: "t", té: "t", u: "u", ve: "v", vé: "v", ixe: "x",
   ix: "x", zede: "z", zed: "z", zède: "z",
 };

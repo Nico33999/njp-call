@@ -87,10 +87,16 @@ export const notHeard = (state: ConversationState): string => {
     case "callerName":
     case "concernedName":
       return "Pardon, je n'ai pas bien entendu le nom. Pouvez-vous le redire, ou l'épeler lettre par lettre ?";
+    case "what_to_correct":
+      return "Pardon, je n'ai pas bien entendu. Tapez 1 pour le nom, 2 pour le numéro, 3 pour le message.";
     default:
       return "Pardon, je n'ai pas bien entendu. Pouvez-vous répéter ?";
   }
 };
+
+/** Ce qui doit être corrigé : à la voix, ou au clavier (réponse courte souvent mal reconnue). */
+export const WHAT_TO_CORRECT =
+  "D'accord. Qu'est-ce qui doit être corrigé : le nom, le numéro, ou autre chose ? Vous pouvez aussi taper 1 pour le nom, 2 pour le numéro, 3 pour le message.";
 
 export const CONFIRM_AGAIN =
   "Pour ne pas me tromper, répondez simplement par oui ou par non, ou tapez 1 pour oui, 2 pour non.";
@@ -534,9 +540,7 @@ export const onCallerTurn = (
       }
       state.phase = "collecting";
       state.asking = "what_to_correct";
-      say.push(
-        "D'accord. Qu'est-ce qui doit être corrigé : le nom, le numéro, ou autre chose ?"
-      );
+      say.push(WHAT_TO_CORRECT);
       return done({ state, say });
     }
     if (Object.keys(u.entities).length) {
@@ -588,7 +592,9 @@ export const onCallerTurn = (
         say.push(QUESTIONS.preference);
         return done({ state, say });
     }
-    say.push("Dites par exemple : le nom, le numéro, ou le message.");
+    say.push(
+      "Dites par exemple : le nom, le numéro, ou le message ; ou tapez 1 pour le nom, 2 pour le numéro, 3 pour le message."
+    );
     return done({ state, say });
   }
 
