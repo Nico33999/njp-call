@@ -1,0 +1,68 @@
+name: CI NJP CALL
+
+# Ne publie rien, ne déploie rien, ne signe rien avec une clé de distribution.
+on:
+  push:
+    branches: ["claude/**", "codex/**"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Contrôles (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    outputs:
+      digest-ubuntu-latest: ${{ steps.digest.outputs.ubuntu-latest }}
+      digest-windows-latest: ${{ steps.digest.outputs.windows-latest }}
+      digest-macos-latest: ${{ steps.digest.outputs.macos-latest }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - name: Dépendances (lockfile figé)
+        run: pnpm install --frozen-lockfile
+      - name: Format
+        run: pnpm format:check
+      - name: Types (navigateur, moteur, service, scripts)
+        run: pnpm typecheck
+      - name: Tests
+        run: pnpm test
+      - name: Build du configurateur
+        run: pnpm build
+      - name: Paquet (non signé ici — aucune clé en CI)
+        run: pnpm package:build
+      - name: Intégrité du paquet
+        run: pnpm package:verify
+      - name: Absence de secrets (dépôt, paquet, bundle)
+        run: pnpm check:secrets
+      - name: Empreinte du paquet
+        id: digest
+        shell: bash
+        run: echo "${{ matrix.os }}=$(node -e 'console.log(require("./dist/package/catalog-entry.json").sha256)')" >> "$GITHUB_OUTPUT"
+
+  reproductible:
+    name: Paquet identique sur les trois systèmes
+    needs: check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Comparer les empreintes
+        run: |
+          a="${{ needs.check.outputs.digest-ubuntu-latest }}"
+          b="${{ needs.check.outputs.digest-windows-latest }}"
+          c="${{ needs.check.outputs.digest-macos-latest }}"
+          echo "ubuntu=$a windows=$b macos=$c"
+          test -n "$a" && test "$a" = "$b" && test "$a" = "$c"

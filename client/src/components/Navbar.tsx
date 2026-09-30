@@ -8,8 +8,8 @@ import { Link, useLocation } from "wouter";
 const navItems = [
   { href: "/", label: "Accueil", icon: Phone },
   { href: "/config", label: "Configuration", icon: Settings },
-  { href: "/simulation", label: "Simulation", icon: MessageSquare },
-  { href: "/historique", label: "Historique", icon: BarChart3 },
+  { href: "/simulation", label: "Recette", icon: MessageSquare },
+  { href: "/historique", label: "Comptes rendus", icon: BarChart3 },
 ];
 
 export default function Navbar() {
@@ -24,7 +24,7 @@ export default function Navbar() {
             <Phone className="w-5 h-5 text-primary-foreground" />
           </div>
           <span className="font-heading text-xl font-bold tracking-tight text-foreground hidden sm:block">
-            NJP Call
+            NJP CALL
           </span>
         </Link>
 

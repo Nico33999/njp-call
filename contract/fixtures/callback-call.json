@@ -1,0 +1,57 @@
+[
+  {
+    "format": "njp.call.command",
+    "v": 1,
+    "extensionId": "njp.call",
+    "cabinetId": "cab_fixture",
+    "callId": "call_fixture_cbk",
+    "seq": 1,
+    "idempotencyKey": "call_fixture_cbk/callback.request/1",
+    "issuedAt": "2026-09-29T08:00:05.000Z",
+    "command": {
+      "type": "callback.request",
+      "payload": {
+        "person": {
+          "declaredName": "Paul Fictif",
+          "phone": "+33600000002",
+          "relation": "self"
+        },
+        "reason": "Question sur une facture",
+        "preferences": {
+          "windows": []
+        },
+        "recipient": {
+          "kind": "secretariat"
+        },
+        "priority": "normal"
+      }
+    }
+  },
+  {
+    "format": "njp.call.command",
+    "v": 1,
+    "extensionId": "njp.call",
+    "cabinetId": "cab_fixture",
+    "callId": "call_fixture_cbk",
+    "seq": 2,
+    "idempotencyKey": "call_fixture_cbk/call.report/1",
+    "issuedAt": "2026-09-29T08:00:06.000Z",
+    "command": {
+      "type": "call.report",
+      "payload": {
+        "startedAt": "2026-09-29T08:00:00.000Z",
+        "endedAt": "2026-09-29T08:00:06.000Z",
+        "outcome": "callback",
+        "summary": "Appel traité par l'assistante automatisée. Demande : callback. Opérations : callback.request : confirmed.",
+        "commands": [
+          {
+            "idempotencyKey": "call_fixture_cbk/callback.request/1",
+            "type": "callback.request",
+            "status": "confirmed",
+            "reference": "cbk_0001"
+          }
+        ]
+      }
+    }
+  }
+]

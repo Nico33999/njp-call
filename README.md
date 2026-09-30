@@ -1,39 +1,66 @@
-# NJP Call - Assistant d'accueil téléphonique IA
+# NJP CALL — by NJP CARE
 
-Application web moderne pour configurer et simuler un assistant IA d'accueil téléphonique professionnel.
+La **secrétaire vocale automatisée** du cabinet, distribuée comme **extension
+officielle** depuis le NJP CARE STORE. Elle répond aux appels, s'annonce comme
+assistante automatisée, prend messages, demandes de rappel et demandes de
+rendez-vous, propose des créneaux réellement autorisés, et n'annonce une
+opération qu'après confirmation par NJP CARE.
 
-## ✨ Nouveauté : Vraie IA intégrée !
-- L'assistant utilise maintenant **Groq (Llama 3.3)** via une fonction serverless Vercel pour des réponses naturelles et intelligentes.
-- Fallback automatique vers la logique locale si l'IA est indisponible.
-- Comportement fidèle à ta configuration (nom, ton, services, horaires...).
+NJP CARE reste l'autorité (cabinet, utilisateur, permissions, patients,
+planning, messages). NJP CALL ne crée ni fichier patients, ni agenda, ni
+authentification.
 
-## Configuration de l'IA (obligatoire pour la vraie IA)
-1. Va dans les **Settings** de ton projet Vercel
-2. **Environment Variables** → Ajoute :
-   - `GROQ_API_KEY` = ta clé API Groq (gratuite sur https://console.groq.com)
-3. Redeploie le projet
-
-Sans la clé, l'application utilise le mode simulation locale (toujours fonctionnel).
-
-## Développement
-```bash
-pnpm install
-pnpm dev
+```text
+dépôt NJP CALL ──► paquet .njpx versionné et signé ──► NJP CARE STORE
+                                                         │ installation, permissions, activation
+                                                         ▼
+                                  NJP CARE : espace « Secrétariat », Aujourd'hui, planning…
+opérateur du cabinet ── SIP/RTP ──► POSTE D'ACCUEIL (NJP CARE) : voix locale, moteur, coffre
 ```
 
-## Build & Déploiement Vercel
+**Cible : traitement au poste du cabinet.** Les appels sont décrochés,
+compris et enregistrés **dans NJP CARE**, sur un poste du cabinet : ligne SIP
+de l'opérateur existant, reconnaissance vocale locale, moteur de conversation
+porté en Rust, journal au coffre. Aucun serveur NJP CALL, aucun service d'IA
+externe. Ce dépôt reste la **référence** du moteur : `contract/conformance/`
+exporte 39 appels et un corpus de langue que le port Rust de NJP CARE doit
+reproduire à l'identique (`pnpm conformance:check`). Le `service/` est un outil
+de recette, pas la cible. Détails, flux sortants et limites : NJP CARE
+`desktop/docs/NJP-CALL-POSTE-LOCAL.md`.
+
+## Contenu du dépôt
+
+| Dossier | Rôle |
+|---|---|
+| `core/` | moteur pur : commandes typées, passerelles, conversation, règles, session, dates Europe/Paris, urgences, rappels, téléphonie abstraite |
+| `service/` | **outil de recette** (ancien mode hébergé, non recommandé) — service 24/7 : stockage durable chiffré, webhooks signés, relais à bail vers le poste, déclaration du poste, limites, journaux expurgés, IA optionnelle (approuvée) |
+| `deploy/` | gabarits d'exploitation (unité systemd, environnement sans valeur) — rien n'est déployé |
+| `client/` | configurateur et **banc de recette** (simulation explicite, rien n'est réel) |
+| `extension/` | manifeste Store (contrat NJP CARE v2) et surfaces déclarées |
+| `scripts/` | construction, signature, vérification du paquet ; détection de secrets ; fixtures de contrat |
+| `contract/fixtures/` | enveloppes réellement émises par des appels simulés, rejouées par les tests Rust de NJP CARE |
+| `contract/conformance/` | appels et corpus de langue du moteur de référence, que le port Rust de NJP CARE doit reproduire à l'identique |
+| `keys/` | clé **publique** d'essai. Aucune clé privée. |
+| `docs/` | architecture, contrat NJP CARE, paquet, téléphonie, exploitation, flux de données, données de santé, validations externes avant pilote |
+
+## Commandes
+
 ```bash
-pnpm build
+pnpm install --frozen-lockfile
+pnpm typecheck        # navigateur + moteur + service + scripts
+pnpm test             # vitest (aucun appel réseau réel, aucune donnée réelle)
+pnpm build            # configurateur
+pnpm package:build    # dist/package/njp.call-<version>.njpx (+ .minisig si NJP_CALL_SIGNING_KEY_FILE)
+pnpm package:verify
+pnpm check:secrets
+pnpm ci               # tout ce qui précède
+pnpm store:backup <fichier>   # sauvegarde à chaud du stockage (NJP_CALL_DB_PATH)
+pnpm store:verify <fichier>   # vérifie une sauvegarde (NJP_CALL_STORAGE_KEY)
 ```
 
-Le site est prêt pour la production avec vraie IA conversationnelle.
+## Ce qui est réel, ce qui est simulé
 
-## Structure
-- `client/` : Frontend React + Vite
-- `api/chat.ts` : Proxy IA (Groq)
-- `server/` : Ancien serveur statique (non utilisé sur Vercel)
-
-## Design
-Style Néo-Brutaliste Télécom (Signal) — fluide et professionnel.
-
-Prochaines améliorations possibles : vraie intégration téléphonie (Twilio, etc.), historique persistant, analytics.
+Voir `docs/ARCHITECTURE.md` §6. En bref : le moteur, le service, le relais et
+le paquet signé sont réels et testés ; le fournisseur téléphonique, le
+fournisseur d'IA et la clé de distribution sont des **décisions externes**
+non prises. Aucune conformité réglementaire n'est déclarée.
