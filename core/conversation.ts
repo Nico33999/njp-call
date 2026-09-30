@@ -109,6 +109,36 @@ export interface ConversationState {
   asking?: Field | "confirmation" | "slot" | "anything_else" | "clarify_time";
 }
 
+/**
+ * Ce que la prochaine réplique de l'appelant devrait contenir. Sert au poste
+ * à régler la fin de parole (une réponse courte se clôt plus vite qu'un
+ * numéro dicté par groupes ou qu'un message libre). N'influe pas sur la
+ * compréhension.
+ */
+export type Expect = "short" | "digits" | "name" | "date" | "free";
+
+export const expectOf = (s: ConversationState): Expect => {
+  switch (s.asking) {
+    case "confirmation":
+    case "anything_else":
+    case "newPatient":
+    case "relation":
+    case "slot":
+      return "short";
+    case "phone":
+      return "digits";
+    case "callerName":
+    case "concernedName":
+      return "name";
+    case "preference":
+    case "currentStart":
+    case "clarify_time":
+      return "date";
+    default:
+      return "free";
+  }
+};
+
 export const initialState = (): ConversationState => ({
   intent: null,
   phase: "greeting",

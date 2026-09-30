@@ -43,6 +43,8 @@ import {
   validateUnderstanding,
   type ConversationState,
   type Understanding,
+  expectOf,
+  type Expect,
 } from "./conversation";
 import { DEGRADED_NOTICE } from "./emergency";
 import {
@@ -103,6 +105,8 @@ export interface SessionOutput {
   hangup: boolean;
   /** Vrai si l'événement était un doublon déjà traité : la réponse est REJOUÉE. */
   duplicate?: boolean;
+  /** Ce qu'on attend de l'appelant ensuite (réglage de la fin de parole). */
+  expect?: Expect;
 }
 
 /** Une session est désignée par son cabinet ET son appel. */
@@ -359,6 +363,7 @@ export class CallSession {
     await this.record({ k: "event", event });
     this.deps.probe?.("event_recorded");
     const out = await this.apply(event);
+    if (!out.hangup && !out.transferTo && out.say.length) out.expect = expectOf(this.state);
     // L'événement n'est EXÉCUTÉ qu'à partir d'ici.
     this.outputs.set(event.id, structuredClone(out));
     await this.record({ k: "output", eventId: event.id, out });

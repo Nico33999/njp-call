@@ -102,38 +102,44 @@
       "Bonjour, vous êtes bien au cabinet Cabinet Fictif. Je suis Clara, l'assistante vocale automatisée du cabinet.",
       "Que puis-je faire pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "free"
     },
     {
      "say": [
       "Pouvez-vous me donner votre nom et votre prénom ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "name"
     },
     {
      "say": [
       "À quel numéro le cabinet peut-il vous joindre ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "digits"
     },
     {
      "say": [
       "Je vous écoute : quel message souhaitez-vous laisser ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "free"
     },
     {
      "say": [
       "Je récapitule : message de Camille Durand, à rappeler au 06 12 34 56 78. Votre message : « Je n'ai pas reçu ma facture du mois dernier. ». Est-ce exact ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     },
     {
      "say": [
       "Votre message est enregistré pour le cabinet.",
       "Puis-je faire autre chose pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     },
     {
      "say": [
@@ -326,38 +332,36 @@
       "Bonjour, vous êtes bien au cabinet Cabinet Fictif. Je suis Clara, l'assistante vocale automatisée du cabinet.",
       "Que puis-je faire pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "free"
     },
     {
      "say": [
       "Pouvez-vous me donner votre nom et votre prénom ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "name"
     },
     {
      "say": [
       "À quel numéro le cabinet peut-il vous joindre ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "digits"
     },
     {
      "say": [
       "Je vous écoute : quel message souhaitez-vous laisser ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "free"
     },
     {
      "say": [
       "Je récapitule : message de Camille Durand, à rappeler au 06 12 34 56 78. Votre message : « Je n'ai pas reçu ma facture du mois dernier. ». Est-ce exact ?"
      ],
-     "hangup": false
-    },
-    {
-     "say": [
-      "Votre message est enregistré pour le cabinet.",
-      "Puis-je faire autre chose pour vous ?"
-     ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     },
     {
      "say": [
@@ -365,6 +369,15 @@
       "Puis-je faire autre chose pour vous ?"
      ],
      "hangup": false,
+     "expect": "short"
+    },
+    {
+     "say": [
+      "Votre message est enregistré pour le cabinet.",
+      "Puis-je faire autre chose pour vous ?"
+     ],
+     "hangup": false,
+     "expect": "short",
      "duplicate": true
     },
     {
@@ -373,6 +386,7 @@
       "Puis-je faire autre chose pour vous ?"
      ],
      "hangup": false,
+     "expect": "short",
      "duplicate": true
     },
     {
@@ -548,31 +562,36 @@
       "Bonjour, vous êtes bien au cabinet Cabinet Fictif. Je suis Clara, l'assistante vocale automatisée du cabinet.",
       "Que puis-je faire pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "free"
     },
     {
      "say": [
       "Pouvez-vous me donner votre nom et votre prénom ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "name"
     },
     {
      "say": [
       "À quel numéro le cabinet peut-il vous joindre ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "digits"
     },
     {
      "say": [
       "Je vous écoute : quel message souhaitez-vous laisser ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "free"
     },
     {
      "say": [
       "Je récapitule : message de Camille Durand, à rappeler au 06 12 34 56 78. Votre message : « Je n'ai pas reçu ma facture du mois dernier. ». Est-ce exact ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     },
     {
      "say": [],
@@ -715,44 +734,51 @@
       "Bonjour, vous êtes bien au cabinet Cabinet Fictif. Je suis Clara, l'assistante vocale automatisée du cabinet.",
       "Que puis-je faire pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "free"
     },
     {
      "say": [
       "Pouvez-vous me donner votre nom et votre prénom ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "name"
     },
     {
      "say": [
       "À quel numéro le cabinet peut-il vous joindre ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "digits"
     },
     {
      "say": [
       "Je vous écoute : quel message souhaitez-vous laisser ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "free"
     },
     {
      "say": [
       "Je récapitule : message de Camille Durand, à rappeler au 06 12 34 56 78. Votre message : « Je n'ai pas reçu ma facture du mois dernier. ». Est-ce exact ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     },
     {
      "say": [
       "Je récapitule : message de Camille Durand, à rappeler au 06 99 88 77 66. Votre message : « Je n'ai pas reçu ma facture du mois dernier. ». Est-ce exact ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     },
     {
      "say": [
       "Votre message est enregistré pour le cabinet.",
       "Puis-je faire autre chose pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     },
     {
      "say": [
@@ -927,38 +953,44 @@
       "Bonjour, vous êtes bien au cabinet Cabinet Fictif. Je suis Clara, l'assistante vocale automatisée du cabinet.",
       "Que puis-je faire pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "free"
     },
     {
      "say": [
       "Pouvez-vous me donner votre nom et votre prénom ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "name"
     },
     {
      "say": [
       "À quel numéro le cabinet peut-il vous joindre ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "digits"
     },
     {
      "say": [
       "Je vous écoute : quel message souhaitez-vous laisser ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "free"
     },
     {
      "say": [
       "Je récapitule : message de Camille Durand, à rappeler au 06 12 34 56 78. Votre message : « Je n'ai pas reçu ma facture du mois dernier. ». Est-ce exact ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     },
     {
      "say": [
       "Le cabinet n'a pas activé cette fonction. Rien n'a été enregistré ; merci de rappeler le cabinet aux heures d'ouverture.",
       "Puis-je faire autre chose pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     }
    ],
    "exchanges": [
@@ -1092,38 +1124,44 @@
       "Bonjour, vous êtes bien au cabinet Cabinet Fictif. Je suis Clara, l'assistante vocale automatisée du cabinet.",
       "Que puis-je faire pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "free"
     },
     {
      "say": [
       "Pouvez-vous me donner votre nom et votre prénom ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "name"
     },
     {
      "say": [
       "À quel numéro le cabinet peut-il vous joindre ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "digits"
     },
     {
      "say": [
       "Je vous écoute : quel message souhaitez-vous laisser ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "free"
     },
     {
      "say": [
       "Je récapitule : message de Camille Durand, à rappeler au 06 12 34 56 78. Votre message : « Je n'ai pas reçu ma facture du mois dernier. ». Est-ce exact ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     },
     {
      "say": [
       "[Simulation] Aucune opération réelle n'a été effectuée : le cabinet n'a rien reçu.",
       "Puis-je faire autre chose pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     }
    ],
    "exchanges": [
@@ -1258,38 +1296,44 @@
       "Bonjour, vous êtes bien au cabinet Cabinet Fictif. Je suis Clara, l'assistante vocale automatisée du cabinet.",
       "Que puis-je faire pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "free"
     },
     {
      "say": [
       "Pouvez-vous me donner votre nom et votre prénom ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "name"
     },
     {
      "say": [
       "À quel numéro le cabinet peut-il vous joindre ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "digits"
     },
     {
      "say": [
       "Je vous écoute : quel message souhaitez-vous laisser ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "free"
     },
     {
      "say": [
       "Je récapitule : message de Camille Durand, à rappeler au 06 12 34 56 78. Votre message : « Je n'ai pas reçu ma facture du mois dernier. ». Est-ce exact ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     },
     {
      "say": [
       "Votre demande est transmise. Le cabinet la recevra dès que son logiciel sera disponible.",
       "Puis-je faire autre chose pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     }
    ],
    "exchanges": [
@@ -1423,38 +1467,44 @@
       "Bonjour, vous êtes bien au cabinet Cabinet Fictif. Je suis Clara, l'assistante vocale automatisée du cabinet.",
       "Que puis-je faire pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "free"
     },
     {
      "say": [
       "Pouvez-vous me donner votre nom et votre prénom ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "name"
     },
     {
      "say": [
       "À quel numéro le cabinet peut-il vous joindre ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "digits"
     },
     {
      "say": [
       "Je vous écoute : quel message souhaitez-vous laisser ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "free"
     },
     {
      "say": [
       "Je récapitule : message de Camille Durand, à rappeler au 06 12 34 56 78. Votre message : « Je n'ai pas reçu ma facture du mois dernier. ». Est-ce exact ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     },
     {
      "say": [
       "Le cabinet n'autorise pas cette opération par téléphone. Je peux transmettre un message.",
       "Puis-je faire autre chose pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     }
    ],
    "exchanges": [
@@ -1594,38 +1644,44 @@
       "Bonjour, vous êtes bien au cabinet Cabinet Fictif. Je suis Clara, l'assistante vocale automatisée du cabinet.",
       "Que puis-je faire pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "free"
     },
     {
      "say": [
       "Pouvez-vous me donner votre nom et votre prénom ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "name"
     },
     {
      "say": [
       "À quel numéro le cabinet peut-il vous joindre ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "digits"
     },
     {
      "say": [
       "Pouvez-vous m'indiquer brièvement le motif, sans détail médical ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "free"
     },
     {
      "say": [
       "Je récapitule : demande de rappel pour Paul Morel, au 06 12 34 56 78, motif : « Pour une question sur une facture ». Est-ce exact ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     },
     {
      "say": [
       "Votre demande de rappel est enregistrée. Le cabinet vous rappellera.",
       "Puis-je faire autre chose pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     },
     {
      "say": [
@@ -1801,39 +1857,45 @@
       "Bonjour, vous êtes bien au cabinet Cabinet Fictif. Je suis Clara, l'assistante vocale automatisée du cabinet.",
       "Que puis-je faire pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "free"
     },
     {
      "say": [
       "Je ne peux pas répondre aux questions médicales. Je transmets votre demande au professionnel, qui vous répondra.",
       "Pouvez-vous me donner votre nom et votre prénom ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "name"
     },
     {
      "say": [
       "À quel numéro le cabinet peut-il vous joindre ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "digits"
     },
     {
      "say": [
       "Je vous écoute : quel message souhaitez-vous laisser ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "free"
     },
     {
      "say": [
       "Je récapitule : message de Léa Petit, à rappeler au 06 11 22 33 44. Votre message : « Est-ce que je dois prendre du paracétamol ? ». Est-ce exact ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     },
     {
      "say": [
       "Votre message est enregistré pour le cabinet.",
       "Puis-je faire autre chose pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     }
    ],
    "exchanges": [
@@ -1973,39 +2035,45 @@
       "Bonjour, vous êtes bien au cabinet Cabinet Fictif. Je suis Clara, l'assistante vocale automatisée du cabinet.",
       "Que puis-je faire pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "free"
     },
     {
      "say": [
       "Je ne peux pas répondre aux questions médicales. Je transmets votre demande au professionnel, qui vous répondra.",
       "Pouvez-vous me donner votre nom et votre prénom ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "name"
     },
     {
      "say": [
       "À quel numéro le cabinet peut-il vous joindre ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "digits"
     },
     {
      "say": [
       "Je vous écoute : quel message souhaitez-vous laisser ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "free"
     },
     {
      "say": [
       "Je récapitule : message de Marc Leroy, à rappeler au 07 01 02 03 04. Votre message : « Le traitement habituel, il me reste trois jours. ». Est-ce exact ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     },
     {
      "say": [
       "Votre message est enregistré pour le cabinet.",
       "Puis-je faire autre chose pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     },
     {
      "say": [
@@ -2186,44 +2254,51 @@
       "Bonjour, vous êtes bien au cabinet Cabinet Fictif. Je suis Clara, l'assistante vocale automatisée du cabinet.",
       "Que puis-je faire pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "free"
     },
     {
      "say": [
       "Pouvez-vous me donner votre nom et votre prénom ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "name"
     },
     {
      "say": [
       "Quel est le nom et le prénom de la personne concernée ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "name"
     },
     {
      "say": [
       "À quel numéro le cabinet peut-il vous joindre ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "digits"
     },
     {
      "say": [
       "Je vous écoute : quel message souhaitez-vous laisser ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "free"
     },
     {
      "say": [
       "Je récapitule : message de Emma Bernard, de la part de Sophie Bernard, à rappeler au 06 12 34 56 78. Votre message : « Elle sera absente à l'école vendredi. ». Est-ce exact ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     },
     {
      "say": [
       "Votre message est enregistré pour le cabinet.",
       "Puis-je faire autre chose pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     }
    ],
    "exchanges": [
@@ -2376,51 +2451,59 @@
       "Bonjour, vous êtes bien au cabinet Cabinet Fictif. Je suis Clara, l'assistante vocale automatisée du cabinet.",
       "Que puis-je faire pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "free"
     },
     {
      "say": [
       "Pouvez-vous me donner votre nom et votre prénom ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "name"
     },
     {
      "say": [
       "À quel numéro le cabinet peut-il vous joindre ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "digits"
     },
     {
      "say": [
       "Êtes-vous déjà venu au cabinet ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     },
     {
      "say": [
       "Quel jour et à quel moment vous conviendrait le mieux ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "date"
     },
     {
      "say": [
       "Je regarde les disponibilités du cabinet.",
       "Je peux vous proposer : premier : jeudi 1 octobre à 14 h, avec Docteur Martin ; deuxième : jeudi 1 octobre à 15 h, avec Docteur Martin ; troisième : jeudi 1 octobre à 16 h, avec Docteur Martin. Lequel vous convient ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     },
     {
      "say": [
       "Je récapitule : rendez-vous pour Camille Durand, le jeudi 1 octobre à 15 h, avec Docteur Martin. Numéro : 06 12 34 56 78. Je réserve ce créneau ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     },
     {
      "say": [
       "C'est confirmé : votre rendez-vous est réservé le jeudi 1 octobre à 15 h.",
       "Puis-je faire autre chose pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     },
     {
      "say": [
@@ -2643,51 +2726,59 @@
       "Bonjour, vous êtes bien au cabinet Cabinet Fictif. Je suis Clara, l'assistante vocale automatisée du cabinet.",
       "Que puis-je faire pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "free"
     },
     {
      "say": [
       "Pouvez-vous me donner votre nom et votre prénom ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "name"
     },
     {
      "say": [
       "À quel numéro le cabinet peut-il vous joindre ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "digits"
     },
     {
      "say": [
       "Êtes-vous déjà venu au cabinet ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     },
     {
      "say": [
       "Quel jour et à quel moment vous conviendrait le mieux ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "date"
     },
     {
      "say": [
       "Je regarde les disponibilités du cabinet.",
       "Je peux vous proposer : premier : jeudi 1 octobre à 14 h, avec Docteur Martin ; deuxième : jeudi 1 octobre à 15 h, avec Docteur Martin ; troisième : jeudi 1 octobre à 16 h, avec Docteur Martin. Lequel vous convient ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     },
     {
      "say": [
       "Je récapitule : rendez-vous pour Camille Durand, le jeudi 1 octobre à 14 h, avec Docteur Martin. Numéro : 06 12 34 56 78. Je réserve ce créneau ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     },
     {
      "say": [
       "Votre demande est transmise au cabinet ; elle n'est pas encore confirmée.",
       "Puis-je faire autre chose pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     }
    ],
    "exchanges": [
@@ -2870,51 +2961,59 @@
       "Bonjour, vous êtes bien au cabinet Cabinet Fictif. Je suis Clara, l'assistante vocale automatisée du cabinet.",
       "Que puis-je faire pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "free"
     },
     {
      "say": [
       "Pouvez-vous me donner votre nom et votre prénom ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "name"
     },
     {
      "say": [
       "À quel numéro le cabinet peut-il vous joindre ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "digits"
     },
     {
      "say": [
       "Êtes-vous déjà venu au cabinet ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     },
     {
      "say": [
       "Quel jour et à quel moment vous conviendrait le mieux ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "date"
     },
     {
      "say": [
       "Je regarde les disponibilités du cabinet.",
       "Je peux vous proposer : premier : jeudi 1 octobre à 14 h, avec Docteur Martin ; deuxième : jeudi 1 octobre à 15 h, avec Docteur Martin ; troisième : jeudi 1 octobre à 16 h, avec Docteur Martin. Lequel vous convient ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     },
     {
      "say": [
       "Je récapitule : rendez-vous pour Camille Durand, le jeudi 1 octobre à 14 h, avec Docteur Martin. Numéro : 06 12 34 56 78. Je réserve ce créneau ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     },
     {
      "say": [
       "Votre demande est transmise au cabinet ; elle n'est pas encore confirmée.",
       "Puis-je faire autre chose pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     }
    ],
    "exchanges": [
@@ -3097,51 +3196,59 @@
       "Bonjour, vous êtes bien au cabinet Cabinet Fictif. Je suis Clara, l'assistante vocale automatisée du cabinet.",
       "Que puis-je faire pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "free"
     },
     {
      "say": [
       "Pouvez-vous me donner votre nom et votre prénom ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "name"
     },
     {
      "say": [
       "À quel numéro le cabinet peut-il vous joindre ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "digits"
     },
     {
      "say": [
       "Êtes-vous déjà venu au cabinet ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     },
     {
      "say": [
       "Quel jour et à quel moment vous conviendrait le mieux ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "date"
     },
     {
      "say": [
       "Je regarde les disponibilités du cabinet.",
       "Je peux vous proposer : premier : jeudi 1 octobre à 14 h, avec Docteur Martin ; deuxième : jeudi 1 octobre à 15 h, avec Docteur Martin ; troisième : jeudi 1 octobre à 16 h, avec Docteur Martin. Lequel vous convient ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     },
     {
      "say": [
       "Je récapitule : rendez-vous pour Camille Durand, le jeudi 1 octobre à 14 h, avec Docteur Martin. Numéro : 06 12 34 56 78. Je réserve ce créneau ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     },
     {
      "say": [
       "Le cabinet n'autorise pas cette opération par téléphone. Je peux transmettre un message.",
       "Puis-je faire autre chose pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     }
    ],
    "exchanges": [
@@ -3335,51 +3442,59 @@
       "Bonjour, vous êtes bien au cabinet Cabinet Fictif. Je suis Clara, l'assistante vocale automatisée du cabinet.",
       "Que puis-je faire pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "free"
     },
     {
      "say": [
       "Pouvez-vous me donner votre nom et votre prénom ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "name"
     },
     {
      "say": [
       "À quel numéro le cabinet peut-il vous joindre ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "digits"
     },
     {
      "say": [
       "Êtes-vous déjà venu au cabinet ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     },
     {
      "say": [
       "Quel jour et à quel moment vous conviendrait le mieux ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "date"
     },
     {
      "say": [
       "Je regarde les disponibilités du cabinet.",
       "Je peux vous proposer : premier : jeudi 1 octobre à 14 h, avec Docteur Martin ; deuxième : jeudi 1 octobre à 15 h, avec Docteur Martin ; troisième : jeudi 1 octobre à 16 h, avec Docteur Martin. Lequel vous convient ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     },
     {
      "say": [
       "Je récapitule : rendez-vous pour Camille Durand, le jeudi 1 octobre à 14 h, avec Docteur Martin. Numéro : 06 12 34 56 78. Je réserve ce créneau ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     },
     {
      "say": [
       "Le cabinet n'autorise pas cette opération par téléphone. Je peux transmettre un message.",
       "Puis-je faire autre chose pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     },
     {
      "say": [
@@ -3612,58 +3727,67 @@
       "Bonjour, vous êtes bien au cabinet Cabinet Fictif. Je suis Clara, l'assistante vocale automatisée du cabinet.",
       "Que puis-je faire pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "free"
     },
     {
      "say": [
       "Pouvez-vous me donner votre nom et votre prénom ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "name"
     },
     {
      "say": [
       "À quel numéro le cabinet peut-il vous joindre ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "digits"
     },
     {
      "say": [
       "Êtes-vous déjà venu au cabinet ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     },
     {
      "say": [
       "Quel jour et à quel moment vous conviendrait le mieux ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "date"
     },
     {
      "say": [
       "Je regarde les disponibilités du cabinet.",
       "Je peux vous proposer : premier : jeudi 1 octobre à 14 h, avec Docteur Martin ; deuxième : jeudi 1 octobre à 15 h, avec Docteur Martin ; troisième : jeudi 1 octobre à 16 h, avec Docteur Martin. Lequel vous convient ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     },
     {
      "say": [
       "Je récapitule : rendez-vous pour Camille Durand, le jeudi 1 octobre à 14 h, avec Docteur Martin. Numéro : 06 12 34 56 78. Je réserve ce créneau ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     },
     {
      "say": [
       "Je ne peux pas modifier le planning pour le moment. Aucun rendez-vous n'a été réservé, déplacé ni annulé.",
       "Je récapitule : demande de rendez-vous pour Camille Durand, au 06 12 34 56 78, de préférence le créneau du jeudi 1 octobre à 14 h. Le cabinet vous recontactera pour fixer l'horaire. Je transmets cette demande ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     },
     {
      "say": [
       "Votre demande est transmise. Le cabinet la recevra dès que son logiciel sera disponible.",
       "Puis-je faire autre chose pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     }
    ],
    "exchanges": [
@@ -3883,51 +4007,59 @@
       "Bonjour, vous êtes bien au cabinet Cabinet Fictif. Je suis Clara, l'assistante vocale automatisée du cabinet.",
       "Que puis-je faire pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "free"
     },
     {
      "say": [
       "Pouvez-vous me donner votre nom et votre prénom ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "name"
     },
     {
      "say": [
       "À quel numéro le cabinet peut-il vous joindre ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "digits"
     },
     {
      "say": [
       "Êtes-vous déjà venu au cabinet ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     },
     {
      "say": [
       "Quel jour et à quel moment vous conviendrait le mieux ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "date"
     },
     {
      "say": [
       "Je regarde les disponibilités du cabinet.",
       "Je peux vous proposer : premier : jeudi 1 octobre à 14 h, avec Docteur Martin ; deuxième : jeudi 1 octobre à 15 h, avec Docteur Martin ; troisième : jeudi 1 octobre à 16 h, avec Docteur Martin. Lequel vous convient ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     },
     {
      "say": [
       "Je récapitule : demande de rendez-vous pour Camille Durand, au 06 12 34 56 78, de préférence jeudi après-midi. Le cabinet vous recontactera pour fixer l'horaire. Je transmets cette demande ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     },
     {
      "say": [
       "Votre demande de rendez-vous est enregistrée. Le cabinet vous recontactera pour fixer l'horaire.",
       "Puis-je faire autre chose pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     }
    ],
    "exchanges": [
@@ -4106,31 +4238,36 @@
       "Bonjour, vous êtes bien au cabinet Cabinet Fictif. Je suis Clara, l'assistante vocale automatisée du cabinet.",
       "Que puis-je faire pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "free"
     },
     {
      "say": [
       "Pouvez-vous me donner votre nom et votre prénom ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "name"
     },
     {
      "say": [
       "À quel numéro le cabinet peut-il vous joindre ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "digits"
     },
     {
      "say": [
       "Êtes-vous déjà venu au cabinet ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     },
     {
      "say": [
       "Quel jour et à quel moment vous conviendrait le mieux ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "date"
     },
     {
      "say": [
@@ -4138,14 +4275,16 @@
       "Je ne peux pas consulter le planning pour le moment.",
       "Je récapitule : demande de rendez-vous pour Camille Durand, au 06 12 34 56 78, de préférence jeudi après-midi. Le cabinet vous recontactera pour fixer l'horaire. Je transmets cette demande ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     },
     {
      "say": [
       "Votre demande de rendez-vous est enregistrée. Le cabinet vous recontactera pour fixer l'horaire.",
       "Puis-je faire autre chose pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     }
    ],
    "exchanges": [
@@ -4312,44 +4451,51 @@
       "Bonjour, vous êtes bien au cabinet Cabinet Fictif. Je suis Clara, l'assistante vocale automatisée du cabinet.",
       "Que puis-je faire pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "free"
     },
     {
      "say": [
       "Pouvez-vous me donner votre nom et votre prénom ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "name"
     },
     {
      "say": [
       "À quel numéro le cabinet peut-il vous joindre ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "digits"
     },
     {
      "say": [
       "Êtes-vous déjà venu au cabinet ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     },
     {
      "say": [
       "Quel jour et à quel moment vous conviendrait le mieux ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "date"
     },
     {
      "say": [
       "Je récapitule : demande de rendez-vous pour Camille Durand, au 06 12 34 56 78, de préférence jeudi après-midi. Le cabinet vous recontactera pour fixer l'horaire. Je transmets cette demande ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     },
     {
      "say": [
       "Votre demande de rendez-vous est enregistrée. Le cabinet vous recontactera pour fixer l'horaire.",
       "Puis-je faire autre chose pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     },
     {
      "say": [
@@ -4533,44 +4679,51 @@
       "Bonjour, vous êtes bien au cabinet Cabinet Fictif. Je suis Clara, l'assistante vocale automatisée du cabinet.",
       "Que puis-je faire pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "free"
     },
     {
      "say": [
       "Pouvez-vous me donner votre nom et votre prénom ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "name"
     },
     {
      "say": [
       "À quel numéro le cabinet peut-il vous joindre ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "digits"
     },
     {
      "say": [
       "Pour retrouver votre rendez-vous : à quelle date et quelle heure est-il prévu ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "date"
     },
     {
      "say": [
       "Quel jour et à quel moment vous conviendrait le mieux ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "date"
     },
     {
      "say": [
       "Je récapitule : message de Camille Durand, à rappeler au 06 12 34 56 78. Votre message : « Souhaite déplacer le rendez-vous du jeudi 1 octobre à 14 h, de préférence vendredi matin. ». Est-ce exact ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     },
     {
      "say": [
       "Votre message est enregistré pour le cabinet.",
       "Puis-je faire autre chose pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     }
    ],
    "exchanges": [
@@ -4710,44 +4863,51 @@
       "Bonjour, vous êtes bien au cabinet Cabinet Fictif. Je suis Clara, l'assistante vocale automatisée du cabinet.",
       "Que puis-je faire pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "free"
     },
     {
      "say": [
       "Pouvez-vous me donner votre nom et votre prénom ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "name"
     },
     {
      "say": [
       "À quel numéro le cabinet peut-il vous joindre ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "digits"
     },
     {
      "say": [
       "Êtes-vous déjà venu au cabinet ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     },
     {
      "say": [
       "Quel jour et à quel moment vous conviendrait le mieux ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "date"
     },
     {
      "say": [
       "S'agit-il du matin ou de l'après-midi ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "date"
     },
     {
      "say": [
       "Je regarde les disponibilités du cabinet.",
       "Je peux vous proposer : premier : jeudi 1 octobre à 14 h, avec Docteur Martin ; deuxième : jeudi 1 octobre à 15 h, avec Docteur Martin ; troisième : jeudi 1 octobre à 16 h, avec Docteur Martin. Lequel vous convient ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     }
    ],
    "exchanges": [
@@ -4894,51 +5054,59 @@
       "Bonjour, vous êtes bien au cabinet Cabinet Fictif. Je suis Clara, l'assistante vocale automatisée du cabinet.",
       "Que puis-je faire pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "free"
     },
     {
      "say": [
       "Pouvez-vous me donner votre nom et votre prénom ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "name"
     },
     {
      "say": [
       "À quel numéro le cabinet peut-il vous joindre ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "digits"
     },
     {
      "say": [
       "Êtes-vous déjà venu au cabinet ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     },
     {
      "say": [
       "Quel jour et à quel moment vous conviendrait le mieux ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "date"
     },
     {
      "say": [
       "Je regarde les disponibilités du cabinet.",
       "Je peux vous proposer : premier : jeudi 1 octobre à 14 h, avec Docteur Martin ; deuxième : jeudi 1 octobre à 15 h, avec Docteur Martin ; troisième : jeudi 1 octobre à 16 h, avec Docteur Martin. Lequel vous convient ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     },
     {
      "say": [
       "Je récapitule : rendez-vous pour Léa Fictive, le jeudi 1 octobre à 14 h, avec Docteur Martin. Numéro : 06 00 00 00 03. Je réserve ce créneau ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     },
     {
      "say": [
       "C'est confirmé : votre rendez-vous est réservé le jeudi 1 octobre à 14 h.",
       "Puis-je faire autre chose pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     }
    ],
    "exchanges": [
@@ -5120,51 +5288,59 @@
       "Bonjour, vous êtes bien au cabinet Cabinet Fictif. Je suis Clara, l'assistante vocale automatisée du cabinet.",
       "Que puis-je faire pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "free"
     },
     {
      "say": [
       "Pouvez-vous me donner votre nom et votre prénom ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "name"
     },
     {
      "say": [
       "À quel numéro le cabinet peut-il vous joindre ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "digits"
     },
     {
      "say": [
       "Pour retrouver votre rendez-vous : à quelle date et quelle heure est-il prévu ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "date"
     },
     {
      "say": [
       "Quel jour et à quel moment vous conviendrait le mieux ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "date"
     },
     {
      "say": [
       "Je regarde les disponibilités du cabinet.",
       "Je peux vous proposer : premier : jeudi 1 octobre à 15 h, avec Docteur Martin ; deuxième : jeudi 1 octobre à 16 h, avec Docteur Martin. Lequel vous convient ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     },
     {
      "say": [
       "Je récapitule : déplacer le rendez-vous du jeudi 1 octobre à 14 h au jeudi 1 octobre à 15 h. C'est une demande : le cabinet la validera, et votre rendez-vous actuel reste en place d'ici là. Je la transmets ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     },
     {
      "say": [
       "Votre demande est transmise au cabinet. Votre rendez-vous n'est pas modifié tant que le cabinet ne l'a pas validée.",
       "Puis-je faire autre chose pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     }
    ],
    "exchanges": [
@@ -5328,38 +5504,44 @@
       "Bonjour, vous êtes bien au cabinet Cabinet Fictif. Je suis Clara, l'assistante vocale automatisée du cabinet.",
       "Que puis-je faire pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "free"
     },
     {
      "say": [
       "Pouvez-vous me donner votre nom et votre prénom ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "name"
     },
     {
      "say": [
       "À quel numéro le cabinet peut-il vous joindre ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "digits"
     },
     {
      "say": [
       "Pour retrouver votre rendez-vous : à quelle date et quelle heure est-il prévu ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "date"
     },
     {
      "say": [
       "Je récapitule : annuler le rendez-vous du jeudi 1 octobre à 14 h, au nom de Camille Durand. C'est une demande : le cabinet la validera, et le rendez-vous reste en place d'ici là. Je la transmets ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     },
     {
      "say": [
       "Votre demande est transmise au cabinet. Votre rendez-vous n'est pas modifié tant que le cabinet ne l'a pas validée.",
       "Puis-je faire autre chose pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     }
    ],
    "exchanges": [
@@ -5469,7 +5651,8 @@
       "Bonjour, vous êtes bien au cabinet Cabinet Fictif. Je suis Clara, l'assistante vocale automatisée du cabinet.",
       "Que puis-je faire pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "free"
     },
     {
      "say": [
@@ -5483,7 +5666,8 @@
       "Le transfert n'a pas abouti. Je peux prendre un message pour le cabinet.",
       "Pouvez-vous me donner votre nom et votre prénom ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "name"
     }
    ],
    "exchanges": [
@@ -5589,7 +5773,8 @@
       "Bonjour, vous êtes bien au cabinet Cabinet Fictif. Je suis Clara, l'assistante vocale automatisée du cabinet.",
       "Que puis-je faire pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "free"
     },
     {
      "say": [
@@ -5754,39 +5939,45 @@
       "Bonjour, vous êtes bien au cabinet Cabinet Fictif. Je suis Clara, l'assistante vocale automatisée du cabinet.",
       "Que puis-je faire pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "free"
     },
     {
      "say": [
       "Personne n'est disponible pour prendre l'appel pour le moment. Je peux prendre un message pour le cabinet.",
       "Pouvez-vous me donner votre nom et votre prénom ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "name"
     },
     {
      "say": [
       "À quel numéro le cabinet peut-il vous joindre ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "digits"
     },
     {
      "say": [
       "Je vous écoute : quel message souhaitez-vous laisser ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "free"
     },
     {
      "say": [
       "Je récapitule : message de Nora Fictive, à rappeler au 06 00 00 00 09. Votre message : « Merci de me rappeler pour mon dossier. ». Est-ce exact ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     },
     {
      "say": [
       "Votre message est enregistré pour le cabinet.",
       "Puis-je faire autre chose pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     }
    ],
    "exchanges": [
@@ -5902,19 +6093,22 @@
       "Bonjour, vous êtes bien au cabinet Cabinet Fictif. Je suis Clara, l'assistante vocale automatisée du cabinet.",
       "Que puis-je faire pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "free"
     },
     {
      "say": [
       "Pouvez-vous me donner votre nom et votre prénom ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "name"
     },
     {
      "say": [
       "Pouvez-vous me donner votre nom et votre prénom ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "name"
     }
    ],
    "exchanges": []
@@ -5989,7 +6183,8 @@
       "Bonjour, vous êtes bien au cabinet Cabinet Fictif. Je suis Clara, l'assistante vocale automatisée du cabinet.",
       "Que puis-je faire pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "free"
     },
     {
      "say": [
@@ -6097,7 +6292,8 @@
       "Bonjour, vous êtes bien au cabinet Cabinet Fictif. Je suis Clara, l'assistante vocale automatisée du cabinet.",
       "Que puis-je faire pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "free"
     },
     {
      "say": [
@@ -6218,19 +6414,22 @@
       "Bonjour, vous êtes bien au cabinet Cabinet Fictif. Je suis Clara, l'assistante vocale automatisée du cabinet.",
       "Que puis-je faire pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "free"
     },
     {
      "say": [
       "Je ne peux pas modifier mon fonctionnement. Je peux vous aider pour un rendez-vous, un message ou une demande de rappel."
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "free"
     },
     {
      "say": [
       "Je ne peux pas modifier mon fonctionnement. Je peux vous aider pour un rendez-vous, un message ou une demande de rappel."
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "free"
     },
     {
      "say": [],
@@ -6349,19 +6548,22 @@
       "Bonjour, vous êtes bien au cabinet Cabinet Fictif. Je suis Clara, l'assistante vocale automatisée du cabinet.",
       "Que puis-je faire pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "free"
     },
     {
      "say": [
       "Êtes-vous toujours là ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "free"
     },
     {
      "say": [
       "Êtes-vous toujours là ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "free"
     },
     {
      "say": [
@@ -6500,38 +6702,44 @@
       "Bonjour, vous êtes bien au cabinet Cabinet Fictif. Je suis Clara, l'assistante vocale automatisée du cabinet.",
       "Que puis-je faire pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "free"
     },
     {
      "say": [
       "Pouvez-vous me donner votre nom et votre prénom ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "name"
     },
     {
      "say": [
       "À quel numéro le cabinet peut-il vous joindre ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "digits"
     },
     {
      "say": [
       "Je vous écoute : quel message souhaitez-vous laisser ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "free"
     },
     {
      "say": [
       "Je récapitule : message de Camille Durand, à rappeler au 06 12 34 56 78. Votre message : « Merci de me renvoyer l'attestation. ». Est-ce exact ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     },
     {
      "say": [
       "Votre message est enregistré pour le cabinet.",
       "Puis-je faire autre chose pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     },
     {
      "say": [
@@ -6715,50 +6923,58 @@
       "Bonjour, vous êtes bien au cabinet Cabinet Fictif. Je suis Clara, l'assistante vocale automatisée du cabinet.",
       "Que puis-je faire pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "free"
     },
     {
      "say": [
       "Pouvez-vous me donner votre nom et votre prénom ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "name"
     },
     {
      "say": [
       "À quel numéro le cabinet peut-il vous joindre ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "digits"
     },
     {
      "say": [
       "Je n'ai pas bien compris le numéro. Dites-le chiffre par chiffre, ou tapez-le sur le clavier de votre téléphone."
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "digits"
     },
     {
      "say": [
       "Je n'ai pas bien compris le numéro. Dites-le chiffre par chiffre, ou tapez-le sur le clavier de votre téléphone."
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "digits"
     },
     {
      "say": [
       "Je vous écoute : quel message souhaitez-vous laisser ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "free"
     },
     {
      "say": [
       "Je récapitule : message de T'as Mis Du Rond, à rappeler au 06 12 34 56 78. Votre message : « Je n'ai pas reçu ma facture du mois dernier. ». Est-ce exact ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     },
     {
      "say": [
       "Votre message est enregistré pour le cabinet.",
       "Puis-je faire autre chose pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     },
     {
      "say": [
@@ -6917,13 +7133,15 @@
       "Le cabinet est actuellement fermé.",
       "Que puis-je faire pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "free"
     },
     {
      "say": [
       "Pouvez-vous me donner votre nom et votre prénom ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "name"
     },
     {
      "say": [],
@@ -7036,13 +7254,15 @@
       "Bonjour, vous êtes bien au cabinet Cabinet Fictif. Je suis Clara, l'assistante vocale automatisée du cabinet.",
       "Que puis-je faire pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "free"
     },
     {
      "say": [
       "Je n'ai pas cette information. Souhaitez-vous laisser un message au cabinet ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "short"
     },
     {
      "say": [
@@ -7163,19 +7383,22 @@
       "Bonjour, vous êtes bien au cabinet Cabinet Fictif. Je suis Clara, l'assistante vocale automatisée du cabinet.",
       "Que puis-je faire pour vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "free"
     },
     {
      "say": [
       "Je peux prendre un rendez-vous, un message, ou une demande de rappel. Que souhaitez-vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "free"
     },
     {
      "say": [
       "Je peux prendre un rendez-vous, un message, ou une demande de rappel. Que souhaitez-vous ?"
      ],
-     "hangup": false
+     "hangup": false,
+     "expect": "free"
     },
     {
      "say": [],
