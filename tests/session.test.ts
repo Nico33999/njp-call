@@ -15,6 +15,7 @@ import {
   InMemoryJournal,
   type TelephonyEvent,
 } from "../core/session";
+import { spelledLetters } from "../core/conversation";
 import {
   dispatch,
   scenarioEvents,
@@ -879,6 +880,104 @@ describe("humain, urgences, détournement, silences", () => {
       care.messages.find(m => m.envelope.command.type === "message.create")!
         .envelope.command.payload
     ).toMatchObject({ caller: { phone: "+33612345678" } });
+  });
+
+  it("confirmation ambiguë : aucune action ; touche 1 : confirmé, une seule fois", async () => {
+    const { session, callId, care } = setup();
+    const { outs } = await run(
+      session,
+      events(callId, [
+        { caller: "je voudrais laisser un message" },
+        { caller: "Camille Durand" },
+        { caller: "06 12 34 56 78" },
+        { caller: "Merci de me rappeler pour mes résultats." },
+        { caller: "oui mais non enfin je sais pas" },
+        { dtmf: "1" },
+      ])
+    );
+    // outs[0] : accueil ; outs[5] : la réponse à la confirmation ambiguë.
+    expect(outs[5].say.join(" ")).toContain("tapez 1 pour oui, 2 pour non");
+    expect(outs[5].say.join(" ")).not.toContain("enregistré");
+    expect(outs[6].say.join(" ")).toContain("Votre message est enregistré");
+    expect(care.messages.filter(m => m.envelope.command.type === "message.create")).toHaveLength(1);
+  });
+
+  it("« oui, et le numéro c'est… » : une correction relue, jamais une exécution directe", async () => {
+    const { session, callId, care } = setup();
+    const { outs } = await run(
+      session,
+      events(callId, [
+        { caller: "je voudrais laisser un message" },
+        { caller: "Camille Durand" },
+        { caller: "06 12 34 56 78" },
+        { caller: "Merci de me rappeler pour mes résultats." },
+        { caller: "oui, le numéro c'est le 06 00 00 00 09" },
+        { caller: "oui" },
+      ])
+    );
+    expect(outs[5].say.join(" ")).toContain("06 00 00 00 09");
+    expect(outs[5].say.join(" ")).not.toContain("enregistré");
+    const created = care.messages.filter(m => m.envelope.command.type === "message.create");
+    expect(created).toHaveLength(1);
+    expect(created[0].envelope.command.payload).toMatchObject({ caller: { phone: "+33600000009" } });
+  });
+
+  it("« non » → quoi corriger → le nom → épelé : le nom de famille remplacé, rien n'est deviné", async () => {
+    const { session, callId, care } = setup();
+    const { outs, said } = await run(
+      session,
+      events(callId, [
+        { caller: "je voudrais laisser un message" },
+        { caller: "Camille Durant" },
+        { caller: "06 12 34 56 78" },
+        { caller: "Merci de me rappeler pour mes résultats." },
+        { caller: "non" },
+        { caller: "le nom" },
+        { caller: "D U R A N D" },
+        { caller: "oui" },
+      ])
+    );
+    expect(said).toContain("Qu'est-ce qui doit être corrigé : le nom, le numéro, ou autre chose ?");
+    expect(said).toContain("l'épeler, lettre par lettre");
+    expect(outs[7].say.join(" ")).toContain("message de Camille Durand");
+    expect(care.messages.find(m => m.envelope.command.type === "message.create")!.envelope.command.payload).toMatchObject({ caller: { declaredName: "Camille Durand" } });
+    expect(care.messages.filter(m => m.envelope.command.type === "message.create")).toHaveLength(1);
+  });
+
+  it("épellation par noms de lettres et « comme » : lue ; une phrase ordinaire n'en est pas une", () => {
+    expect(spelledLetters("dé u erre a enne dé")).toBe("durand");
+    expect(spelledLetters("D comme Denis, U comme Ursule, P comme Pierre, O, N, T")).toBe("dupont");
+    expect(spelledLetters("L E F E accent grave V R E")).toBe("lefevre");
+    expect(spelledLetters("je voudrais un rendez-vous")).toBeNull();
+    expect(spelledLetters("oui")).toBeNull();
+  });
+
+  it("réplique inintelligible : dit et redemandé selon la question, aucun nom capté", async () => {
+    const { session, callId } = setup();
+    const { said } = await run(
+      session,
+      events(callId, [
+        { caller: "je voudrais laisser un message" },
+        { caller: "" },
+      ])
+    );
+    expect(said).toContain("je n'ai pas bien entendu le nom");
+    expect(said.split("Pouvez-vous me donner votre nom").length).toBe(2);
+  });
+
+  it("« oui, pas de problème » est un oui", async () => {
+    const { session, callId, care } = setup();
+    await run(
+      session,
+      events(callId, [
+        { caller: "je voudrais laisser un message" },
+        { caller: "Camille Durand" },
+        { caller: "06 12 34 56 78" },
+        { caller: "Merci de me rappeler pour mes résultats." },
+        { caller: "oui, pas de problème" },
+      ])
+    );
+    expect(care.messages.filter(m => m.envelope.command.type === "message.create")).toHaveLength(1);
   });
 
   it("numéro mal reconnu : redemandé avec le clavier proposé, puis tapé (régression voix locale)", async () => {

@@ -106,7 +106,13 @@ export interface ConversationState {
   injectionAttempts: number;
   handoffReason?: string;
   /** Question en cours : sert à interpréter une réponse courte (« Dupont »). */
-  asking?: Field | "confirmation" | "slot" | "anything_else" | "clarify_time";
+  asking?:
+    | Field
+    | "confirmation"
+    | "slot"
+    | "anything_else"
+    | "clarify_time"
+    | "what_to_correct";
 }
 
 /**
@@ -124,6 +130,7 @@ export const expectOf = (s: ConversationState): Expect => {
     case "newPatient":
     case "relation":
     case "slot":
+    case "what_to_correct":
       return "short";
     case "phone":
       return "digits";
@@ -243,9 +250,101 @@ export const validateUnderstanding = (raw: unknown): Understanding => {
 // ---------------------------------------------------------------------------
 
 const YES =
-  /^(oui|ouais|c'est (ca|bien ca|exact|correct|bon)|exact(ement)?|d'accord|parfait|tout a fait|ok|oui c'est (ca|bon|parfait)|absolument|volontiers|je confirme)\b/;
+  /^(oui|ouais|c'est (ca|bien ca|exact|correct|bon)|exact(e|ement)?|d'accord|parfait|tout a fait|ok|oui c'est (ca|bon|parfait)|absolument|volontiers|je confirme)\b/;
+// « no » : ce que la reconnaissance rend parfois pour « non » (un non
+// n'exécute jamais rien).
 const NO =
-  /^(non|pas du tout|pas (ca|exactement)|c'est faux|erreur|ce n'est pas (ca|exact))\b/;
+  /^(non|no|pas du tout|pas (ca|exactement)|c'est faux|erreur|ce n'est pas (ca|exact))\b/;
+
+/**
+ * Une confirmation qui dit oui ET autre chose (« oui mais… », « oui non »,
+ * « oui enfin je crois ») n'est PAS un oui : aucune action ne suit.
+ */
+const HEDGE =
+  /\b(non|pas|mais|sauf|enfin|attendez|attends|en fait|plutot|peut etre|peut-etre|je crois|je pense|il me semble|je (ne )?sais pas|je suis pas sur|euh|heu|hum)\b/;
+
+/** Ce qui doit être corrigé, après un « non » au récapitulatif. */
+export type CorrectionTarget = "name" | "phone" | "message" | "date";
+export const correctionTarget = (s: string): CorrectionTarget | undefined => {
+  if (/\b(nom|prenom|orthographe|epel)/.test(s)) return "name";
+  if (/\b(numero|telephone|portable|joindre)\b/.test(s)) return "phone";
+  if (/\b(date|jour|heure|horaire|creneau|moment)\b/.test(s)) return "date";
+  if (/\b(message|motif|texte|demande)\b/.test(s)) return "message";
+  return undefined;
+};
+
+/**
+ * Épellation lettre par lettre (« D U R A N D », « dé u erre a enne dé »,
+ * « D comme Denis, U comme Ursule… »). Rend les lettres, ou rien si la
+ * réplique n'est pas une épellation.
+ */
+const LETTER_NAMES: Record<string, string> = {
+  a: "a", ah: "a", be: "b", bé: "b", ce: "c", cé: "c", se: "c", de: "d", dé: "d",
+  e: "e", eu: "e", effe: "f", ef: "f", ge: "g", gé: "g", ache: "h", hache: "h",
+  i: "i", ji: "j", gi: "j", ka: "k", ca: "k", elle: "l", el: "l", emme: "m", em: "m",
+  enne: "n", en: "n", o: "o", oh: "o", pe: "p", pé: "p", ku: "q", qu: "q", erre: "r",
+  err: "r", esse: "s", es: "s", te: "t", té: "t", u: "u", ve: "v", vé: "v", ixe: "x",
+  ix: "x", zede: "z", zed: "z", zède: "z",
+};
+const spellWords = (utterance: string): string[] =>
+  utterance
+    .toLowerCase()
+    .replace(/double\s+v[ée]?/g, " w ")
+    .replace(/i\s+grec/g, " y ")
+    .replace(/(\p{L})\s+comme\s+\p{L}+/gu, "$1")
+    .replace(/[.,;:!?'"«»()-]/g, " ")
+    .split(/\s+/)
+    .filter(Boolean);
+
+const letterOf = (w: string): string | null =>
+  /^\p{L}$/u.test(w) ? w : (LETTER_NAMES[w] ?? null);
+
+/**
+ * « Mon nom, c'est Durant. D U R A N D. » : une épellation EN FIN de
+ * réplique (au moins quatre lettres). Rend les lettres et ce qui précède.
+ */
+export const spelledTail = (
+  utterance: string
+): { letters: string; prefix: string } | null => {
+  const words = spellWords(utterance);
+  let i = words.length;
+  let letters = "";
+  let hits = 0;
+  while (i > 0) {
+    const l = letterOf(words[i - 1]);
+    if (!l) break;
+    letters = l + letters;
+    hits += 1;
+    i -= 1;
+  }
+  if (hits < 4 || i === 0) return null;
+  return { letters, prefix: words.slice(0, i).join(" ") };
+};
+
+export const spelledLetters = (utterance: string): string | null => {
+  const raw = utterance
+    .toLowerCase()
+    .replace(/double\s+v[ée]?/g, " w ")
+    .replace(/i\s+grec/g, " y ")
+    .replace(/(\p{L})\s+comme\s+\p{L}+/gu, "$1")
+    .replace(/[.,;:!?'"«»()-]/g, " ");
+  const words = raw.split(/\s+/).filter(Boolean);
+  if (words.length < 3) return null;
+  let letters = "";
+  let hits = 0;
+  for (const w of words) {
+    if (/^\p{L}$/u.test(w)) {
+      letters += w;
+      hits += 1;
+    } else if (LETTER_NAMES[w]) {
+      letters += LETTER_NAMES[w];
+      hits += 1;
+    } else if (/^(accent|aigu|grave|circonflexe|tiret|trait|d'union|apostrophe|majuscule)$/.test(w)) {
+      continue;
+    } else return null;
+  }
+  return hits >= 3 ? letters : null;
+};
 
 const intentOf = (s: string): Intent | undefined => {
   if (
@@ -350,8 +449,11 @@ export const fallbackUnderstand = (
     state.asking === "anything_else" ||
     state.asking === "newPatient"
   ) {
-    if (YES.test(s)) u.confirmation = "yes";
-    else if (NO.test(s))
+    if (YES.test(s)) {
+      // « oui mais… », « oui non », « oui je crois » : ni oui ni non.
+      const rest = s.replace(YES, "").replace(/\bpas de (probleme|souci)\b/g, "");
+      if (!HEDGE.test(rest)) u.confirmation = "yes";
+    } else if (NO.test(s))
       u.confirmation =
         /\bnon,? (c'est|mon|le|la|il|elle)\b/.test(s) || s.split(" ").length > 3
           ? "correction"
@@ -387,6 +489,32 @@ export const fallbackUnderstand = (
           : 3;
     if (/\b(aucun|aucune|pas possible|ne (me )?convien)/.test(s))
       u.confirmation = "no";
+  }
+
+  // Épellation, quand on attend un nom : les lettres remplacent le nom de
+  // famille déjà entendu (dernier mot), ou forment le nom.
+  if (state.asking === "callerName" || state.asking === "concernedName") {
+    const letters = spelledLetters(utterance);
+    if (letters) {
+      const field = state.asking;
+      const prev = state.collected[field]?.trim().split(/\s+/) ?? [];
+      const spelled = titleCase(letters);
+      u.entities[field] =
+        prev.length >= 2 ? [...prev.slice(0, -1), spelled].join(" ") : spelled;
+      return u;
+    }
+    // Le nom dit PUIS épelé : les lettres corrigent le nom de famille.
+    const tail = spelledTail(utterance);
+    if (tail) {
+      const field = state.asking;
+      const said = fallbackUnderstand(tail.prefix, state).entities[field];
+      const known = state.collected[field]?.trim().split(/\s+/) ?? [];
+      const saidWords = said?.trim().split(/\s+/) ?? [];
+      const base = saidWords.length >= 2 ? saidWords : known.length >= 2 ? known : [];
+      const spelled = titleCase(tail.letters);
+      u.entities[field] = base.length >= 2 ? [...base.slice(0, -1), spelled].join(" ") : spelled;
+      return u;
+    }
   }
 
   const explicit = utterance.match(NAME_EXPLICIT);
@@ -429,7 +557,8 @@ export const fallbackUnderstand = (
   }
 
   if (
-    /\d|demain|lundi|mardi|mercredi|jeudi|vendredi|samedi|dimanche|matin|apres-midi|apres midi|midi|soir|semaine|janvier|fevrier|mars|avril|mai|juin|juillet|aout|septembre|octobre|novembre|decembre/.test(
+    // Mots entiers : « mais » n'est pas « mai ».
+    /\d|\b(demain|lundi|mardi|mercredi|jeudi|vendredi|samedi|dimanche|matin|apres-midi|apres midi|midi|soir|semaine|janvier|fevrier|mars|avril|mai|juin|juillet|aout|septembre|octobre|novembre|decembre)\b/.test(
       s
     ) &&
     !u.entities.phone

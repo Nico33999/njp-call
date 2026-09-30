@@ -32,6 +32,7 @@ import {
   type Intent,
   type Understanding,
   windowsFrom,
+  correctionTarget,
 } from "./conversation";
 import type { AvailabilityQuery, AvailabilityResult } from "./gateway";
 
@@ -69,6 +70,30 @@ const QUESTIONS: Record<Field, string> = {
   messageText: "Je vous écoute : quel message souhaitez-vous laisser ?",
   reason: "Pouvez-vous m'indiquer brièvement le motif, sans détail médical ?",
 };
+
+/**
+ * Réplique inintelligible (reconnaissance vide, ou pas du français) : on le
+ * dit, et on redemande la même chose avec l'aide adaptée — jamais un nom ou
+ * un numéro deviné.
+ */
+export const notHeard = (state: ConversationState): string => {
+  switch (state.asking) {
+    case "confirmation":
+    case "anything_else":
+    case "newPatient":
+      return "Pardon, je n'ai pas bien entendu. Répondez par oui ou par non, ou tapez 1 pour oui, 2 pour non.";
+    case "phone":
+      return PHONE_AGAIN;
+    case "callerName":
+    case "concernedName":
+      return "Pardon, je n'ai pas bien entendu le nom. Pouvez-vous le redire, ou l'épeler lettre par lettre ?";
+    default:
+      return "Pardon, je n'ai pas bien entendu. Pouvez-vous répéter ?";
+  }
+};
+
+export const CONFIRM_AGAIN =
+  "Pour ne pas me tromper, répondez simplement par oui ou par non, ou tapez 1 pour oui, 2 pour non.";
 
 const PHONE_AGAIN =
   "Je n'ai pas bien compris le numéro. Dites-le chiffre par chiffre, ou tapez-le sur le clavier de votre téléphone.";
@@ -486,6 +511,10 @@ export const onCallerTurn = (
 
   // 4. Confirmation d'une reformulation.
   if (state.phase === "confirming") {
+    // « Oui, et le numéro c'est… » : une correction, jamais une exécution.
+    if (u.confirmation === "yes" && Object.keys(u.entities).length) {
+      u.confirmation = "correction";
+    }
     if (u.confirmation === "yes") {
       state.confirmation = "yes";
       state.phase = "executing";
@@ -503,8 +532,10 @@ export const onCallerTurn = (
         return done(advance(state, ctx, say));
       }
       state.phase = "collecting";
-      state.asking = undefined;
-      say.push("D'accord. Qu'est-ce qui doit être corrigé ?");
+      state.asking = "what_to_correct";
+      say.push(
+        "D'accord. Qu'est-ce qui doit être corrigé : le nom, le numéro, ou autre chose ?"
+      );
       return done({ state, say });
     }
     if (Object.keys(u.entities).length) {
@@ -514,7 +545,49 @@ export const onCallerTurn = (
       state.proposed = null;
       return done(advance(state, ctx, say));
     }
-    say.push("Pouvez-vous me répondre par oui ou par non ?");
+    say.push(CONFIRM_AGAIN);
+    return done({ state, say });
+  }
+
+  // 4 bis. Ce qui doit être corrigé.
+  if (state.asking === "what_to_correct") {
+    if (Object.keys(u.entities).length) {
+      state.asking = undefined;
+      const ask = merge(state, u, ctx);
+      if (ask) return done({ state, say: [ask] });
+      return done(advance(state, ctx, say));
+    }
+    const c = state.collected;
+    switch (correctionTarget(fold(utterance))) {
+      // Le nom, le numéro, le message restent tels quels jusqu'à ce que la
+      // nouvelle réponse les remplace (l'épellation corrige le nom de
+      // famille déjà entendu).
+      case "name":
+        state.asking = "callerName";
+        say.push(
+          "Pouvez-vous me redire votre nom ? Vous pouvez aussi l'épeler, lettre par lettre."
+        );
+        return done({ state, say });
+      case "phone":
+        state.asking = "phone";
+        say.push(
+          "Quel est le bon numéro ? Vous pouvez le dire chiffre par chiffre, ou le taper sur le clavier de votre téléphone."
+        );
+        return done({ state, say });
+      case "message":
+        state.asking = "messageText";
+        say.push("Je vous écoute : quel est le bon message ?");
+        return done({ state, say });
+      case "date":
+        delete c.windows;
+        delete c.preferenceText;
+        delete c.chosenSlot;
+        state.offeredSlots = [];
+        state.asking = "preference";
+        say.push(QUESTIONS.preference);
+        return done({ state, say });
+    }
+    say.push("Dites par exemple : le nom, le numéro, ou le message.");
     return done({ state, say });
   }
 

@@ -7057,7 +7057,7 @@
    ]
   },
   {
-   "name": "cabinet_ferme",
+   "name": "confirmation_ambigue_puis_touche_1",
    "cabinetId": "cab_fixture",
    "callId": "call_0037",
    "config": {
@@ -7065,7 +7065,7 @@
     "assistantName": "Clara",
     "cabinetName": "Cabinet Fictif",
     "greeting": "",
-    "closedGreeting": "Nos horaires sont du lundi au vendredi.",
+    "closedGreeting": "",
     "languages": [
      "fr"
     ],
@@ -7110,7 +7110,7 @@
      "id": "call_0037-ev1",
      "type": "call.started",
      "at": "2026-09-29T08:00:00.000Z",
-     "open": false
+     "open": true
     },
     {
      "id": "call_0037-ev2",
@@ -7120,17 +7120,45 @@
     },
     {
      "id": "call_0037-ev3",
-     "type": "call.ended",
+     "type": "caller.utterance",
      "at": "2026-09-29T08:00:02.000Z",
-     "reason": "hangup"
+     "text": "Camille Durand"
+    },
+    {
+     "id": "call_0037-ev4",
+     "type": "caller.utterance",
+     "at": "2026-09-29T08:00:03.000Z",
+     "text": "06 12 34 56 78"
+    },
+    {
+     "id": "call_0037-ev5",
+     "type": "caller.utterance",
+     "at": "2026-09-29T08:00:04.000Z",
+     "text": "Merci de me rappeler pour mes résultats."
+    },
+    {
+     "id": "call_0037-ev6",
+     "type": "caller.utterance",
+     "at": "2026-09-29T08:00:05.000Z",
+     "text": "oui mais non enfin je sais pas"
+    },
+    {
+     "id": "call_0037-ev7",
+     "type": "caller.dtmf",
+     "at": "2026-09-29T08:00:06.000Z",
+     "digits": "1"
+    },
+    {
+     "id": "call_0037-ev8",
+     "type": "caller.utterance",
+     "at": "2026-09-29T08:00:07.000Z",
+     "text": "non merci"
     }
    ],
    "outputs": [
     {
      "say": [
       "Bonjour, vous êtes bien au cabinet Cabinet Fictif. Je suis Clara, l'assistante vocale automatisée du cabinet.",
-      "Nos horaires sont du lundi au vendredi.",
-      "Le cabinet est actuellement fermé.",
       "Que puis-je faire pour vous ?"
      ],
      "hangup": false,
@@ -7144,7 +7172,45 @@
      "expect": "name"
     },
     {
-     "say": [],
+     "say": [
+      "À quel numéro le cabinet peut-il vous joindre ?"
+     ],
+     "hangup": false,
+     "expect": "digits"
+    },
+    {
+     "say": [
+      "Je vous écoute : quel message souhaitez-vous laisser ?"
+     ],
+     "hangup": false,
+     "expect": "free"
+    },
+    {
+     "say": [
+      "Je récapitule : message de Camille Durand, à rappeler au 06 12 34 56 78. Votre message : « Merci de me rappeler pour mes résultats. ». Est-ce exact ?"
+     ],
+     "hangup": false,
+     "expect": "short"
+    },
+    {
+     "say": [
+      "Pour ne pas me tromper, répondez simplement par oui ou par non, ou tapez 1 pour oui, 2 pour non."
+     ],
+     "hangup": false,
+     "expect": "short"
+    },
+    {
+     "say": [
+      "Votre message est enregistré pour le cabinet.",
+      "Puis-je faire autre chose pour vous ?"
+     ],
+     "hangup": false,
+     "expect": "short"
+    },
+    {
+     "say": [
+      "Merci de votre appel. Au revoir."
+     ],
      "hangup": true
     }
    ],
@@ -7158,29 +7224,71 @@
       "cabinetId": "cab_fixture",
       "callId": "call_0037",
       "seq": 1,
+      "idempotencyKey": "call_0037/message.create/1",
+      "issuedAt": "2026-09-29T08:00:06.000Z",
+      "command": {
+       "type": "message.create",
+       "payload": {
+        "caller": {
+         "declaredName": "Camille Durand",
+         "phone": "+33612345678",
+         "relation": "self"
+        },
+        "recipient": {
+         "kind": "secretariat"
+        },
+        "confirmedText": "Merci de me rappeler pour mes résultats.",
+        "aiSummary": "Message de Camille Durand.",
+        "category": "administratif",
+        "level": "normal"
+       }
+      }
+     },
+     "result": {
+      "idempotencyKey": "call_0037/message.create/1",
+      "status": "confirmed",
+      "reference": "msg_0001"
+     }
+    },
+    {
+     "kind": "submit",
+     "envelope": {
+      "format": "njp.call.command",
+      "v": 1,
+      "extensionId": "njp.call",
+      "cabinetId": "cab_fixture",
+      "callId": "call_0037",
+      "seq": 2,
       "idempotencyKey": "call_0037/call.report/1",
-      "issuedAt": "2026-09-29T08:00:02.000Z",
+      "issuedAt": "2026-09-29T08:00:07.000Z",
       "command": {
        "type": "call.report",
        "payload": {
         "startedAt": "2026-09-29T08:00:00.000Z",
-        "endedAt": "2026-09-29T08:00:02.000Z",
-        "outcome": "abandoned",
-        "summary": "Appel traité par l'assistante automatisée. Demande : message. Aucune opération.",
-        "commands": []
+        "endedAt": "2026-09-29T08:00:07.000Z",
+        "outcome": "message",
+        "summary": "Appel traité par l'assistante automatisée. Demande : message. Opérations : message.create : confirmed.",
+        "commands": [
+         {
+          "idempotencyKey": "call_0037/message.create/1",
+          "type": "message.create",
+          "status": "confirmed",
+          "reference": "msg_0001"
+         }
+        ]
        }
       }
      },
      "result": {
       "idempotencyKey": "call_0037/call.report/1",
       "status": "confirmed",
-      "reference": "rpt_0001"
+      "reference": "rpt_0002"
      }
     }
    ]
   },
   {
-   "name": "information_pratique_sans_ia",
+   "name": "oui_avec_correction_du_numero",
    "cabinetId": "cab_fixture",
    "callId": "call_0038",
    "config": {
@@ -7239,13 +7347,37 @@
      "id": "call_0038-ev2",
      "type": "caller.utterance",
      "at": "2026-09-29T08:00:01.000Z",
-     "text": "Quels sont vos horaires d'ouverture ?"
+     "text": "je voudrais laisser un message"
     },
     {
      "id": "call_0038-ev3",
      "type": "caller.utterance",
      "at": "2026-09-29T08:00:02.000Z",
-     "text": "non merci"
+     "text": "Camille Durand"
+    },
+    {
+     "id": "call_0038-ev4",
+     "type": "caller.utterance",
+     "at": "2026-09-29T08:00:03.000Z",
+     "text": "06 12 34 56 78"
+    },
+    {
+     "id": "call_0038-ev5",
+     "type": "caller.utterance",
+     "at": "2026-09-29T08:00:04.000Z",
+     "text": "Merci de me rappeler pour mes résultats."
+    },
+    {
+     "id": "call_0038-ev6",
+     "type": "caller.utterance",
+     "at": "2026-09-29T08:00:05.000Z",
+     "text": "oui, le numéro c'est le 06 00 00 00 09"
+    },
+    {
+     "id": "call_0038-ev7",
+     "type": "caller.utterance",
+     "at": "2026-09-29T08:00:06.000Z",
+     "text": "oui"
     }
    ],
    "outputs": [
@@ -7259,16 +7391,46 @@
     },
     {
      "say": [
-      "Je n'ai pas cette information. Souhaitez-vous laisser un message au cabinet ?"
+      "Pouvez-vous me donner votre nom et votre prénom ?"
+     ],
+     "hangup": false,
+     "expect": "name"
+    },
+    {
+     "say": [
+      "À quel numéro le cabinet peut-il vous joindre ?"
+     ],
+     "hangup": false,
+     "expect": "digits"
+    },
+    {
+     "say": [
+      "Je vous écoute : quel message souhaitez-vous laisser ?"
+     ],
+     "hangup": false,
+     "expect": "free"
+    },
+    {
+     "say": [
+      "Je récapitule : message de Camille Durand, à rappeler au 06 12 34 56 78. Votre message : « Merci de me rappeler pour mes résultats. ». Est-ce exact ?"
      ],
      "hangup": false,
      "expect": "short"
     },
     {
      "say": [
-      "Merci de votre appel. Au revoir."
+      "Je récapitule : message de Camille Durand, à rappeler au 06 00 00 00 09. Votre message : « Merci de me rappeler pour mes résultats. ». Est-ce exact ?"
      ],
-     "hangup": true
+     "hangup": false,
+     "expect": "short"
+    },
+    {
+     "say": [
+      "Votre message est enregistré pour le cabinet.",
+      "Puis-je faire autre chose pour vous ?"
+     ],
+     "hangup": false,
+     "expect": "short"
     }
    ],
    "exchanges": [
@@ -7281,29 +7443,36 @@
       "cabinetId": "cab_fixture",
       "callId": "call_0038",
       "seq": 1,
-      "idempotencyKey": "call_0038/call.report/1",
-      "issuedAt": "2026-09-29T08:00:02.000Z",
+      "idempotencyKey": "call_0038/message.create/1",
+      "issuedAt": "2026-09-29T08:00:06.000Z",
       "command": {
-       "type": "call.report",
+       "type": "message.create",
        "payload": {
-        "startedAt": "2026-09-29T08:00:00.000Z",
-        "endedAt": "2026-09-29T08:00:02.000Z",
-        "outcome": "abandoned",
-        "summary": "Appel traité par l'assistante automatisée. Aucune opération.",
-        "commands": []
+        "caller": {
+         "declaredName": "Camille Durand",
+         "phone": "+33600000009",
+         "relation": "self"
+        },
+        "recipient": {
+         "kind": "secretariat"
+        },
+        "confirmedText": "Merci de me rappeler pour mes résultats.",
+        "aiSummary": "Message de Camille Durand.",
+        "category": "administratif",
+        "level": "normal"
        }
       }
      },
      "result": {
-      "idempotencyKey": "call_0038/call.report/1",
+      "idempotencyKey": "call_0038/message.create/1",
       "status": "confirmed",
-      "reference": "rpt_0001"
+      "reference": "msg_0001"
      }
     }
    ]
   },
   {
-   "name": "intention_incomprise",
+   "name": "non_puis_nom_epele",
    "cabinetId": "cab_fixture",
    "callId": "call_0039",
    "config": {
@@ -7362,16 +7531,708 @@
      "id": "call_0039-ev2",
      "type": "caller.utterance",
      "at": "2026-09-29T08:00:01.000Z",
-     "text": "euh"
+     "text": "je voudrais laisser un message"
     },
     {
      "id": "call_0039-ev3",
      "type": "caller.utterance",
      "at": "2026-09-29T08:00:02.000Z",
-     "text": "bof"
+     "text": "Camille Durant"
     },
     {
      "id": "call_0039-ev4",
+     "type": "caller.utterance",
+     "at": "2026-09-29T08:00:03.000Z",
+     "text": "06 12 34 56 78"
+    },
+    {
+     "id": "call_0039-ev5",
+     "type": "caller.utterance",
+     "at": "2026-09-29T08:00:04.000Z",
+     "text": "Merci de me rappeler pour mes résultats."
+    },
+    {
+     "id": "call_0039-ev6",
+     "type": "caller.utterance",
+     "at": "2026-09-29T08:00:05.000Z",
+     "text": "non"
+    },
+    {
+     "id": "call_0039-ev7",
+     "type": "caller.utterance",
+     "at": "2026-09-29T08:00:06.000Z",
+     "text": "le nom"
+    },
+    {
+     "id": "call_0039-ev8",
+     "type": "caller.utterance",
+     "at": "2026-09-29T08:00:07.000Z",
+     "text": "dé u erre a enne dé"
+    },
+    {
+     "id": "call_0039-ev9",
+     "type": "caller.utterance",
+     "at": "2026-09-29T08:00:08.000Z",
+     "text": "oui"
+    }
+   ],
+   "outputs": [
+    {
+     "say": [
+      "Bonjour, vous êtes bien au cabinet Cabinet Fictif. Je suis Clara, l'assistante vocale automatisée du cabinet.",
+      "Que puis-je faire pour vous ?"
+     ],
+     "hangup": false,
+     "expect": "free"
+    },
+    {
+     "say": [
+      "Pouvez-vous me donner votre nom et votre prénom ?"
+     ],
+     "hangup": false,
+     "expect": "name"
+    },
+    {
+     "say": [
+      "À quel numéro le cabinet peut-il vous joindre ?"
+     ],
+     "hangup": false,
+     "expect": "digits"
+    },
+    {
+     "say": [
+      "Je vous écoute : quel message souhaitez-vous laisser ?"
+     ],
+     "hangup": false,
+     "expect": "free"
+    },
+    {
+     "say": [
+      "Je récapitule : message de Camille Durant, à rappeler au 06 12 34 56 78. Votre message : « Merci de me rappeler pour mes résultats. ». Est-ce exact ?"
+     ],
+     "hangup": false,
+     "expect": "short"
+    },
+    {
+     "say": [
+      "D'accord. Qu'est-ce qui doit être corrigé : le nom, le numéro, ou autre chose ?"
+     ],
+     "hangup": false,
+     "expect": "short"
+    },
+    {
+     "say": [
+      "Pouvez-vous me redire votre nom ? Vous pouvez aussi l'épeler, lettre par lettre."
+     ],
+     "hangup": false,
+     "expect": "name"
+    },
+    {
+     "say": [
+      "Je récapitule : message de Camille Durand, à rappeler au 06 12 34 56 78. Votre message : « Merci de me rappeler pour mes résultats. ». Est-ce exact ?"
+     ],
+     "hangup": false,
+     "expect": "short"
+    },
+    {
+     "say": [
+      "Votre message est enregistré pour le cabinet.",
+      "Puis-je faire autre chose pour vous ?"
+     ],
+     "hangup": false,
+     "expect": "short"
+    }
+   ],
+   "exchanges": [
+    {
+     "kind": "submit",
+     "envelope": {
+      "format": "njp.call.command",
+      "v": 1,
+      "extensionId": "njp.call",
+      "cabinetId": "cab_fixture",
+      "callId": "call_0039",
+      "seq": 1,
+      "idempotencyKey": "call_0039/message.create/1",
+      "issuedAt": "2026-09-29T08:00:08.000Z",
+      "command": {
+       "type": "message.create",
+       "payload": {
+        "caller": {
+         "declaredName": "Camille Durand",
+         "phone": "+33612345678",
+         "relation": "self"
+        },
+        "recipient": {
+         "kind": "secretariat"
+        },
+        "confirmedText": "Merci de me rappeler pour mes résultats.",
+        "aiSummary": "Message de Camille Durand.",
+        "category": "administratif",
+        "level": "normal"
+       }
+      }
+     },
+     "result": {
+      "idempotencyKey": "call_0039/message.create/1",
+      "status": "confirmed",
+      "reference": "msg_0001"
+     }
+    }
+   ]
+  },
+  {
+   "name": "inintelligible_puis_touche_2",
+   "cabinetId": "cab_fixture",
+   "callId": "call_0040",
+   "config": {
+    "schema": 2,
+    "assistantName": "Clara",
+    "cabinetName": "Cabinet Fictif",
+    "greeting": "",
+    "closedGreeting": "",
+    "languages": [
+     "fr"
+    ],
+    "openingHours": [],
+    "practitioners": [
+     {
+      "ref": "prac_a",
+      "displayName": "Docteur Martin",
+      "aliases": [
+       "Martin"
+      ]
+     }
+    ],
+    "appointmentTypes": [],
+    "transferDestinations": [
+     {
+      "ref": "dest_accueil",
+      "label": "Accueil"
+     }
+    ],
+    "urgency": {
+     "validatedByCabinet": true
+    },
+    "afterHours": "message",
+    "degradedMode": "message_only",
+    "reminders": {
+     "enabled": false,
+     "hoursBefore": 24,
+     "channel": "sms"
+    },
+    "retention": {
+     "callRecordDays": 90,
+     "storeAudio": false
+    },
+    "cabinetInstructions": "",
+    "cabinetKnowledge": "",
+    "simulation": false,
+    "offerSlots": true
+   },
+   "events": [
+    {
+     "id": "call_0040-ev1",
+     "type": "call.started",
+     "at": "2026-09-29T08:00:00.000Z",
+     "open": true
+    },
+    {
+     "id": "call_0040-ev2",
+     "type": "caller.utterance",
+     "at": "2026-09-29T08:00:01.000Z",
+     "text": "je voudrais laisser un message"
+    },
+    {
+     "id": "call_0040-ev3",
+     "type": "caller.utterance",
+     "at": "2026-09-29T08:00:02.000Z",
+     "text": ""
+    },
+    {
+     "id": "call_0040-ev4",
+     "type": "caller.utterance",
+     "at": "2026-09-29T08:00:03.000Z",
+     "text": "Camille Durand"
+    },
+    {
+     "id": "call_0040-ev5",
+     "type": "caller.utterance",
+     "at": "2026-09-29T08:00:04.000Z",
+     "text": ""
+    },
+    {
+     "id": "call_0040-ev6",
+     "type": "caller.utterance",
+     "at": "2026-09-29T08:00:05.000Z",
+     "text": "06 12 34 56 78"
+    },
+    {
+     "id": "call_0040-ev7",
+     "type": "caller.utterance",
+     "at": "2026-09-29T08:00:06.000Z",
+     "text": "Merci de me rappeler pour mes résultats."
+    },
+    {
+     "id": "call_0040-ev8",
+     "type": "caller.dtmf",
+     "at": "2026-09-29T08:00:07.000Z",
+     "digits": "2"
+    },
+    {
+     "id": "call_0040-ev9",
+     "type": "caller.utterance",
+     "at": "2026-09-29T08:00:08.000Z",
+     "text": "le numéro"
+    },
+    {
+     "id": "call_0040-ev10",
+     "type": "caller.dtmf",
+     "at": "2026-09-29T08:00:09.000Z",
+     "digits": "0600000009"
+    },
+    {
+     "id": "call_0040-ev11",
+     "type": "caller.utterance",
+     "at": "2026-09-29T08:00:10.000Z",
+     "text": "oui"
+    }
+   ],
+   "outputs": [
+    {
+     "say": [
+      "Bonjour, vous êtes bien au cabinet Cabinet Fictif. Je suis Clara, l'assistante vocale automatisée du cabinet.",
+      "Que puis-je faire pour vous ?"
+     ],
+     "hangup": false,
+     "expect": "free"
+    },
+    {
+     "say": [
+      "Pouvez-vous me donner votre nom et votre prénom ?"
+     ],
+     "hangup": false,
+     "expect": "name"
+    },
+    {
+     "say": [
+      "Pardon, je n'ai pas bien entendu le nom. Pouvez-vous le redire, ou l'épeler lettre par lettre ?"
+     ],
+     "hangup": false,
+     "expect": "name"
+    },
+    {
+     "say": [
+      "À quel numéro le cabinet peut-il vous joindre ?"
+     ],
+     "hangup": false,
+     "expect": "digits"
+    },
+    {
+     "say": [
+      "Je n'ai pas bien compris le numéro. Dites-le chiffre par chiffre, ou tapez-le sur le clavier de votre téléphone."
+     ],
+     "hangup": false,
+     "expect": "digits"
+    },
+    {
+     "say": [
+      "Je vous écoute : quel message souhaitez-vous laisser ?"
+     ],
+     "hangup": false,
+     "expect": "free"
+    },
+    {
+     "say": [
+      "Je récapitule : message de Camille Durand, à rappeler au 06 12 34 56 78. Votre message : « Merci de me rappeler pour mes résultats. ». Est-ce exact ?"
+     ],
+     "hangup": false,
+     "expect": "short"
+    },
+    {
+     "say": [
+      "D'accord. Qu'est-ce qui doit être corrigé : le nom, le numéro, ou autre chose ?"
+     ],
+     "hangup": false,
+     "expect": "short"
+    },
+    {
+     "say": [
+      "Quel est le bon numéro ? Vous pouvez le dire chiffre par chiffre, ou le taper sur le clavier de votre téléphone."
+     ],
+     "hangup": false,
+     "expect": "digits"
+    },
+    {
+     "say": [
+      "Je récapitule : message de Camille Durand, à rappeler au 06 00 00 00 09. Votre message : « Merci de me rappeler pour mes résultats. ». Est-ce exact ?"
+     ],
+     "hangup": false,
+     "expect": "short"
+    },
+    {
+     "say": [
+      "Votre message est enregistré pour le cabinet.",
+      "Puis-je faire autre chose pour vous ?"
+     ],
+     "hangup": false,
+     "expect": "short"
+    }
+   ],
+   "exchanges": [
+    {
+     "kind": "submit",
+     "envelope": {
+      "format": "njp.call.command",
+      "v": 1,
+      "extensionId": "njp.call",
+      "cabinetId": "cab_fixture",
+      "callId": "call_0040",
+      "seq": 1,
+      "idempotencyKey": "call_0040/message.create/1",
+      "issuedAt": "2026-09-29T08:00:10.000Z",
+      "command": {
+       "type": "message.create",
+       "payload": {
+        "caller": {
+         "declaredName": "Camille Durand",
+         "phone": "+33600000009",
+         "relation": "self"
+        },
+        "recipient": {
+         "kind": "secretariat"
+        },
+        "confirmedText": "Merci de me rappeler pour mes résultats.",
+        "aiSummary": "Message de Camille Durand.",
+        "category": "administratif",
+        "level": "normal"
+       }
+      }
+     },
+     "result": {
+      "idempotencyKey": "call_0040/message.create/1",
+      "status": "confirmed",
+      "reference": "msg_0001"
+     }
+    }
+   ]
+  },
+  {
+   "name": "cabinet_ferme",
+   "cabinetId": "cab_fixture",
+   "callId": "call_0041",
+   "config": {
+    "schema": 2,
+    "assistantName": "Clara",
+    "cabinetName": "Cabinet Fictif",
+    "greeting": "",
+    "closedGreeting": "Nos horaires sont du lundi au vendredi.",
+    "languages": [
+     "fr"
+    ],
+    "openingHours": [],
+    "practitioners": [
+     {
+      "ref": "prac_a",
+      "displayName": "Docteur Martin",
+      "aliases": [
+       "Martin"
+      ]
+     }
+    ],
+    "appointmentTypes": [],
+    "transferDestinations": [
+     {
+      "ref": "dest_accueil",
+      "label": "Accueil"
+     }
+    ],
+    "urgency": {
+     "validatedByCabinet": true
+    },
+    "afterHours": "message",
+    "degradedMode": "message_only",
+    "reminders": {
+     "enabled": false,
+     "hoursBefore": 24,
+     "channel": "sms"
+    },
+    "retention": {
+     "callRecordDays": 90,
+     "storeAudio": false
+    },
+    "cabinetInstructions": "",
+    "cabinetKnowledge": "",
+    "simulation": false,
+    "offerSlots": true
+   },
+   "events": [
+    {
+     "id": "call_0041-ev1",
+     "type": "call.started",
+     "at": "2026-09-29T08:00:00.000Z",
+     "open": false
+    },
+    {
+     "id": "call_0041-ev2",
+     "type": "caller.utterance",
+     "at": "2026-09-29T08:00:01.000Z",
+     "text": "je voudrais laisser un message"
+    },
+    {
+     "id": "call_0041-ev3",
+     "type": "call.ended",
+     "at": "2026-09-29T08:00:02.000Z",
+     "reason": "hangup"
+    }
+   ],
+   "outputs": [
+    {
+     "say": [
+      "Bonjour, vous êtes bien au cabinet Cabinet Fictif. Je suis Clara, l'assistante vocale automatisée du cabinet.",
+      "Nos horaires sont du lundi au vendredi.",
+      "Le cabinet est actuellement fermé.",
+      "Que puis-je faire pour vous ?"
+     ],
+     "hangup": false,
+     "expect": "free"
+    },
+    {
+     "say": [
+      "Pouvez-vous me donner votre nom et votre prénom ?"
+     ],
+     "hangup": false,
+     "expect": "name"
+    },
+    {
+     "say": [],
+     "hangup": true
+    }
+   ],
+   "exchanges": [
+    {
+     "kind": "submit",
+     "envelope": {
+      "format": "njp.call.command",
+      "v": 1,
+      "extensionId": "njp.call",
+      "cabinetId": "cab_fixture",
+      "callId": "call_0041",
+      "seq": 1,
+      "idempotencyKey": "call_0041/call.report/1",
+      "issuedAt": "2026-09-29T08:00:02.000Z",
+      "command": {
+       "type": "call.report",
+       "payload": {
+        "startedAt": "2026-09-29T08:00:00.000Z",
+        "endedAt": "2026-09-29T08:00:02.000Z",
+        "outcome": "abandoned",
+        "summary": "Appel traité par l'assistante automatisée. Demande : message. Aucune opération.",
+        "commands": []
+       }
+      }
+     },
+     "result": {
+      "idempotencyKey": "call_0041/call.report/1",
+      "status": "confirmed",
+      "reference": "rpt_0001"
+     }
+    }
+   ]
+  },
+  {
+   "name": "information_pratique_sans_ia",
+   "cabinetId": "cab_fixture",
+   "callId": "call_0042",
+   "config": {
+    "schema": 2,
+    "assistantName": "Clara",
+    "cabinetName": "Cabinet Fictif",
+    "greeting": "",
+    "closedGreeting": "",
+    "languages": [
+     "fr"
+    ],
+    "openingHours": [],
+    "practitioners": [
+     {
+      "ref": "prac_a",
+      "displayName": "Docteur Martin",
+      "aliases": [
+       "Martin"
+      ]
+     }
+    ],
+    "appointmentTypes": [],
+    "transferDestinations": [
+     {
+      "ref": "dest_accueil",
+      "label": "Accueil"
+     }
+    ],
+    "urgency": {
+     "validatedByCabinet": true
+    },
+    "afterHours": "message",
+    "degradedMode": "message_only",
+    "reminders": {
+     "enabled": false,
+     "hoursBefore": 24,
+     "channel": "sms"
+    },
+    "retention": {
+     "callRecordDays": 90,
+     "storeAudio": false
+    },
+    "cabinetInstructions": "",
+    "cabinetKnowledge": "",
+    "simulation": false,
+    "offerSlots": true
+   },
+   "events": [
+    {
+     "id": "call_0042-ev1",
+     "type": "call.started",
+     "at": "2026-09-29T08:00:00.000Z",
+     "open": true
+    },
+    {
+     "id": "call_0042-ev2",
+     "type": "caller.utterance",
+     "at": "2026-09-29T08:00:01.000Z",
+     "text": "Quels sont vos horaires d'ouverture ?"
+    },
+    {
+     "id": "call_0042-ev3",
+     "type": "caller.utterance",
+     "at": "2026-09-29T08:00:02.000Z",
+     "text": "non merci"
+    }
+   ],
+   "outputs": [
+    {
+     "say": [
+      "Bonjour, vous êtes bien au cabinet Cabinet Fictif. Je suis Clara, l'assistante vocale automatisée du cabinet.",
+      "Que puis-je faire pour vous ?"
+     ],
+     "hangup": false,
+     "expect": "free"
+    },
+    {
+     "say": [
+      "Je n'ai pas cette information. Souhaitez-vous laisser un message au cabinet ?"
+     ],
+     "hangup": false,
+     "expect": "short"
+    },
+    {
+     "say": [
+      "Merci de votre appel. Au revoir."
+     ],
+     "hangup": true
+    }
+   ],
+   "exchanges": [
+    {
+     "kind": "submit",
+     "envelope": {
+      "format": "njp.call.command",
+      "v": 1,
+      "extensionId": "njp.call",
+      "cabinetId": "cab_fixture",
+      "callId": "call_0042",
+      "seq": 1,
+      "idempotencyKey": "call_0042/call.report/1",
+      "issuedAt": "2026-09-29T08:00:02.000Z",
+      "command": {
+       "type": "call.report",
+       "payload": {
+        "startedAt": "2026-09-29T08:00:00.000Z",
+        "endedAt": "2026-09-29T08:00:02.000Z",
+        "outcome": "abandoned",
+        "summary": "Appel traité par l'assistante automatisée. Aucune opération.",
+        "commands": []
+       }
+      }
+     },
+     "result": {
+      "idempotencyKey": "call_0042/call.report/1",
+      "status": "confirmed",
+      "reference": "rpt_0001"
+     }
+    }
+   ]
+  },
+  {
+   "name": "intention_incomprise",
+   "cabinetId": "cab_fixture",
+   "callId": "call_0043",
+   "config": {
+    "schema": 2,
+    "assistantName": "Clara",
+    "cabinetName": "Cabinet Fictif",
+    "greeting": "",
+    "closedGreeting": "",
+    "languages": [
+     "fr"
+    ],
+    "openingHours": [],
+    "practitioners": [
+     {
+      "ref": "prac_a",
+      "displayName": "Docteur Martin",
+      "aliases": [
+       "Martin"
+      ]
+     }
+    ],
+    "appointmentTypes": [],
+    "transferDestinations": [
+     {
+      "ref": "dest_accueil",
+      "label": "Accueil"
+     }
+    ],
+    "urgency": {
+     "validatedByCabinet": true
+    },
+    "afterHours": "message",
+    "degradedMode": "message_only",
+    "reminders": {
+     "enabled": false,
+     "hoursBefore": 24,
+     "channel": "sms"
+    },
+    "retention": {
+     "callRecordDays": 90,
+     "storeAudio": false
+    },
+    "cabinetInstructions": "",
+    "cabinetKnowledge": "",
+    "simulation": false,
+    "offerSlots": true
+   },
+   "events": [
+    {
+     "id": "call_0043-ev1",
+     "type": "call.started",
+     "at": "2026-09-29T08:00:00.000Z",
+     "open": true
+    },
+    {
+     "id": "call_0043-ev2",
+     "type": "caller.utterance",
+     "at": "2026-09-29T08:00:01.000Z",
+     "text": "euh"
+    },
+    {
+     "id": "call_0043-ev3",
+     "type": "caller.utterance",
+     "at": "2026-09-29T08:00:02.000Z",
+     "text": "bof"
+    },
+    {
+     "id": "call_0043-ev4",
      "type": "call.ended",
      "at": "2026-09-29T08:00:03.000Z",
      "reason": "hangup"
@@ -7413,9 +8274,9 @@
       "v": 1,
       "extensionId": "njp.call",
       "cabinetId": "cab_fixture",
-      "callId": "call_0039",
+      "callId": "call_0043",
       "seq": 1,
-      "idempotencyKey": "call_0039/call.report/1",
+      "idempotencyKey": "call_0043/call.report/1",
       "issuedAt": "2026-09-29T08:00:03.000Z",
       "command": {
        "type": "call.report",
@@ -7429,7 +8290,7 @@
       }
      },
      "result": {
-      "idempotencyKey": "call_0039/call.report/1",
+      "idempotencyKey": "call_0043/call.report/1",
       "status": "confirmed",
       "reference": "rpt_0001"
      }

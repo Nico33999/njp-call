@@ -160,11 +160,30 @@ export interface DateTimeReading {
  * « aujourd'hui » (Paris). Ne lève jamais : ce qui n'est pas compris est
  * absent, ce qui est incertain est listé dans `ambiguities`.
  */
+// Nombres dits en lettres (ce que rend souvent la reconnaissance vocale) :
+// « quatorze octobre », « dix heures et demie », « seize heures trente ».
+const SPOKEN_TENS: Record<string, number> = { vingt: 20, trente: 30, quarante: 40, cinquante: 50 };
+const SPOKEN_SMALL: Record<string, number> = {
+  un: 1, une: 1, deux: 2, trois: 3, quatre: 4, cinq: 5, six: 6, sept: 7, huit: 8, neuf: 9,
+  dix: 10, onze: 11, douze: 12, treize: 13, quatorze: 14, quinze: 15, seize: 16,
+};
+export const spokenNumbersToDigits = (s: string): string =>
+  s
+    .replace(/\ble premier\b/g, "le 1er")
+    .replace(
+      /\b(vingt|trente|quarante|cinquante)(?:[- ]et[- ](un|une)|-(deux|trois|quatre|cinq|six|sept|huit|neuf))?\b/g,
+      (_m, t: string, un?: string, u?: string) => String(SPOKEN_TENS[t] + (un ? 1 : u ? SPOKEN_SMALL[u] : 0))
+    )
+    .replace(/\bdix-(sept|huit|neuf)\b/g, (_m, u: string) => String(10 + SPOKEN_SMALL[u]))
+    .replace(/\b(dix|onze|douze|treize|quatorze|quinze|seize)\b/g, (_m, w: string) => String(SPOKEN_SMALL[w]))
+    .replace(/\b(deux|trois|quatre|cinq|six|sept|huit|neuf)\b/g, (_m, w: string) => String(SPOKEN_SMALL[w]))
+    .replace(/\b(un|une)(?= (heures?|h)\b)/g, "1");
+
 export const readDateTime = (
   sentence: string,
   nowMs: number
 ): DateTimeReading => {
-  const s = fold(sentence);
+  const s = spokenNumbersToDigits(fold(sentence));
   const today = parisDateOf(nowMs);
   const out: DateTimeReading = { ambiguities: [] };
 
@@ -234,13 +253,18 @@ export const readDateTime = (
   else if (/\bminuit\b/.test(s)) out.time = { h: 0, min: 0 };
   else if (hm) {
     let h = Number(hm[1]);
-    const min = hm[2]
+    let min = hm[2]
       ? Number(hm[2])
       : /\bet demie\b/.test(s)
         ? 30
         : /\bet quart\b/.test(s)
           ? 15
           : 0;
+    // « dix heures moins le quart » : 9 h 45.
+    if (!hm[2] && /\bmoins le quart\b/.test(s) && h > 0) {
+      h -= 1;
+      min = 45;
+    }
     const pm = /\b(de l'apres[- ]midi|du soir)\b/.test(s);
     const am = /\bdu matin\b/.test(s);
     if (pm && h < 12) h += 12;

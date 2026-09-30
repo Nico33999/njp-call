@@ -55,6 +55,7 @@ import {
   onTransferResult,
   type Decision,
   type EngineContext,
+  notHeard,
 } from "./engine";
 import type {
   AvailabilityReader,
@@ -409,13 +410,22 @@ export class CallSession {
         return out;
       }
       case "caller.dtmf": {
-        // Touche 0 : un humain. Dix chiffres pendant la demande de numéro : le numéro.
+        // Touche 0 : un humain. Dix chiffres pendant la demande de numéro : le
+        // numéro. 1 / 2 à une question fermée : oui / non.
+        const yesNo =
+          this.state.asking === "confirmation" ||
+          this.state.asking === "anything_else" ||
+          this.state.asking === "newPatient";
         const text =
           event.digits === "0"
             ? "je veux parler à quelqu'un"
-            : readFrenchPhone(event.digits)
-              ? event.digits
-              : "";
+            : yesNo && event.digits === "1"
+              ? "oui"
+              : yesNo && event.digits === "2"
+                ? "non"
+                : readFrenchPhone(event.digits)
+                  ? event.digits
+                  : "";
         if (!text) return out;
         return this.apply(
           { id: event.id, type: "caller.utterance", at: event.at, text },
@@ -424,6 +434,11 @@ export class CallSession {
       }
       case "caller.utterance": {
         this.silences = 0;
+        if (!event.text.trim()) {
+          // Rien d'intelligible : on le dit, on redemande — rien n'est deviné.
+          out.say.push(notHeard(this.state));
+          return out;
+        }
         let u: Understanding;
         if (replay?.understanding) {
           u = replay.understanding.u;
